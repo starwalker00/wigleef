@@ -13,7 +13,7 @@ function About() {
             </p>
             <p>
                 When navigating between pages, we want to persist page state (input
-                values, scroll position, etc.) for a Single-Page Application (SPA)
+                values, scroll position, etc) for a Single-Page Application (SPA)
                 experience.
             </p>
             <p>
@@ -24,7 +24,7 @@ function About() {
             </p>
             <h3>Try It Out</h3>
             <p>
-                To visualize this, try tying in the search input in the{' '}
+                To visualize this, try tying in the search input in the
                 <code>Sidebar</code> and then changing routes. You'll notice the input
                 state is persisted.
             </p>
