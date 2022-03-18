@@ -25,7 +25,7 @@ function About() {
             <h3>Try It Out</h3>
             <p>
                 To visualize this, try tying in the search input in the
-                <code>Sidebar</code> and then changing routes. You'll notice the input
+                <code>Sidebar</code> and then changing routes. You&apos;ll notice the input
                 state is persisted.
             </p>
         </section>
