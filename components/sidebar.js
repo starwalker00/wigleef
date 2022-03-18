@@ -8,6 +8,9 @@ function Sidebar() {
             <Link href="/">
                 <a>Home</a>
             </Link>
+            <Link href="/explore">
+                <a>Explore</a>
+            </Link>
             <Link href="/about">
                 <a>About</a>
             </Link>
