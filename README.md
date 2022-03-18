@@ -1,3 +1,10 @@
+## Multi page multi-page optimal layout
+
+- [https://github.com/vercel/next.js/tree/canary/examples/layout-component](https://github.com/vercel/next.js/tree/canary/examples/layout-component)
+- [https://adamwathan.me/2019/10/17/persistent-layout-patterns-in-nextjs/](https://adamwathan.me/2019/10/17/persistent-layout-patterns-in-nextjs/)
+- [https://codesandbox.io/s/5-getlayout-function-on-page-and-layout-components-7e1bg?from-embed=&file=/pages/_app.js](https://codesandbox.io/s/5-getlayout-function-on-page-and-layout-components-7e1bg?from-embed=&file=/pages/_app.js)
+- [https://github.com/syamjayaraj/next-multi-page-website/tree/main/pages](https://github.com/syamjayaraj/next-multi-page-website/tree/main/pages)
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
