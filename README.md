@@ -1,5 +1,10 @@
 ## Ressources
 
+### wagmi - ethers.js react hook library
+
+- [wagmi docs](https://wagmi.sh/)
+- [wagmi+next.js example on GitHub](https://github.com/Seth-McKilla/nextjs-wagmi/tree/cc06073893175e70cc2c5013abff932551db4dc6)
+
 ### Apollo
 
 - [Apollo docs](https://www.apollographql.com/docs/react/)
