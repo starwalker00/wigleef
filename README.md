@@ -1,13 +1,33 @@
-## Multi page multi-page optimal layout
+## Ressources
+
+### Apollo
+
+- [Apollo docs](https://www.apollographql.com/docs/react/)
+- [https://www.apollographql.com/blog/apollo-client/next-js/next-js-getting-started/](https://www.apollographql.com/blog/apollo-client/next-js/next-js-getting-started/)
+- [https://developers.wpengine.com/blog/apollo-client-cache-rehydration-in-next-js](https://developers.wpengine.com/blog/apollo-client-cache-rehydration-in-next-js)
+- [https://github1s.com/kellenmace/apollo-client-cache-rehydration-in-next-js/blob/HEAD/pages/blog.tsx](https://github1s.com/kellenmace/apollo-client-cache-rehydration-in-next-js/blob/HEAD/pages/blog.tsx)
+
+### Lens
+
+- [Lens docs](https://docs.lens.dev/docs/introduction)
+- [API GraphQL playground](https://api-mumbai.lens.dev/playground)
+- [GitHub : lens-api-examples](https://github.com/aave/lens-api-examples)
+
+### Next.js
+
+- [Next.js docs](https://nextjs.org/docs)
+- [Next.js examples](https://github.com/vercel/next.js/tree/canary/examples)
+
+#### Multi page multi-page optimal layout
 
 - [https://github.com/vercel/next.js/tree/canary/examples/layout-component](https://github.com/vercel/next.js/tree/canary/examples/layout-component)
 - [https://adamwathan.me/2019/10/17/persistent-layout-patterns-in-nextjs/](https://adamwathan.me/2019/10/17/persistent-layout-patterns-in-nextjs/)
 - [https://codesandbox.io/s/5-getlayout-function-on-page-and-layout-components-7e1bg?from-embed=&file=/pages/_app.js](https://codesandbox.io/s/5-getlayout-function-on-page-and-layout-components-7e1bg?from-embed=&file=/pages/_app.js)
 - [https://github.com/syamjayaraj/next-multi-page-website/tree/main/pages](https://github.com/syamjayaraj/next-multi-page-website/tree/main/pages)
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
 ## Getting Started
+
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 First, run the development server:
 
