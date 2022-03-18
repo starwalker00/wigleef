@@ -11,6 +11,9 @@ function Sidebar() {
             <Link href="/explore">
                 <a>Explore</a>
             </Link>
+            <Link href="/post">
+                <a>Post</a>
+            </Link>
             <Link href="/about">
                 <a>About</a>
             </Link>
