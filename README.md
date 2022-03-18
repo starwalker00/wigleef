@@ -13,6 +13,13 @@
 - [API GraphQL playground](https://api-mumbai.lens.dev/playground)
 - [GitHub : lens-api-examples](https://github.com/aave/lens-api-examples)
 
+### IPFS
+
+- [JS-IPFS docs](https://docs.ipfs.io/reference/js/api/)
+- [JS-IPFS npmjs.com](https://www.npmjs.com/package/ipfs-http-client)
+- [GitHub js-ipfs-examples](https://github.com/ipfs-examples/js-ipfs-examples)
+- [LogRocket tuto](https://blog.logrocket.com/decentralized-data-storage-using-ipfs-and-react-a-tutorial-with-examples/)
+
 ### Next.js
 
 - [Next.js docs](https://nextjs.org/docs)
