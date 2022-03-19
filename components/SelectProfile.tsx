@@ -135,7 +135,13 @@ function SelectProfile({ address }) {
             {
               data.profiles?.items.map((profile) => {
                 let profileID = ethers.BigNumber.from(profile.id);
-                return (< option selected={profileID.eq(profileIDApp)} value={profileID.toString()} > {profile.handle}{'#'}{profileID.toString()}</option>)
+                return (
+                  <option
+                    key={profileID.toString()}
+                    selected={profileID.eq(profileIDApp)}
+                    value={profileID.toString()} >
+                    {profile.handle}{'#'}{profileID.toString()}
+                  </option>)
               }
 
               )
