@@ -1,6 +1,8 @@
 import Link from 'next/link'
 import styles from './sidebar.module.css'
 
+import ConnectButtonAndModal from '../components/ConnectButtonAndModal'
+
 function Sidebar() {
     return (
         <nav className={styles.nav}>
@@ -17,6 +19,7 @@ function Sidebar() {
             <Link href="/about">
                 <a>About</a>
             </Link>
+            <ConnectButtonAndModal />
         </nav>
     )
 }

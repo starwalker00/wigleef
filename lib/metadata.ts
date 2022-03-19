@@ -11,23 +11,23 @@ interface MetadataMedia {
     type: MimeType;
 }
 
-enum MetadataVersions {
+export enum MetadataVersions {
     one = '1.0.0',
 }
 
-enum MetadataDisplayType {
+export enum MetadataDisplayType {
     number = 'number',
     string = 'string',
     date = 'date',
 }
 
-interface MetadataAttribute {
+export interface MetadataAttribute {
     displayType?: MetadataDisplayType;
     traitType?: string;
     value: string;
 }
 
-interface Metadata {
+export interface Metadata {
     /**
      * The metadata version.
      */
@@ -97,5 +97,3 @@ interface Metadata {
      */
     appId?: AppId;
 }
-
-export default Metadata
