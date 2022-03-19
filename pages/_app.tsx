@@ -7,6 +7,8 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { Provider as WagmiProvider, chain, defaultChains } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 
+import { AppProvider } from '../components/context/AppContext';
+
 // const infuraId = 'Pld6XQBC-Jcd2Ls10sPWEG2IsgjCsO4N';
 const chains = defaultChains;
 type Connector = InjectedConnector;
@@ -27,13 +29,15 @@ function MyApp({ Component, pageProps }) {
   const getLayout = Component.getLayout || ((page) => page)
 
   return (
-    <ApolloProvider client={apolloClient}>
-      <WagmiProvider /*autoConnect*/ connectors={connectors}>
-        <ChakraProvider>
-          {getLayout(<Component {...pageProps} />)}
-        </ChakraProvider>
-      </WagmiProvider>
-    </ApolloProvider>
+    <AppProvider>
+      <ApolloProvider client={apolloClient}>
+        <WagmiProvider /*autoConnect*/ connectors={connectors}>
+          <ChakraProvider>
+            {getLayout(<Component {...pageProps} />)}
+          </ChakraProvider>
+        </WagmiProvider>
+      </ApolloProvider>
+    </AppProvider>
   )
 }
 

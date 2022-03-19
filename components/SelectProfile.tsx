@@ -1,15 +1,16 @@
 import {
-    Text,
-    Button,
-    Flex,
-    Box,
-    Spacer,
-    Stack,
-    Select
+  Text,
+  Button,
+  Flex,
+  Box,
+  Spacer,
+  Stack,
+  Select
 } from '@chakra-ui/react';
 import { gql, useQuery } from "@apollo/client";
-import { initializeApollo, addApolloState } from "../lib/apolloClient";
 import { prettyJSON } from '../lib/helpers';
+
+import { useProfileID, useDispatchProfileID } from "./context/AppContext";
 
 const GET_PROFILES = `
   query($request: ProfileQueryRequest!) {
@@ -93,53 +94,69 @@ const GET_PROFILES = `
 `;
 
 function SelectProfile({ address }) {
-    const { loading, error, data, fetchMore } = useQuery(
-        gql(GET_PROFILES),
-        {
-            variables: {
-                request: { ownedBy: address },
-            },
-            notifyOnNetworkStatusChange: true,
-        });
-    if (data) {
-        prettyJSON('data', data)
-        if (data.profiles?.items?.length < 1) {
-            return (
-                <>
-                    <Text>you do not own a profile</Text>
+  const profileIDApp = useProfileID()
+  const dispatch = useDispatchProfileID()
 
-                </>
-            )
-        } else {
-            // add first profile to context
-            return (
-                <>
-                    <Stack spacing={3}>
-                        <Select placeholder='Profiles'>
-                            {
-                                data.profiles?.items.map((profile) => (
-                                    <option value={profile.id}>{profile.handle}{'#'}{parseInt(profile.id, 16)}</option>
-                                ))
-                            }
-                        </Select>
-                    </Stack>
-                </>
-            )
-        }
-    }
-    else if (loading) {
-        return (
-            <>
-                <Text>loading</Text>
-            </>
-        )
-    }
-    else {
-        return (
-            <>
-            </>
-        )
-    }
+  const { loading, error, data, fetchMore } = useQuery(
+    gql(GET_PROFILES),
+    {
+      variables: {
+        request: { ownedBy: address },
+      },
+      notifyOnNetworkStatusChange: true,
+      fetchPolicy: "no-cache"
+    });
+
+  function changeProfileID(event: any) {
+    dispatch({ type: 'set_profileID', payload: event.target.value });
+  }
+
+  if (data) {
+    // prettyJSON('data', data)
+    console.log(`found : ${data.profiles?.items?.length} profiles`)
+    if (data.profiles?.items?.length < 1) {
+      return (
+        <>
+          <Text>you do not own a profile</Text>
+        </>
+      )
+    } else {
+      // add first profile to context if no profile ID is set
+      if (profileIDApp == 0) {
+        let firstProfileID = data.profiles.items[0].id;
+        dispatch({ type: 'set_profileID', payload: firstProfileID });
+      }
+    };
+    return (
+      <>
+        <Stack spacing={3}>
+          <Select onChange={(event) => changeProfileID(event)}>
+            {
+              data.profiles?.items.map((profile) => {
+                let profileID = parseInt(profile.id, 16); // hex to dec
+                return (< option selected={profileID == profileIDApp} value={profileID.toString()} > {profile.handle}{'#'}{profileID.toString()}</option>)
+              }
+
+              )
+            }
+          </Select>
+        </Stack>
+      </>
+    )
+  }
+  else if (loading) {
+    return (
+      <>
+        <Text>loading</Text>
+      </>
+    )
+  }
+  else {
+    return (
+      <>
+      </>
+    )
+  }
 }
 
 export default SelectProfile;
