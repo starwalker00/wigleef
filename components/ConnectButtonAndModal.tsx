@@ -17,6 +17,7 @@ import {
 import { useDisclosure } from '@chakra-ui/react';
 
 import { useConnect, useAccount } from 'wagmi';
+import SelectProfile from '../components/SelectProfile'
 
 function ConnectButtonAndModal() {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -37,6 +38,9 @@ function ConnectButtonAndModal() {
                     <Spacer />
                     <Box p='4' bg='green.400'>
                         <Text fontSize='xs'>Connected to {accountData.connector.name}</Text>
+                    </Box>
+                    <Box>
+                        <SelectProfile address={accountData.address} />
                     </Box>
                     <Button onClick={() => { disconnect(); onClose(); }}>Disconnect</Button>
                 </Flex>
