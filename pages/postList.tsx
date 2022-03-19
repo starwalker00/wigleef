@@ -307,7 +307,7 @@ const GET_PUBLICATIONS = `
   }
 `;
 
-function postList() {
+function PostList() {
     const profileIDApp: ethers.BigNumber = useProfileID()
     const dispatch = useDispatchProfileID()
 
@@ -374,7 +374,7 @@ function postList() {
     )
 }
 
-postList.getLayout = function getLayout(page) {
+PostList.getLayout = function getLayout(page) {
     return (
         <Layout>
             <Sidebar />
@@ -383,4 +383,4 @@ postList.getLayout = function getLayout(page) {
     )
 }
 
-export default postList
+export default PostList
