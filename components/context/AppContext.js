@@ -1,4 +1,5 @@
 import { useReducer, useContext, createContext } from 'react'
+import { ethers } from 'ethers';
 
 const AppStateContext = createContext()
 const AppDispatchContext = createContext()
@@ -14,7 +15,7 @@ const reducer = (state, action) => {
 }
 
 export const AppProvider = ({ children }) => {
-    const [state, dispatch] = useReducer(reducer, 0)
+    const [state, dispatch] = useReducer(reducer, ethers.BigNumber.from(0))
     return (
         <AppDispatchContext.Provider value={dispatch}>
             <AppStateContext.Provider value={state}>

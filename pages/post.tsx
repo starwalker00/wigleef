@@ -23,6 +23,8 @@ import { gql, useApolloClient, useMutation } from "@apollo/client";
 
 import { useSignMessage, useSignTypedData, useContractWrite, useSigner, useAccount } from 'wagmi';
 
+import { useProfileID } from "../components/context/AppContext";
+
 // authentication
 const GET_CHALLENGE = `
   query($request: ChallengeRequest!) {
@@ -110,11 +112,10 @@ try {
 }
 
 function Post() {
+    const profileIDApp: ethers.BigNumber = useProfileID();
     const apolloClient = useApolloClient();
     const [isLoading, setIsLoading] = useState(false);
-    const [{ data, error, loading }, signMessage] = useSignMessage({
-        message: 'gm wagmi frens',
-    });
+    const [{ data, error, loading }, signMessage] = useSignMessage();
     const [{ data: dataSignTypedData, error: errorSignTypedData, loading: loadingSignTypedData }, signTypedData] = useSignTypedData();
     const [createPost, { called: calledCreatePost, reset: resetCreatePost, data: dataCreate }] = useMutation(gql(CREATE_POST_TYPED_DATA));
     const [{ data: dataSigner, error: errorSigner, loading: loadingSigner }, getSigner] = useSigner();
@@ -178,7 +179,7 @@ function Post() {
         }).then(response => {
             prettyJSON('response', response);
             const createPostRequest = {
-                profileId: "0x49",
+                profileId: profileIDApp.toHexString(),
                 contentURI: 'ipfs://' + response.path,
                 collectModule: {
                     // feeCollectModule: {

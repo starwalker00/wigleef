@@ -9,6 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { gql, useQuery } from "@apollo/client";
 import { prettyJSON } from '../lib/helpers';
+import { ethers, utils, Wallet } from 'ethers';
 
 import { useProfileID, useDispatchProfileID } from "./context/AppContext";
 
@@ -94,7 +95,7 @@ const GET_PROFILES = `
 `;
 
 function SelectProfile({ address }) {
-  const profileIDApp = useProfileID()
+  const profileIDApp: ethers.BigNumber = useProfileID()
   const dispatch = useDispatchProfileID()
 
   const { loading, error, data, fetchMore } = useQuery(
@@ -108,7 +109,7 @@ function SelectProfile({ address }) {
     });
 
   function changeProfileID(event: any) {
-    dispatch({ type: 'set_profileID', payload: event.target.value });
+    dispatch({ type: 'set_profileID', payload: ethers.BigNumber.from(event.target.value) });
   }
 
   if (data) {
@@ -122,8 +123,8 @@ function SelectProfile({ address }) {
       )
     } else {
       // add first profile to context if no profile ID is set
-      if (profileIDApp == 0) {
-        let firstProfileID = data.profiles.items[0].id;
+      if (profileIDApp.eq(0)) {
+        let firstProfileID = ethers.BigNumber.from(data.profiles.items[0].id);
         dispatch({ type: 'set_profileID', payload: firstProfileID });
       }
     };
@@ -133,8 +134,8 @@ function SelectProfile({ address }) {
           <Select onChange={(event) => changeProfileID(event)}>
             {
               data.profiles?.items.map((profile) => {
-                let profileID = parseInt(profile.id, 16); // hex to dec
-                return (< option selected={profileID == profileIDApp} value={profileID.toString()} > {profile.handle}{'#'}{profileID.toString()}</option>)
+                let profileID = ethers.BigNumber.from(profile.id);
+                return (< option selected={profileID.eq(profileIDApp)} value={profileID.toString()} > {profile.handle}{'#'}{profileID.toString()}</option>)
               }
 
               )
