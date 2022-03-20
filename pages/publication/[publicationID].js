@@ -647,7 +647,7 @@ function Publication() {
           ) : (
             comments.map((comment) => {
               return (
-                <div>
+                <div key={comment.id}>
                   <p>{comment.id}</p>
                   <p>{comment.metadata?.content}</p>
                 </div>
