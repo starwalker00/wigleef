@@ -339,7 +339,7 @@ function Explore() {
   return (
 
     <section>
-      {console.log(posts)}
+      {/* {console.log(posts)} */}
       <h1>Explore</h1>
       {!havePosts && loading ? (
         <p>Loading...</p>
