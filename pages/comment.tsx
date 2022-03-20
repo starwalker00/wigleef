@@ -40,15 +40,14 @@ const AUTHENTICATION = `
  }
 `;
 
-// post
-const CREATE_POST_TYPED_DATA = `
-  mutation($request: CreatePublicPostRequest!) { 
-    createPostTypedData(request: $request) {
+const CREATE_COMMENT_TYPED_DATA = `
+  mutation($request: CreatePublicCommentRequest!) { 
+    createCommentTypedData(request: $request) {
       id
       expiresAt
       typedData {
         types {
-          PostWithSig {
+          CommentWithSig {
             name
             type
           }
@@ -63,18 +62,20 @@ const CREATE_POST_TYPED_DATA = `
         nonce
         deadline
         profileId
+        profileIdPointed
+        pubIdPointed
         contentURI
         collectModule
         collectModuleData
         referenceModule
         referenceModuleData
       }
-    }
-  }
-}
+     }
+   }
+ }
 `;
 
-let post: Metadata =
+let comment: Metadata =
 {
     version: MetadataVersions.one,
     metadata_id: uuidv4(),
@@ -111,20 +112,20 @@ try {
     ipfsClient = undefined;
 }
 
-function Post() {
+function Comment() {
     const profileIDApp: ethers.BigNumber = useProfileID();
     const apolloClient = useApolloClient();
     const [isLoading, setIsLoading] = useState(false);
     const [{ data, error, loading }, signMessage] = useSignMessage();
     const [{ data: dataSignTypedData, error: errorSignTypedData, loading: loadingSignTypedData }, signTypedData] = useSignTypedData();
-    const [createPost, { called: calledCreatePost, reset: resetCreatePost, data: dataCreate }] = useMutation(gql(CREATE_POST_TYPED_DATA));
+    const [createComment, { called: calledCreateComment, reset: resetCreateComment, data: dataCreate }] = useMutation(gql(CREATE_COMMENT_TYPED_DATA));
     const [{ data: dataSigner, error: errorSigner, loading: loadingSigner }, getSigner] = useSigner();
     const [{ data: dataContractWrite, error: errorContractWrite, loading: loadingContractWrite }, write] = useContractWrite(
         {
             addressOrName: '0xd7B3481De00995046C7850bCe9a5196B7605c367',
             contractInterface: LENS_HUB_ABI,
         },
-        'postWithSig'
+        'commentWithSig'
     );
     const [{ data: dataAccount, error: errorAccount, loading: loadingAccount }, disconnect] = useAccount();
     //auth 
@@ -151,19 +152,19 @@ function Post() {
     };
 
     //post
-    const createPostTypedData = (createPostTypedDataRequest: any, accessTokens: any) => {
+    const createCommentTypedData = (createCommentTypedDataRequest: any, accessTokens: any) => {
         const accessToken = accessTokens?.data?.authenticate?.accessToken;
-        return createPost(
+        return createComment(
             {
                 variables: {
-                    request: createPostTypedDataRequest,
+                    request: createCommentTypedDataRequest,
                 },
                 context: { headers: { authorization: accessToken ? `Bearer ${accessToken}` : '' } }
             }
         );
     };
 
-    async function clickPost() {
+    async function clickComment() {
         setIsLoading(true);
         var typedData;
         var _accessTokens;
@@ -175,22 +176,24 @@ function Post() {
         }).then(accessTokens => {
             prettyJSON('login: result', accessTokens.data);
             _accessTokens = accessTokens;
-            return ipfsClient.add(JSON.stringify(post))
+            return ipfsClient.add(JSON.stringify(comment))
         }).then(ipfsResult => {
             prettyJSON('ipfsResult', ipfsResult);
-            const createPostRequest = {
+            const createCommentRequest = {
                 profileId: profileIDApp.toHexString(),
+                // remember it has to be indexed and follow metadata standards to be traceable!
+                publicationId: '0x49-0x02',
                 contentURI: 'ipfs://' + ipfsResult.path,
                 collectModule: {
-                    // feeCollectModule: {
-                    //   amount: {
-                    //     currency: currencies.enabledModuleCurrencies.map(
-                    //       (c: any) => c.address
-                    //     )[0],
-                    //     value: '0.000001',
-                    //   },
-                    //   recipient: address,
-                    //   referralFee: 10.5,
+                    // timedFeeCollectModule: {
+                    //     amount: {
+                    //         currency: currencies.enabledModuleCurrencies.map(
+                    //             (c: any) => c.address
+                    //         )[0],
+                    //         value: '0.01',
+                    //     },
+                    //     recipient: address,
+                    //     referralFee: 10.5,
                     // },
                     revertCollectModule: true,
                 },
@@ -198,10 +201,11 @@ function Post() {
                     followerOnlyReferenceModule: false,
                 },
             };
-            return createPostTypedData(createPostRequest, _accessTokens)
+            return createCommentTypedData(createCommentRequest, _accessTokens)
         }).then(response => {
-            prettyJSON('createPostTypedData: ', response);
-            typedData = response.data.createPostTypedData.typedData;
+            prettyJSON('createCommentTypedData: ', response);
+            typedData = response.data.createCommentTypedData.typedData;
+            debugger;
             return signTypedData({
                 domain: omit(typedData.domain, '__typename'),
                 types: omit(typedData.types, '__typename'),
@@ -216,6 +220,8 @@ function Post() {
                     args: {
                         profileId: typedData.value.profileId,
                         contentURI: typedData.value.contentURI,
+                        profileIdPointed: typedData.value.profileIdPointed,
+                        pubIdPointed: typedData.value.pubIdPointed,
                         collectModule: typedData.value.collectModule,
                         collectModuleData: typedData.value.collectModuleData,
                         referenceModule: typedData.value.referenceModule,
@@ -229,9 +235,9 @@ function Post() {
                     }
                 });
         }).then(() => {
-            console.log('POST SENT')
+            console.log('COMMENT SENT')
         }).catch(error => {
-            console.log('POST NOOOOOOOT SENT')
+            console.log('COMMENT NOOOOOOOT SENT')
             console.log(error);
         }).finally(() => {
             setIsLoading(false);
@@ -239,7 +245,7 @@ function Post() {
     }
     return (
         <section>
-            <h2>Post</h2>
+            <h2>Comment</h2>
             <p>
                 This example adds a property <code>getLayout</code> to your page,
                 allowing you to return a React component for the layout. This allows you
@@ -248,7 +254,7 @@ function Post() {
             </p>
             <p>
                 {dataAccount
-                    ? <Button isLoading={isLoading} onClick={() => clickPost()} spinner={<BeatLoader size={8} />}>Post</Button>
+                    ? <Button isLoading={isLoading} onClick={() => clickComment()} spinner={<BeatLoader size={8} />}>Comment</Button>
                     : <Text>No account connected</Text>
                 }
             </p>
@@ -263,7 +269,7 @@ function Post() {
     )
 }
 
-Post.getLayout = function getLayout(page) {
+Comment.getLayout = function getLayout(page) {
     return (
         <Layout>
             <Sidebar />
@@ -272,4 +278,4 @@ Post.getLayout = function getLayout(page) {
     )
 }
 
-export default Post
+export default Comment

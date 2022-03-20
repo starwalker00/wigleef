@@ -601,7 +601,7 @@ function Publication() {
   // const posts = data?.posts?.edges?.map((edge) => edge.node) || [];
   // const havePosts = Boolean(posts.length);
   // const haveMorePosts = Boolean(data?.posts?.pageInfo?.hasNextPage);
-  // prettyJSON(dataPost);
+  // prettyJSON('dataPost', dataPost);
   const post = dataPost?.publication || [];
   const havePost = Boolean(post);
   const haveMorePost = Boolean(false);

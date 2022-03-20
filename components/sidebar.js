@@ -16,6 +16,9 @@ function Sidebar() {
             <Link href="/post">
                 <a>Post</a>
             </Link>
+            <Link href="/comment">
+                <a>Comment</a>
+            </Link>
             <Link href="/postList">
                 <a>My Posts</a>
             </Link>
