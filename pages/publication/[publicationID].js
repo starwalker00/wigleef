@@ -1,24 +1,14 @@
-import Layout from '../components/layout'
-import Sidebar from '../components/sidebar'
-import {
-  Text,
-  Button,
-  Flex,
-  Box,
-  Spacer,
-  Stack,
-  Select
-} from '@chakra-ui/react';
-import { gql, useQuery } from "@apollo/client";
-import { prettyJSON } from '../lib/helpers';
-import { ethers, utils, Wallet } from 'ethers';
-import { useProfileID, useDispatchProfileID } from "../components/context/AppContext";
-import Link from 'next/link'
+import Layout from '../../components/layout'
+import Sidebar from '../../components/sidebar'
 
-const GET_PUBLICATIONS = `
-  query($request: PublicationsQueryRequest!) {
-    publications(request: $request) {
-      items {
+import { gql, useQuery } from "@apollo/client";
+import { initializeApollo, addApolloState } from "../../lib/apolloClient";
+import { prettyJSON } from '../../lib/helpers';
+import { useRouter } from 'next/router'
+
+const GET_PUBLICATION = `
+  query($request: PublicationQueryRequest!) {
+    publication(request: $request) {
         __typename 
         ... on Post {
           ...PostFields
@@ -28,12 +18,6 @@ const GET_PUBLICATIONS = `
         }
         ... on Mirror {
           ...MirrorFields
-        }
-      }
-      pageInfo {
-        prev
-        next
-        totalCount
       }
     }
   }
@@ -308,33 +292,32 @@ const GET_PUBLICATIONS = `
   }
 `;
 
-function PostList() {
-  const profileIDApp: ethers.BigNumber = useProfileID()
-  const dispatch = useDispatchProfileID()
+function Publication() {
+  const router = useRouter()
+  const { publicationID } = router.query;
+  prettyJSON('publicationID', publicationID);
 
   const { loading, error, data, fetchMore } = useQuery(
-    gql(GET_PUBLICATIONS),
+    gql(GET_PUBLICATION),
     {
       variables: {
-        request: {
-          profileId: profileIDApp.toHexString(),
-          publicationTypes: ['POST', 'COMMENT', 'MIRROR'],
-        },
+        request: { publicationId: publicationID },
+        // request: { publicationId: '0x49-0x02' },
       },
       notifyOnNetworkStatusChange: true,
-      fetchPolicy: "no-cache"
     });
   // const posts = data?.posts?.edges?.map((edge) => edge.node) || [];
   // const havePosts = Boolean(posts.length);
   // const haveMorePosts = Boolean(data?.posts?.pageInfo?.hasNextPage);
-
-  const publications = data?.publications?.items || [];
-  const havePosts = Boolean(publications.length);
+  prettyJSON(data);
+  const publication = data?.publication || [];
+  const havePosts = Boolean(publication);
   const haveMorePosts = Boolean(true);
-  // prettyJSON('publications', publications);
+
   return (
+
     <section>
-      <h1>My Posts</h1>
+      <h1>publication/[id]</h1>
       {!havePosts && loading ? (
         <p>Loading...</p>
       ) : error ? (
@@ -342,26 +325,16 @@ function PostList() {
       ) : !havePosts ? (
         <p>No posts found.</p>
       ) : (
-        publications.map((publication) => {
-          return (
-            <article key={publication.id} style={{ border: "2px solid #eee", padding: "1rem", marginBottom: "1rem", borderRadius: "10px" }}>
-              <h2>{publication.__typename}</h2>
-              <Link
-                href={{
-                  pathname: '/publication/[publicationID]',
-                  query: { publicationID: publication.id },
-                }}
-              >
-                <a><h3>{publication.id}</h3></a>
-              </Link>
-              <p>{publication.metadata.content}</p>
-              <p>mirror : {publication.stats.totalAmountOfComments}</p>
-              <p>collects : {publication.stats.totalAmountOfCollects}</p>
-              <p>comments : {publication.stats.totalAmountOfComments}</p>
-            </article>
-          );
-        })
-      )}
+        <article key={publication.id} style={{ border: "2px solid #eee", padding: "1rem", marginBottom: "1rem", borderRadius: "10px" }}>
+          <h2>{publication.__typename}</h2>
+          <h3>{publication.id}</h3>
+          <p>{publication.metadata?.content}</p>
+          <p>mirror : {publication.stats?.totalAmountOfComments}</p>
+          <p>collects : {publication.stats?.totalAmountOfCollects}</p>
+          <p>comments : {publication.stats?.totalAmountOfComments}</p>
+        </article>
+      )
+      }
       {havePosts ? (
         haveMorePosts ? (
           <form onSubmit={event => {
@@ -385,7 +358,7 @@ function PostList() {
   )
 }
 
-PostList.getLayout = function getLayout(page) {
+Publication.getLayout = function getLayout(page) {
   return (
     <Layout>
       <Sidebar />
@@ -394,4 +367,26 @@ PostList.getLayout = function getLayout(page) {
   )
 }
 
-export default PostList
+export async function getStaticProps({ params }) {
+  // prettyJSON('params', params);
+  const apolloClient = initializeApollo();
+
+  const result = await apolloClient.query({
+    query: gql(GET_PUBLICATION),
+    variables: {
+      request: { publicationId: params.publicationID },
+      // request: { publicationId: '0x49-0x02' },
+    },
+  });
+
+  return addApolloState(apolloClient, {
+    props: {},
+  });
+}
+
+export async function getStaticPaths() {
+  const paths = []
+  return { paths, fallback: true }
+}
+
+export default Publication

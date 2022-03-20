@@ -1,5 +1,6 @@
 import Layout from '../components/layout'
 import Sidebar from '../components/sidebar'
+import Link from 'next/link'
 
 import { gql, useQuery } from "@apollo/client";
 import { initializeApollo, addApolloState } from "../lib/apolloClient";
@@ -351,8 +352,18 @@ function Explore() {
           return (
             <article key={post.id} style={{ border: "2px solid #eee", padding: "1rem", marginBottom: "1rem", borderRadius: "10px" }}>
               <h2>{post.__typename}</h2>
-              <h3>{post.id}</h3>
+              <Link
+                href={{
+                  pathname: '/publication/[publicationID]',
+                  query: { publicationID: post.id },
+                }}
+              >
+                <a><h3>{post.id}</h3></a>
+              </Link>
               <p>{post.metadata.content}</p>
+              <p>mirror : {post.stats.totalAmountOfComments}</p>
+              <p>collects : {post.stats.totalAmountOfCollects}</p>
+              <p>comments : {post.stats.totalAmountOfComments}</p>
             </article>
           );
         })
