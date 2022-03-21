@@ -12,7 +12,8 @@ import { prettyJSON } from '../lib/helpers';
 import { BigNumber } from "@ethersproject/bignumber";
 
 import { useProfileID, useDispatchProfileID } from "./context/AppContext";
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { UNSET_CONTEXT_PROFILE_ID } from '../lib/config';
 
 const GET_PROFILES = `
   query($request: ProfileQueryRequest!) {
@@ -99,15 +100,8 @@ function SelectProfile({ address }) {
   const profileIDApp: BigNumber = useProfileID()
   const dispatch = useDispatchProfileID()
 
-  useEffect(() => {
-    // set first profile to appcontext if no profile ID is set
-    if (profileIDApp.eq(0) && data?.profiles?.items?.length > 0) {
-      let firstProfileID = BigNumber.from(data.profiles.items[0].id);
-      dispatch({ type: 'set_profileID', payload: firstProfileID });
-    }
-  }, []);
-
-  const { loading, error, data, fetchMore } = useQuery(
+  // get profiles ownedBy connected address
+  const { loading, error, data, fetchMore, called } = useQuery(
     gql(GET_PROFILES),
     {
       variables: {
@@ -117,6 +111,13 @@ function SelectProfile({ address }) {
       fetchPolicy: "no-cache"
     });
 
+  // set first profile to appcontext if no profile ID is set
+  if (profileIDApp.eq(UNSET_CONTEXT_PROFILE_ID) && data?.profiles?.items?.length > 0) {
+    let firstProfileID = BigNumber.from(data.profiles.items[0].id);
+    dispatch({ type: 'set_profileID', payload: firstProfileID });
+  }
+
+  // handle select one of owned profileID
   function changeProfileID(event: any) {
     dispatch({ type: 'set_profileID', payload: BigNumber.from(event.target.value) });
   }
@@ -145,9 +146,7 @@ function SelectProfile({ address }) {
                     value={profileID.toString()} >
                     {profile.handle}{'#'}{profileID.toString()}
                   </option>)
-              }
-
-              )
+              })
             }
           </Select>
         </Stack>
