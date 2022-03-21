@@ -1,14 +1,9 @@
 /** @type {import('next').NextConfig} */
-const removeImports = require('next-remove-imports')();
-const nextConfig = {
+const removeImports = require('next-remove-imports')({})
+
+module.exports = removeImports({
   reactStrictMode: true,
   experimental: {
-    scrollRestoration: true,
+    scrollRestoration: true
   },
-}
-
-module.exports = (phase, { defaultConfig }) => {
-  return removeImports({
-    ...nextConfig
-  });
-};
+})

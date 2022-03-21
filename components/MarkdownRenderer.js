@@ -1,30 +1,27 @@
-import markdownToHtml from '../lib/markdownToHtml'
-import { useEffect, useState } from 'react';
-import markdownStyles from './markdown-styles.module.css'
-import { Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react'
-import MDEditor from '@uiw/react-md-editor';
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
+import dynamic from "next/dynamic";
+import rehypeSanitize from "rehype-sanitize";
+
+const MarkdownPreview = dynamic(
+    () => import("@uiw/react-markdown-preview"),
+    { ssr: false }
+);
 
 function MarkdownRenderer({ markdownString }) {
-    const [content, setContent] = useState()
-    useEffect(() => {
-        async function mdToHtml() {
-            const response = await markdownToHtml(markdownString) || '';
-            setContent(response);
-        }
-        mdToHtml();
-    }, [markdownString]);
-
-    if (!content) {
+    if (!markdownString || typeof markdownString != "string") {
         return (
             <Skeleton height='20px' />
         );
     } else {
         return (
             <div>
-                <MDEditor.Markdown source={content} />
-            </div>
+                {/* {console.log(`markdownString: ${markdownString}`)} */}
+                <MarkdownPreview source={markdownString} rehypePlugins={[[rehypeSanitize]]} />
+                {/* <MarkdownPreview source={'<iframe src="javascript:alert(\'delta\')" ></iframe>'} /> */}
+            </div >
         );
     }
 }
 
-export default MarkdownRenderer;
+export default MarkdownRenderer

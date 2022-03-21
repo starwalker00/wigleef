@@ -25,7 +25,6 @@ import { useSignMessage, useSignTypedData, useContractWrite, useSigner, useAccou
 
 import { useProfileID } from "../components/context/AppContext";
 
-import MarkdownEditor from '../components/MarkdownEditor'
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import dynamic from "next/dynamic";
