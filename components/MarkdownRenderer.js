@@ -2,6 +2,7 @@ import markdownToHtml from '../lib/markdownToHtml'
 import { useEffect, useState } from 'react';
 import markdownStyles from './markdown-styles.module.css'
 import { Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react'
+import MDEditor from '@uiw/react-md-editor';
 
 function MarkdownRenderer({ markdownString }) {
     const [content, setContent] = useState()
@@ -19,10 +20,9 @@ function MarkdownRenderer({ markdownString }) {
         );
     } else {
         return (
-            <div
-                className={markdownStyles['markdown']}
-                dangerouslySetInnerHTML={{ __html: content }}
-            />
+            <div>
+                <MDEditor.Markdown source={content} />
+            </div>
         );
     }
 }
