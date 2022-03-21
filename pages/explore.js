@@ -334,25 +334,24 @@ function Explore() {
   // const havePosts = Boolean(posts.length);
   // const haveMorePosts = Boolean(data?.posts?.pageInfo?.hasNextPage);
 
-  const posts = data?.explorePublications?.items || [];
-  const havePosts = Boolean(posts.length);
-  const haveMorePosts = Boolean(true);
+  const publications = data?.explorePublications?.items || [];
+  const havePublication = Boolean(publications.length);
+  const haveMorePublication = Boolean(true);
 
   return (
-
     <section>
-      {/* {console.log(posts)} */}
+      {console.log(publications)}
       <h1>Explore</h1>
-      {!havePosts && loading ? (
+      {!havePublication && loading ? (
         <p>Loading...</p>
       ) : error ? (
         <p>An error has occurred.</p>
-      ) : !havePosts ? (
-        <p>No posts found.</p>
+      ) : !havePublication ? (
+        <p>No publications found.</p>
       ) : (
-        posts.map((post) => {
+        publications.map((publication) => {
           return (
-            <Publication key={post.id} post={post} />
+            <Publication key={publication.id} publication={publication} />
           );
           // return (
           //   <article key={post.id} style={{ border: "2px solid #eee", padding: "1rem", marginBottom: "1rem", borderRadius: "10px" }}>
@@ -373,8 +372,8 @@ function Explore() {
           // );
         })
       )}
-      {havePosts ? (
-        haveMorePosts ? (
+      {havePublication ? (
+        haveMorePublication ? (
           <form onSubmit={event => {
             event.preventDefault();
             fetchMore({
@@ -389,7 +388,7 @@ function Explore() {
             </button>
           </form>
         ) : (
-          <p>✅ All posts loaded.</p>
+          <p>✅ All publications loaded.</p>
         )
       ) : null}
     </section>

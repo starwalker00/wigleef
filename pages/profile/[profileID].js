@@ -339,18 +339,19 @@ function Profile() {
   // const haveMorePosts = Boolean(data?.posts?.pageInfo?.hasNextPage);
   // prettyJSON('publications', publications);
   const publications = data?.publications?.items || [];
-  const havePosts = Boolean(publications.length);
-  const haveMorePosts = Boolean(true);
+  const havePublication = Boolean(publications.length);
+  const haveMorePublication = Boolean(true);
 
   return (
     <section>
-      <h1>My Posts</h1>
-      {!havePosts && loading ? (
+      {console.log(publications)}
+      <h1>My publications</h1>
+      {!havePublication && loading ? (
         <p>Loading...</p>
       ) : error ? (
         <p>An error has occurred.</p>
-      ) : !havePosts ? (
-        <p>No posts found.</p>
+      ) : !havePublication ? (
+        <p>No publications found.</p>
       ) : (
         publications.map((publication) => {
           return (
@@ -358,8 +359,8 @@ function Profile() {
           );
         })
       )}
-      {havePosts ? (
-        haveMorePosts ? (
+      {havePublication ? (
+        haveMorePublication ? (
           <form onSubmit={event => {
             event.preventDefault();
             fetchMore({
@@ -374,7 +375,7 @@ function Profile() {
             </button>
           </form>
         ) : (
-          <p>✅ All posts loaded.</p>
+          <p>✅ All publications loaded.</p>
         )
       ) : null}
     </section>
