@@ -10,6 +10,8 @@ import {
   Stack,
   Select
 } from '@chakra-ui/react';
+import { Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react'
+
 import { gql, useQuery } from "@apollo/client";
 import { initializeApollo, addApolloState } from "../../lib/apolloClient";
 import { prettyJSON } from '../../lib/helpers';
@@ -321,7 +323,7 @@ function Profile() {
   const constCurrentProfileID = BigNumber.from(profileID);
 
   // fetch publications of profileID
-  const { loading, error, data, fetchMore, refetch } = useQuery(
+  const { loading: loadingPublication, error, data, fetchMore, refetch } = useQuery(
     gql(GET_PUBLICATIONS),
     {
       variables: {
@@ -346,8 +348,8 @@ function Profile() {
     <section>
       {console.log(publications)}
       <h1>My publications</h1>
-      {!havePublication && loading ? (
-        <p>Loading...</p>
+      {!havePublication && loadingPublication ? (
+        <p><Skeleton height='20px' /></p>
       ) : error ? (
         <p>An error has occurred.</p>
       ) : !havePublication ? (
@@ -370,8 +372,8 @@ function Profile() {
               }
             });
           }}>
-            <button type="submit" disabled={loading}>
-              {loading ? "Loading..." : "Load more"}
+            <button type="submit" disabled={loadingPublication}>
+              {loadingPublication ? "Loading..." : "Load more"}
             </button>
           </form>
         ) : (

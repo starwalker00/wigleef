@@ -1,6 +1,7 @@
 import Layout from '../../components/layout'
 import Sidebar from '../../components/sidebar'
 import PublicationView from '../../components/PublicationView'
+import { Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react'
 
 import { gql, useQuery } from "@apollo/client";
 import { initializeApollo, addApolloState } from "../../lib/apolloClient";
@@ -595,7 +596,7 @@ function Publication() {
   prettyJSON('publicationID', publicationID);
 
   // query main publication
-  const { loading: loadingPost, error: errorPost, data: dataPost, fetchMore: fetchMorePost } = useQuery(
+  const { loading: loadingPublication, error: errorPost, data: dataPost, fetchMore: fetchMorePost } = useQuery(
     gql(GET_PUBLICATION),
     {
       variables: {
@@ -632,8 +633,8 @@ function Publication() {
   return (
     <section>
       <h1>publication/[id]</h1>
-      {!havePublication && loadingPost ? (
-        <p>Loading...</p>
+      {!havePublication && loadingPublication ? (
+        <p><Skeleton height='20px' /></p>
       ) : errorPost ? (
         <p>An error has occurred.</p>
       ) : !havePublication ? (

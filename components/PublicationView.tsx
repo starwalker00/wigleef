@@ -9,7 +9,7 @@ import ReactTimeAgo from 'react-time-ago'
 import CommentView from '../components/CommentView'
 
 function PublicationView(dataPublication) {
-    console.log(dataPublication)
+    // console.log(dataPublication)
     const publication = dataPublication.publication;
     // console.log(publication)
     if (publication.length < 1) {
