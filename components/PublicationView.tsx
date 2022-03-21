@@ -52,7 +52,7 @@ function PublicationView(dataPublication) {
                                 {publication.id}</Text>
                         </Flex>
                         <Flex flexDirection='column'>
-                            <Flex className='profile' alignItems='center' bgColor='blue.50'>
+                            <Flex className='profile' alignItems='center' bgColor='blue.50' py='1'>
                                 <Avatar size='md' src={publication.profile?.picture} />
                                 <Flex ml='2' alignItems='center'>
                                     <Text fontSize='lg' fontWeight='bold'>
@@ -71,7 +71,7 @@ function PublicationView(dataPublication) {
                                     <Text fontSize='xs'><ReactTimeAgo date={new Date(publication.createdAt)} timeStyle="twitter" /></Text>
                                 </Flex>
                             </Flex>
-                            <Flex className='metadata' flexDirection='column' alignContent='center' bgColor='blue.100' ml='3'>
+                            <Flex className='metadata' flexDirection='column' alignContent='center' bgColor='blue.100'>
                                 <Heading
                                     color={'gray.700'}
                                     fontSize={'sm'}
@@ -80,9 +80,11 @@ function PublicationView(dataPublication) {
                                 </Heading>
                                 <Text fontSize='xs' color={'gray.500'}>{publication.metadata?.description}</Text>
                                 {/* <Text fontSize='sm' color={'gray.800'}>{publication.metadata?.content}</Text> */}
-                                <MarkdownRenderer markdownString={publication.metadata?.content} />
-                                <Divider my='2' />
+                                <Box m='3' p='3' borderLeft='1px solid green'>
+                                    <MarkdownRenderer markdownString={publication.metadata?.content} />
+                                </Box>
                             </Flex>
+                            <Divider my='2' />
                             <Flex className='stats' flexDirection='row' justifyContent='space-around' gap='2' alignContent='center'>
                                 <Text fontSize='xs' color={'gray.500'}>{publication.stats?.totalAmountOfComments}{''} comments</Text>
                                 <Text fontSize='xs' color={'gray.500'}>{publication.stats?.totalAmountOfCollects} collects</Text>

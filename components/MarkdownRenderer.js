@@ -15,22 +15,14 @@ function MarkdownRenderer({ markdownString }) {
 
     if (!content) {
         return (
-            <div>
-                <div>
-                    <Skeleton height='20px' />
-                </div>
-            </div>
+            <Skeleton height='20px' />
         );
     } else {
         return (
-            <div>
-                <div>
-                    <div
-                        className={markdownStyles['markdown']}
-                        dangerouslySetInnerHTML={{ __html: content }}
-                    />
-                </div>
-            </div>
+            <div
+                className={markdownStyles['markdown']}
+                dangerouslySetInnerHTML={{ __html: content }}
+            />
         );
     }
 }

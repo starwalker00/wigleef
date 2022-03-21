@@ -49,7 +49,7 @@ function CommentView(dataComment) {
                             {publication.id}</Text>
                     </Flex>
                     <Flex flexDirection='column'>
-                        <Flex className='profile' alignItems='center' bgColor='blue.50'>
+                        <Flex className='profile' alignItems='center' bgColor='blue.50' py='1'>
                             <Avatar size='sm' src={publication.profile?.picture} />
                             <Flex ml='2' alignItems='center'>
                                 <Text fontSize='md' fontWeight='bold'>
@@ -69,7 +69,7 @@ function CommentView(dataComment) {
                             </Flex>
                         </Flex>
                         <Divider orientation='vertical' />
-                        <Flex className='metadata' flexDirection='column' alignContent='center' bgColor='blue.100' ml='3'>
+                        <Flex className='metadata' flexDirection='column' alignContent='center' bgColor='blue.100'>
                             <Heading
                                 color={'gray.700'}
                                 fontSize={'sm'}
@@ -77,9 +77,11 @@ function CommentView(dataComment) {
                                 {publication.metadata?.name}
                             </Heading>
                             <Text fontSize='xs' color={'gray.500'}>{publication.metadata?.description}</Text>
-                            <MarkdownRenderer markdownString={publication.metadata?.content} />
-                            <Divider my='2' />
+                            <Box m='3' p='3' borderLeft='1px solid green'>
+                                <MarkdownRenderer markdownString={publication.metadata?.content} />
+                            </Box>
                         </Flex>
+                        <Divider my='2' />
                         <Flex className='stats' flexDirection='row' justifyContent='space-around' gap='2' alignContent='center'>
                             <Text fontSize='xs' color={'gray.500'}>{publication.stats?.totalAmountOfComments}{''} comments</Text>
                             <Text fontSize='xs' color={'gray.500'}>{publication.stats?.totalAmountOfCollects} collects</Text>
