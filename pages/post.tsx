@@ -25,6 +25,16 @@ import { useSignMessage, useSignTypedData, useContractWrite, useSigner, useAccou
 
 import { useProfileID } from "../components/context/AppContext";
 
+import MarkdownEditor from '../components/MarkdownEditor'
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
+import dynamic from "next/dynamic";
+
+const MDEditor = dynamic(
+    () => import("@uiw/react-md-editor").then((mod) => mod.default),
+    { ssr: false }
+);
+
 // authentication
 const GET_CHALLENGE = `
   query($request: ChallengeRequest!) {
@@ -74,27 +84,6 @@ const CREATE_POST_TYPED_DATA = `
 }
 `;
 
-let post: Metadata =
-{
-    version: MetadataVersions.one,
-    metadata_id: uuidv4(),
-    description: 'Description',
-    content: 'OAS ✽ ✾ ✿ ❀ ❁ ❃ ❊ ❋ ✣ ✤ 🌹 ❀ ✿ 🌷 💐 ⚜',
-    external_url: null,
-    image: null,
-    imageMimeType: null,
-    name: 'Name',
-    attributes: [],
-    media: [
-        // {
-        //   item: 'https://scx2.b-cdn.net/gfx/news/hires/2018/lion.jpg',
-        //   // item: 'https://assets-global.website-files.com/5c38aa850637d1e7198ea850/5f4e173f16b537984687e39e_AAVE%20ARTICLE%20website%20main%201600x800.png',
-        //   type: 'image/jpeg',
-        // },
-    ],
-    appId: 'testing123',
-}
-
 let ipfsClient: IPFSHTTPClient | undefined;
 try {
     ipfsClient = create({
@@ -127,6 +116,8 @@ function Post() {
         'postWithSig'
     );
     const [{ data: dataAccount, error: errorAccount, loading: loadingAccount }, disconnect] = useAccount();
+    const [value, setValue] = useState("**Hello world!!!**");
+
     //auth 
     const generateChallenge = (address: string) => {
         return apolloClient.query({
@@ -151,6 +142,27 @@ function Post() {
     };
 
     //post
+    let post: Metadata =
+    {
+        version: MetadataVersions.one,
+        metadata_id: uuidv4(),
+        description: 'Description',
+        // content: 'OAS ✽ ✾ ✿ ❀ ❁ ❃ ❊ ❋ ✣ ✤ 🌹 ❀ ✿ 🌷 💐 ⚜',
+        content: value,
+        external_url: null,
+        image: null,
+        imageMimeType: null,
+        name: 'Name',
+        attributes: [],
+        media: [
+            // {
+            //   item: 'https://scx2.b-cdn.net/gfx/news/hires/2018/lion.jpg',
+            //   // item: 'https://assets-global.website-files.com/5c38aa850637d1e7198ea850/5f4e173f16b537984687e39e_AAVE%20ARTICLE%20website%20main%201600x800.png',
+            //   type: 'image/jpeg',
+            // },
+        ],
+        appId: 'testing123',
+    }
     const createPostTypedData = (createPostTypedDataRequest: any, accessTokens: any) => {
         const accessToken = accessTokens?.data?.authenticate?.accessToken;
         return createPost(
@@ -246,6 +258,9 @@ function Post() {
                 to define the layout on a per-page basis. Since we&apos;re returning a
                 function, we can have complex nested layouts if desired.
             </p>
+            <div>
+                <MDEditor value={value} onChange={setValue} />
+            </div>
             <p>
                 {dataAccount
                     ? <Button isLoading={isLoading} onClick={() => clickPost()} spinner={<BeatLoader size={8} />}>Post</Button>
