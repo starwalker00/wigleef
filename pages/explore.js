@@ -361,7 +361,7 @@ function Explore() {
                 <a><h3>{post.id}</h3></a>
               </Link>
               <p>{post.metadata.content}</p>
-              <p>mirror : {post.stats.totalAmountOfComments}</p>
+              <p>mirror : {post.stats.totalAmountOfMirrors}</p>
               <p>collects : {post.stats.totalAmountOfCollects}</p>
               <p>comments : {post.stats.totalAmountOfComments}</p>
             </article>

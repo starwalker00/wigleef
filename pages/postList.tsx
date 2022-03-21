@@ -355,7 +355,7 @@ function PostList() {
                 <a><h3>{publication.id}</h3></a>
               </Link>
               <p>{publication.metadata.content}</p>
-              <p>mirror : {publication.stats.totalAmountOfComments}</p>
+              <p>mirror : {publication.stats.totalAmountOfMirrors}</p>
               <p>collects : {publication.stats.totalAmountOfCollects}</p>
               <p>comments : {publication.stats.totalAmountOfComments}</p>
             </article>
