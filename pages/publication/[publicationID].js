@@ -1,5 +1,6 @@
 import Layout from '../../components/layout'
 import Sidebar from '../../components/sidebar'
+import PublicationView from '../../components/PublicationView'
 
 import { gql, useQuery } from "@apollo/client";
 import { initializeApollo, addApolloState } from "../../lib/apolloClient";
@@ -609,9 +610,9 @@ function Publication() {
   // const havePosts = Boolean(posts.length);
   // const haveMorePosts = Boolean(data?.posts?.pageInfo?.hasNextPage);
   // prettyJSON('dataPost', dataPost);
-  const post = dataPost?.publication || [];
-  const havePost = Boolean(post);
-  const haveMorePost = Boolean(false);
+  const publication = dataPost?.publication || [];
+  const havePublication = Boolean(publication);
+  const haveMorePublication = Boolean(false);
 
   // query comments of main publication
   const { loading: loadingComments, error: errorComments, data: dataComments, fetchMore: fetchMoreComments } = useQuery(
@@ -631,42 +632,43 @@ function Publication() {
   return (
     <section>
       <h1>publication/[id]</h1>
-      {!havePost && loadingPost ? (
+      {!havePublication && loadingPost ? (
         <p>Loading...</p>
       ) : errorPost ? (
         <p>An error has occurred.</p>
-      ) : !havePost ? (
+      ) : !havePublication ? (
         <p>No posts found.</p>
       ) : (
-        <article key={post.id} style={{ border: "2px solid #eee", padding: "1rem", marginBottom: "1rem", borderRadius: "10px" }}>
-          <h2>{post.__typename}</h2>
-          <h3>{post.id}</h3>
-          <p>{post.metadata?.content}</p>
-          <p>mirror : {post.stats?.totalAmountOfComments}</p>
-          <p>collects : {post.stats?.totalAmountOfCollects}</p>
-          <p>comments : {post.stats?.totalAmountOfComments}</p>
-          {!haveComments && loadingComments ? (
-            <p>Loading comments...</p>
-          ) : errorComments ? (
-            <p>An error has occurred.</p>
-          ) : !haveComments ? (
-            <p>No comments found.</p>
-          ) : (
-            comments.map((comment) => {
-              return (
-                <div key={comment.id}>
-                  <p>{comment.id}</p>
-                  <p>{comment.metadata?.content}</p>
-                </div>
-              )
-            })
-          )
-          }
-        </article>
+        <PublicationView key={publication.id} publication={publication} comments={comments} />
+        // <article key={post.id} style={{ border: "2px solid #eee", padding: "1rem", marginBottom: "1rem", borderRadius: "10px" }}>
+        //   <h2>{post.__typename}</h2>
+        //   <h3>{post.id}</h3>
+        //   <p>{post.metadata?.content}</p>
+        //   <p>mirror : {post.stats?.totalAmountOfComments}</p>
+        //   <p>collects : {post.stats?.totalAmountOfCollects}</p>
+        //   <p>comments : {post.stats?.totalAmountOfComments}</p>
+        //   {!haveComments && loadingComments ? (
+        //     <p>Loading comments...</p>
+        //   ) : errorComments ? (
+        //     <p>An error has occurred.</p>
+        //   ) : !haveComments ? (
+        //     <p>No comments found.</p>
+        //   ) : (
+        //     comments.map((comment) => {
+        //       return (
+        //         <div key={comment.id}>
+        //           <p>{comment.id}</p>
+        //           <p>{comment.metadata?.content}</p>
+        //         </div>
+        //       )
+        //     })
+        //   )
+        //   }
+        // </article>
       )
       }
-      {havePost ? (
-        haveMorePost ? (
+      {havePublication ? (
+        haveMorePublication ? (
           <form onSubmit={event => {
             event.preventDefault();
             fetchMore({
