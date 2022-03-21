@@ -6,6 +6,7 @@ import {
 } from '@chakra-ui/react'
 import { FaTwitter } from 'react-icons/fa'
 import ReactTimeAgo from 'react-time-ago'
+import MarkdownRenderer from './MarkdownRenderer'
 
 function CommentView(dataComment) {
     // console.log(dataComment)
@@ -30,19 +31,28 @@ function CommentView(dataComment) {
                 passHref
                 /*auto prefetch : https://nextjs.org/docs/messages/prefetch-true-deprecated is it really working ? */>
                 <LinkOverlay>
-                    <Text
-                        color={'green.500'}
-                        textTransform={'uppercase'}
-                        fontWeight={800}
-                        fontSize={'sm'}
-                        letterSpacing={1.1}>
-                        {publication.__typename}
-                    </Text>
+                    <Flex flexDirection='row' justifyContent='flex-start' gap='2'>
+                        <Text
+                            color={'green.500'}
+                            textTransform={'uppercase'}
+                            fontWeight={800}
+                            fontSize={'sm'}
+                            letterSpacing={1.1}>
+                            {publication.__typename}
+                        </Text>
+                        <Text
+                            color={'green.500'}
+                            textTransform={'uppercase'}
+                            fontWeight={800}
+                            fontSize={'sm'}
+                            letterSpacing={1.1}>
+                            {publication.id}</Text>
+                    </Flex>
                     <Flex flexDirection='column'>
-                        <Flex className='profile'>
-                            <Avatar src={publication.profile?.picture} />
-                            <Box ml='3'>
-                                <Text fontWeight='bold'>
+                        <Flex className='profile' alignItems='center' bgColor='blue.50'>
+                            <Avatar size='sm' src={publication.profile?.picture} />
+                            <Flex ml='2' alignItems='center'>
+                                <Text fontSize='md' fontWeight='bold'>
                                     {publication.profile?.handle}
                                     {/* <Badge ml='1' colorScheme='green'>New</Badge> */}
                                     {publication.profile?.twitterUrl
@@ -55,11 +65,11 @@ function CommentView(dataComment) {
                                         :
                                         null}
                                 </Text>
-                                <Text fontSize='sm'>{publication.profile?.id}</Text>
                                 <Text fontSize='xs'><ReactTimeAgo date={new Date(publication.createdAt)} timeStyle="twitter" /></Text>
-                            </Box>
+                            </Flex>
                         </Flex>
-                        <Flex className='metadata' flexDirection='column' alignContent='center' ml='3'>
+                        <Divider orientation='vertical' />
+                        <Flex className='metadata' flexDirection='column' alignContent='center' bgColor='blue.100' ml='3'>
                             <Heading
                                 color={'gray.700'}
                                 fontSize={'sm'}
@@ -67,9 +77,10 @@ function CommentView(dataComment) {
                                 {publication.metadata?.name}
                             </Heading>
                             <Text fontSize='xs' color={'gray.500'}>{publication.metadata?.description}</Text>
-                            <Text fontSize='sm' color={'gray.800'}>{publication.metadata?.content}</Text>
+                            <MarkdownRenderer markdownString={publication.metadata?.content} />
+                            <Divider my='2' />
                         </Flex>
-                        <Flex className='stats' flexDirection='row' gap='2' alignContent='center' ml='3'>
+                        <Flex className='stats' flexDirection='row' justifyContent='space-around' gap='2' alignContent='center'>
                             <Text fontSize='xs' color={'gray.500'}>{publication.stats?.totalAmountOfComments}{''} comments</Text>
                             <Text fontSize='xs' color={'gray.500'}>{publication.stats?.totalAmountOfCollects} collects</Text>
                             <Text fontSize='xs' color={'gray.500'}>{publication.stats?.totalAmountOfMirrors} mirrors</Text>
