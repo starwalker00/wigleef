@@ -593,7 +593,7 @@ function Publication() {
   // demo publication needed because publicationID is undefined on first render
   // https://www.joshwcomeau.com/react/the-perils-of-rehydration/
   const publicationID = router.query.publicationID ?? DEMO_PUBLICATION_ID;
-  prettyJSON('publicationID', publicationID);
+  // prettyJSON('publicationID', publicationID);
 
   // query main publication
   const { loading: loadingPublication, error: errorPost, data: dataPost, fetchMore: fetchMorePost } = useQuery(

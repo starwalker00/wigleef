@@ -319,7 +319,7 @@ function Profile() {
   // demo profile needed because profileID is undefined on first render
   // https://www.joshwcomeau.com/react/the-perils-of-rehydration/
   const profileID = router.query.profileID ?? DEMO_PROFILE_ID;
-  prettyJSON('profileID', profileID);
+  // prettyJSON('profileID', profileID);
   const constCurrentProfileID = BigNumber.from(profileID);
 
   // fetch publications of profileID
@@ -346,7 +346,7 @@ function Profile() {
 
   return (
     <section>
-      {console.log(publications)}
+      {/* {console.log(publications)} */}
       <h1>My publications</h1>
       {!havePublication && loadingPublication ? (
         <Skeleton height='20px' />

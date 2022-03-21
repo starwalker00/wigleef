@@ -361,13 +361,13 @@ function Explore() {
   const havePublication = Boolean(publications.length);
   const haveMorePublication = Boolean(true);
   function getRandomArbitrary(min, max) {
-    console.log(min)
-    console.log(max)
+    // console.log(min)
+    // console.log(max)
     return Math.floor(Math.random() * (max - min) + min);
   }
   return (
     <section>
-      {console.log(publications)}
+      {/* {console.log(publications)} */}
       <h1>Explore</h1>
       {!havePublication && loading ? (
         <p>Loading...</p>
@@ -402,14 +402,14 @@ function Explore() {
       {havePublication ? (
         haveMorePublication ? (
           <form onSubmit={event => {
-            prettyJSON('publications.length', publications.length);
+            // prettyJSON('publications.length', publications.length);
             event.preventDefault();
             // prettyJSON('data', data);
             const pageInfoNext = JSON.parse(data.explorePublications.pageInfo.next);
             // const pageInfo = JSON.parse(data.explorePublications.pageInfo);
-            prettyJSON('pageInfo', pageInfoNext);
+            // prettyJSON('pageInfo', pageInfoNext);
             const randomCursor = getRandomArbitrary(2, data.explorePublications.pageInfo.totalCount);
-            console.log(randomCursor);
+            // console.log(randomCursor);
             fetchMore({
               variables: {
                 request: {
@@ -427,10 +427,10 @@ function Explore() {
               updateQuery: (prevResult, { fetchMoreResult }) => {
                 // prettyJSON('prevResult', fetchMoreResult);
                 // prettyJSON('fetchMoreResult', fetchMoreResult);
-                console.log('updateQueryupdateQueryupdateQueryupdateQueryupdateQuery')
-                console.log(prevResult)
-                console.log(fetchMoreResult)
-                prettyJSON('fetchMoreResult', fetchMoreResult.explorePublications.items[0].id);
+                // console.log('updateQueryupdateQueryupdateQueryupdateQueryupdateQuery')
+                // console.log(prevResult)
+                // console.log(fetchMoreResult)
+                // prettyJSON('fetchMoreResult', fetchMoreResult.explorePublications.items[0].id);
                 // fetchMoreResult.explorePublications.items = [
                 //   ...prevResult.explorePublications.items,
                 //   ...fetchMoreResult.explorePublications.items
@@ -473,7 +473,7 @@ export async function getStaticProps(context) {
       request: { sortCriteria: 'TOP_COMMENTED', limit: 20, cursor: 0 },
     },
   });
-  prettyJSON('explore: result', result.data);
+  // prettyJSON('explore: result', result.data);
 
   return addApolloState(apolloClient, {
     props: {},
