@@ -8,8 +8,11 @@ import { Provider as WagmiProvider, chain, defaultChains } from 'wagmi'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 
 import { AppProvider } from '../components/context/AppContext';
+import TimeAgo from 'javascript-time-ago'
 
-// const infuraId = 'Pld6XQBC-Jcd2Ls10sPWEG2IsgjCsO4N';
+import en from 'javascript-time-ago/locale/en.json'
+TimeAgo.addDefaultLocale(en)
+
 const chains = defaultChains;
 type Connector = InjectedConnector;
 // Set up connectors

@@ -1,5 +1,7 @@
 import Layout from '../components/layout'
 import Sidebar from '../components/sidebar'
+import Publication from '../components/Publication'
+
 import Link from 'next/link'
 
 import { gql, useQuery } from "@apollo/client";
@@ -350,22 +352,25 @@ function Explore() {
       ) : (
         posts.map((post) => {
           return (
-            <article key={post.id} style={{ border: "2px solid #eee", padding: "1rem", marginBottom: "1rem", borderRadius: "10px" }}>
-              <h2>{post.__typename}</h2>
-              <Link
-                href={{
-                  pathname: '/publication/[publicationID]',
-                  query: { publicationID: post.id },
-                }}
-              >
-                <a><h3>{post.id}</h3></a>
-              </Link>
-              <p>{post.metadata.content}</p>
-              <p>mirror : {post.stats.totalAmountOfMirrors}</p>
-              <p>collects : {post.stats.totalAmountOfCollects}</p>
-              <p>comments : {post.stats.totalAmountOfComments}</p>
-            </article>
+            <Publication key={post.id} post={post} />
           );
+          // return (
+          //   <article key={post.id} style={{ border: "2px solid #eee", padding: "1rem", marginBottom: "1rem", borderRadius: "10px" }}>
+          //     <h2>{post.__typename}</h2>
+          //     <Link
+          //       href={{
+          //         pathname: '/publication/[publicationID]',
+          //         query: { publicationID: post.id },
+          //       }}
+          //     >
+          //       <a><h3>{post.id}</h3></a>
+          //     </Link>
+          //     <p>{post.metadata.content}</p>
+          //     <p>mirror : {post.stats.totalAmountOfMirrors}</p>
+          //     <p>collects : {post.stats.totalAmountOfCollects}</p>
+          //     <p>comments : {post.stats.totalAmountOfComments}</p>
+          //   </article>
+          // );
         })
       )}
       {havePosts ? (
