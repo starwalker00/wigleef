@@ -10,10 +10,12 @@ import {
   Select
 } from '@chakra-ui/react';
 import { gql, useQuery } from "@apollo/client";
+import { initializeApollo, addApolloState } from "../../lib/apolloClient";
 import { prettyJSON } from '../../lib/helpers';
-import { ethers } from 'ethers';
+import { BigNumber } from "@ethersproject/bignumber";
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { DEMO_PROFILE_ID } from '../../lib/config';
 
 const GET_PUBLICATIONS = `
   query($request: PublicationsQueryRequest!) {
@@ -309,11 +311,15 @@ const GET_PUBLICATIONS = `
 `;
 
 function Profile() {
+  // get profileID from params
   const router = useRouter();
-  const { profileID } = router.query;
-  // prettyJSON('profileID', profileID);
-  const constCurrentProfileID = ethers.BigNumber.from(profileID);
+  // demo profile needed because profileID is undefined on first render
+  // https://www.joshwcomeau.com/react/the-perils-of-rehydration/
+  const profileID = router.query.profileID ?? DEMO_PROFILE_ID;
+  prettyJSON('profileID', profileID);
+  const constCurrentProfileID = BigNumber.from(profileID);
 
+  // fetch publications of profileID
   const { loading, error, data, fetchMore, refetch } = useQuery(
     gql(GET_PUBLICATIONS),
     {
@@ -326,14 +332,14 @@ function Profile() {
       notifyOnNetworkStatusChange: true,
       fetchPolicy: "no-cache"
     });
+  // manage edge cases
   // const posts = data?.posts?.edges?.map((edge) => edge.node) || [];
   // const havePosts = Boolean(posts.length);
   // const haveMorePosts = Boolean(data?.posts?.pageInfo?.hasNextPage);
-
+  // prettyJSON('publications', publications);
   const publications = data?.publications?.items || [];
   const havePosts = Boolean(publications.length);
   const haveMorePosts = Boolean(true);
-  // prettyJSON('publications', publications);
 
   return (
     <section>
@@ -404,30 +410,31 @@ Profile.getLayout = function getLayout(page) {
   )
 }
 
-export async function getStaticProps({ params }) {
-  // prettyJSON('params', params);
-  // const apolloClient = initializeApollo();
+// TODO? : use static generation on useful pages
 
-  // const result = await apolloClient.query({
-  //   query: gql(GET_PUBLICATIONS),
-  //   variables: {
-  //     request: { publicationId: params.publicationID },
-  //     // request: { publicationId: '0x49-0x02' },
-  //   },
-  // });
-  // prettyJSON(`GET_PUBLICATION ${params.publicationID}`, result);
-  // return addApolloState(apolloClient, {
-  //   props: {},
-  // });
-  return {
-    props: {},
-  };
-}
+// export async function getStaticProps({params}) {
+//   prettyJSON('params', params);
+//   const apolloClient = initializeApollo();
 
-// do not generate static pages, always fallback to client-side fetching
-export async function getStaticPaths() {
-  const paths = []
-  return { paths, fallback: true }
-}
+//   const constCurrentProfileID = ethers.BigNumber.from(params.profileID);
+//   const result = await apolloClient.query({
+//     query: gql(GET_PUBLICATIONS),
+//     variables: {
+//       request: {
+//         profileId: constCurrentProfileID.toHexString(),
+//         publicationTypes: ['POST', 'COMMENT', 'MIRROR'],
+//       },
+//     },
+//   });
+//   prettyJSON(`GET_PUBLICATIONS OF PROFILE ID ${params.profileID}`, result);
+//   return addApolloState(apolloClient, {
+//     props: { },
+//   });
+// }
+
+// export async function getStaticPaths() {
+//   const paths = []
+//   return {paths, fallback: true }
+// }
 
 export default Profile

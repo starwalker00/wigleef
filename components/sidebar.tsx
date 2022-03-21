@@ -2,11 +2,11 @@ import Link from 'next/link'
 import styles from './sidebar.module.css'
 
 import ConnectButtonAndModal from '../components/ConnectButtonAndModal'
-import { ethers } from 'ethers';
+import { BigNumber } from "@ethersproject/bignumber";
 import { useProfileID } from "../components/context/AppContext";
 
 function Sidebar() {
-    const profileIDApp: ethers.BigNumber = useProfileID();
+    const profileIDApp: BigNumber = useProfileID();
 
     const myProfileIDhexString: string = profileIDApp.eq(0) ? '0x49' : profileIDApp.toHexString();
     // TODO

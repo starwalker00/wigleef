@@ -5,6 +5,7 @@ import { gql, useQuery } from "@apollo/client";
 import { initializeApollo, addApolloState } from "../../lib/apolloClient";
 import { prettyJSON } from '../../lib/helpers';
 import { useRouter } from 'next/router'
+import { DEMO_PUBLICATION_ID } from '../../lib/config';
 
 const GET_PUBLICATION = `
   query($request: PublicationQueryRequest!) {
@@ -585,9 +586,12 @@ const GET_PUBLICATIONS = `
 `;
 
 function Publication() {
-  const router = useRouter()
-  const { publicationID } = router.query;
-  // prettyJSON('publicationID', publicationID);
+  // get publicationID from params
+  const router = useRouter();
+  // demo publication needed because publicationID is undefined on first render
+  // https://www.joshwcomeau.com/react/the-perils-of-rehydration/
+  const publicationID = router.query.publicationID ?? DEMO_PUBLICATION_ID;
+  prettyJSON('publicationID', publicationID);
 
   // query main publication
   const { loading: loadingPost, error: errorPost, data: dataPost, fetchMore: fetchMorePost } = useQuery(
@@ -599,6 +603,8 @@ function Publication() {
       },
       notifyOnNetworkStatusChange: true,
     });
+
+  // manage edge cases
   // const posts = data?.posts?.edges?.map((edge) => edge.node) || [];
   // const havePosts = Boolean(posts.length);
   // const haveMorePosts = Boolean(data?.posts?.pageInfo?.hasNextPage);
@@ -691,30 +697,28 @@ Publication.getLayout = function getLayout(page) {
   )
 }
 
-export async function getStaticProps({ params }) {
-  // prettyJSON('params', params);
-  // const apolloClient = initializeApollo();
+// TODO? : use static generation on useful pages
 
-  // const result = await apolloClient.query({
-  //   query: gql(GET_PUBLICATIONS),
-  //   variables: {
-  //     request: { publicationId: params.publicationID },
-  //     // request: { publicationId: '0x49-0x02' },
-  //   },
-  // });
-  // prettyJSON(`GET_PUBLICATION ${params.publicationID}`, result);
-  // return addApolloState(apolloClient, {
-  //   props: {},
-  // });
-  return {
-    props: {},
-  };
-}
+// export async function getStaticProps({ params }) {
+//   prettyJSON('params', params);
+//   const apolloClient = initializeApollo();
 
-// do not generate static pages, always fallback to client-side fetching
-export async function getStaticPaths() {
-  const paths = []
-  return { paths, fallback: true }
-}
+//   const result = await apolloClient.query({
+//     query: gql(GET_PUBLICATIONS),
+//     variables: {
+//       request: { publicationId: params.publicationID },
+//       // request: { publicationId: '0x49-0x02' },
+//     },
+//   });
+//   prettyJSON(`GET_PUBLICATION ${params.publicationID}`, result);
+//   return addApolloState(apolloClient, {
+//     props: {},
+//   });
+// }
+
+// export async function getStaticPaths() {
+//   const paths = []
+//   return { paths, fallback: true }
+// }
 
 export default Publication
