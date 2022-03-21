@@ -81,7 +81,7 @@ function PublicationView(dataPublication) {
             </LinkBox>
             {comments && comments.map((comment) => {
                 return (
-                    <CommentView comment={comment} />
+                    <CommentView key={comment.id} comment={comment} />
                 )
             })
             }
