@@ -115,7 +115,7 @@ function Post() {
         'postWithSig'
     );
     const [{ data: dataAccount, error: errorAccount, loading: loadingAccount }, disconnect] = useAccount();
-    const [value, setValue] = useState("**Hello world!!!**");
+    const [markdownValue, setMarkdownValue] = useState("**Hello world!!!**");
 
     //auth 
     const generateChallenge = (address: string) => {
@@ -147,7 +147,7 @@ function Post() {
         metadata_id: uuidv4(),
         description: 'Description',
         // content: 'OAS ✽ ✾ ✿ ❀ ❁ ❃ ❊ ❋ ✣ ✤ 🌹 ❀ ✿ 🌷 💐 ⚜',
-        content: value,
+        content: markdownValue,
         external_url: null,
         image: null,
         imageMimeType: null,
@@ -258,7 +258,9 @@ function Post() {
                 function, we can have complex nested layouts if desired.
             </p>
             <div>
-                <MDEditor value={value} onChange={setValue} />
+                {// @ts-ignore
+                    <MDEditor value={markdownValue} onChange={setMarkdownValue} />
+                }
             </div>
             <p>
                 {dataAccount
