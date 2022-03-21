@@ -1,6 +1,6 @@
 import Layout from '../../components/layout'
 import Sidebar from '../../components/sidebar'
-import Publication from '../../components/Publication'
+import PublicationView from '../../components/PublicationView'
 import {
   Text,
   Button,
@@ -355,7 +355,7 @@ function Profile() {
       ) : (
         publications.map((publication) => {
           return (
-            <Publication key={publication.id} publication={publication} />
+            <PublicationView key={publication.id} publication={publication} />
           );
         })
       )}

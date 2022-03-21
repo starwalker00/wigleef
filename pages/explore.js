@@ -1,6 +1,6 @@
 import Layout from '../components/layout'
 import Sidebar from '../components/sidebar'
-import Publication from '../components/Publication'
+import PublicationView from '../components/PublicationView'
 
 import Link from 'next/link'
 
@@ -351,7 +351,7 @@ function Explore() {
       ) : (
         publications.map((publication) => {
           return (
-            <Publication key={publication.id} publication={publication} />
+            <PublicationView key={publication.id} publication={publication} />
           );
           // return (
           //   <article key={post.id} style={{ border: "2px solid #eee", padding: "1rem", marginBottom: "1rem", borderRadius: "10px" }}>

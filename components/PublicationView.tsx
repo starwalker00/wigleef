@@ -7,7 +7,7 @@ import {
 import { FaTwitter } from 'react-icons/fa'
 import ReactTimeAgo from 'react-time-ago'
 
-function Publication(dataPublication) {
+function PublicationView(dataPublication) {
     const publication = dataPublication.publication;
     // console.log(publication)
     if (!publication) {
@@ -77,7 +77,7 @@ function Publication(dataPublication) {
     );
 }
 
-export default Publication;
+export default PublicationView;
 
 // {
 //     "__typename": "Post",
