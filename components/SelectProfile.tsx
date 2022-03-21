@@ -12,6 +12,7 @@ import { prettyJSON } from '../lib/helpers';
 import { BigNumber } from "@ethersproject/bignumber";
 
 import { useProfileID, useDispatchProfileID } from "./context/AppContext";
+import { useEffect } from 'react';
 
 const GET_PROFILES = `
   query($request: ProfileQueryRequest!) {
@@ -98,6 +99,14 @@ function SelectProfile({ address }) {
   const profileIDApp: BigNumber = useProfileID()
   const dispatch = useDispatchProfileID()
 
+  useEffect(() => {
+    // set first profile to appcontext if no profile ID is set
+    if (profileIDApp.eq(0) && data?.profiles?.items?.length > 0) {
+      let firstProfileID = BigNumber.from(data.profiles.items[0].id);
+      dispatch({ type: 'set_profileID', payload: firstProfileID });
+    }
+  }, []);
+
   const { loading, error, data, fetchMore } = useQuery(
     gql(GET_PROFILES),
     {
@@ -121,12 +130,6 @@ function SelectProfile({ address }) {
           <Text>you do not own a profile</Text>
         </>
       )
-    } else {
-      // add first profile to context if no profile ID is set
-      if (profileIDApp.eq(0)) {
-        let firstProfileID = BigNumber.from(data.profiles.items[0].id);
-        dispatch({ type: 'set_profileID', payload: firstProfileID });
-      }
     };
     return (
       <>
