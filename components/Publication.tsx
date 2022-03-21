@@ -8,7 +8,7 @@ import { FaTwitter } from 'react-icons/fa'
 import ReactTimeAgo from 'react-time-ago'
 
 function Publication(dataPublication) {
-    const publication = dataPublication.post;
+    const publication = dataPublication.publication;
     // console.log(publication)
     if (!publication) {
         return <h1>no pub</h1>

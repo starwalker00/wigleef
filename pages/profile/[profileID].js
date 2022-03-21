@@ -1,5 +1,6 @@
 import Layout from '../../components/layout'
 import Sidebar from '../../components/sidebar'
+import Publication from '../../components/Publication'
 import {
   Text,
   Button,
@@ -344,13 +345,6 @@ function Profile() {
   return (
     <section>
       <h1>My Posts</h1>
-      <Button onClick={() => refetch({
-        request: {
-          profileId: profileID.toHexString(),
-          publicationTypes: ['POST', 'COMMENT', 'MIRROR'],
-        },
-      })}
-      ></Button>
       {!havePosts && loading ? (
         <p>Loading...</p>
       ) : error ? (
@@ -360,21 +354,7 @@ function Profile() {
       ) : (
         publications.map((publication) => {
           return (
-            <article key={publication.id} style={{ border: "2px solid #eee", padding: "1rem", marginBottom: "1rem", borderRadius: "10px" }}>
-              <h2>{publication.__typename}</h2>
-              <Link
-                href={{
-                  pathname: '/publication/[publicationID]',
-                  query: { publicationID: publication.id },
-                }}
-              >
-                <a><h3>{publication.id}</h3></a>
-              </Link>
-              <p>{publication.metadata.content}</p>
-              <p>mirror : {publication.stats.totalAmountOfMirrors}</p>
-              <p>collects : {publication.stats.totalAmountOfCollects}</p>
-              <p>comments : {publication.stats.totalAmountOfComments}</p>
-            </article>
+            <Publication key={publication.id} publication={publication} />
           );
         })
       )}
