@@ -1,5 +1,5 @@
-import Layout from '../components/layout'
-import Sidebar from '../components/sidebar'
+import Layout from '../../components/layout'
+import Sidebar from '../../components/sidebar'
 import {
   Text,
   Button,
@@ -10,10 +10,10 @@ import {
   Select
 } from '@chakra-ui/react';
 import { gql, useQuery } from "@apollo/client";
-import { prettyJSON } from '../lib/helpers';
-import { ethers, utils, Wallet } from 'ethers';
-import { useProfileID, useDispatchProfileID } from "../components/context/AppContext";
+import { prettyJSON } from '../../lib/helpers';
+import { ethers } from 'ethers';
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 const GET_PUBLICATIONS = `
   query($request: PublicationsQueryRequest!) {
@@ -308,16 +308,18 @@ const GET_PUBLICATIONS = `
   }
 `;
 
-function PostList() {
-  const profileIDApp: ethers.BigNumber = useProfileID()
-  const dispatch = useDispatchProfileID()
+function Profile() {
+  const router = useRouter();
+  const { profileID } = router.query;
+  // prettyJSON('profileID', profileID);
+  const constCurrentProfileID = ethers.BigNumber.from(profileID);
 
-  const { loading, error, data, fetchMore } = useQuery(
+  const { loading, error, data, fetchMore, refetch } = useQuery(
     gql(GET_PUBLICATIONS),
     {
       variables: {
         request: {
-          profileId: profileIDApp.toHexString(),
+          profileId: constCurrentProfileID.toHexString(),
           publicationTypes: ['POST', 'COMMENT', 'MIRROR'],
         },
       },
@@ -332,9 +334,17 @@ function PostList() {
   const havePosts = Boolean(publications.length);
   const haveMorePosts = Boolean(true);
   // prettyJSON('publications', publications);
+
   return (
     <section>
       <h1>My Posts</h1>
+      <Button onClick={() => refetch({
+        request: {
+          profileId: profileID.toHexString(),
+          publicationTypes: ['POST', 'COMMENT', 'MIRROR'],
+        },
+      })}
+      ></Button>
       {!havePosts && loading ? (
         <p>Loading...</p>
       ) : error ? (
@@ -385,7 +395,7 @@ function PostList() {
   )
 }
 
-PostList.getLayout = function getLayout(page) {
+Profile.getLayout = function getLayout(page) {
   return (
     <Layout>
       <Sidebar />
@@ -394,4 +404,30 @@ PostList.getLayout = function getLayout(page) {
   )
 }
 
-export default PostList
+export async function getStaticProps({ params }) {
+  // prettyJSON('params', params);
+  // const apolloClient = initializeApollo();
+
+  // const result = await apolloClient.query({
+  //   query: gql(GET_PUBLICATIONS),
+  //   variables: {
+  //     request: { publicationId: params.publicationID },
+  //     // request: { publicationId: '0x49-0x02' },
+  //   },
+  // });
+  // prettyJSON(`GET_PUBLICATION ${params.publicationID}`, result);
+  // return addApolloState(apolloClient, {
+  //   props: {},
+  // });
+  return {
+    props: {},
+  };
+}
+
+// do not generate static pages, always fallback to client-side fetching
+export async function getStaticPaths() {
+  const paths = []
+  return { paths, fallback: true }
+}
+
+export default Profile

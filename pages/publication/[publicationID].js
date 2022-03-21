@@ -589,6 +589,7 @@ function Publication() {
   const { publicationID } = router.query;
   // prettyJSON('publicationID', publicationID);
 
+  // query main publication
   const { loading: loadingPost, error: errorPost, data: dataPost, fetchMore: fetchMorePost } = useQuery(
     gql(GET_PUBLICATION),
     {
@@ -606,7 +607,7 @@ function Publication() {
   const havePost = Boolean(post);
   const haveMorePost = Boolean(false);
 
-  // get comment
+  // query comments of main publication
   const { loading: loadingComments, error: errorComments, data: dataComments, fetchMore: fetchMoreComments } = useQuery(
     gql(GET_PUBLICATIONS),
     {
@@ -617,11 +618,11 @@ function Publication() {
       notifyOnNetworkStatusChange: true,
     });
   // prettyJSON('dataComments', dataComments);
+
   const comments = dataComments?.publications.items || [];
   const haveComments = Boolean(comments.length);
   const haveMoreComments = Boolean(true);
   return (
-
     <section>
       <h1>publication/[id]</h1>
       {!havePost && loadingPost ? (
@@ -692,21 +693,25 @@ Publication.getLayout = function getLayout(page) {
 
 export async function getStaticProps({ params }) {
   // prettyJSON('params', params);
-  const apolloClient = initializeApollo();
+  // const apolloClient = initializeApollo();
 
-  const result = await apolloClient.query({
-    query: gql(GET_PUBLICATION),
-    variables: {
-      request: { publicationId: params.publicationID },
-      // request: { publicationId: '0x49-0x02' },
-    },
-  });
+  // const result = await apolloClient.query({
+  //   query: gql(GET_PUBLICATIONS),
+  //   variables: {
+  //     request: { publicationId: params.publicationID },
+  //     // request: { publicationId: '0x49-0x02' },
+  //   },
+  // });
   // prettyJSON(`GET_PUBLICATION ${params.publicationID}`, result);
-  return addApolloState(apolloClient, {
+  // return addApolloState(apolloClient, {
+  //   props: {},
+  // });
+  return {
     props: {},
-  });
+  };
 }
 
+// do not generate static pages, always fallback to client-side fetching
 export async function getStaticPaths() {
   const paths = []
   return { paths, fallback: true }
