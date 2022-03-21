@@ -634,7 +634,7 @@ function Publication() {
     <section>
       <h1>publication/[id]</h1>
       {!havePublication && loadingPublication ? (
-        <p><Skeleton height='20px' /></p>
+        <Skeleton height='20px' />
       ) : errorPost ? (
         <p>An error has occurred.</p>
       ) : !havePublication ? (

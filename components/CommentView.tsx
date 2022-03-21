@@ -26,7 +26,9 @@ function CommentView(dataComment) {
                 href={{
                     pathname: '/publication/[publicationID]',
                     query: { publicationID: publication.id },
-                }} /*auto prefetch : https://nextjs.org/docs/messages/prefetch-true-deprecated is it really working ? */>
+                }}
+                passHref
+                /*auto prefetch : https://nextjs.org/docs/messages/prefetch-true-deprecated is it really working ? */>
                 <LinkOverlay>
                     <Text
                         color={'green.500'}
@@ -75,7 +77,7 @@ function CommentView(dataComment) {
                     </Flex>
                 </LinkOverlay>
             </NextLink >
-        </LinkBox>
+        </LinkBox >
         // <div key={comment.id}>
         //     <p>{comment.id}</p>
         //     <p>{comment.metadata?.content}</p>

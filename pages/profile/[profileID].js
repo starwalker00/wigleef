@@ -349,7 +349,7 @@ function Profile() {
       {console.log(publications)}
       <h1>My publications</h1>
       {!havePublication && loadingPublication ? (
-        <p><Skeleton height='20px' /></p>
+        <Skeleton height='20px' />
       ) : error ? (
         <p>An error has occurred.</p>
       ) : !havePublication ? (
