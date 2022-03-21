@@ -7,6 +7,7 @@ import {
 import { FaTwitter } from 'react-icons/fa'
 import ReactTimeAgo from 'react-time-ago'
 import CommentView from '../components/CommentView'
+import MarkdownRenderer from './MarkdownRenderer'
 
 function PublicationView(dataPublication) {
     // console.log(dataPublication)
@@ -70,9 +71,11 @@ function PublicationView(dataPublication) {
                                     {publication.metadata?.name}
                                 </Heading>
                                 <Text fontSize='xs' color={'gray.500'}>{publication.metadata?.description}</Text>
-                                <Text fontSize='sm' color={'gray.800'}>{publication.metadata?.content}</Text>
+                                {/* <Text fontSize='sm' color={'gray.800'}>{publication.metadata?.content}</Text> */}
+                                <MarkdownRenderer markdownString={publication.metadata?.content} />
+                                <Divider my='2' />
                             </Flex>
-                            <Flex className='stats' flexDirection='row' gap='2' alignContent='center' ml='3'>
+                            <Flex className='stats' flexDirection='row' bgColor='blue' justifyContent='space-around' gap='2' alignContent='center'>
                                 <Text fontSize='xs' color={'gray.500'}>{publication.stats?.totalAmountOfComments}{''} comments</Text>
                                 <Text fontSize='xs' color={'gray.500'}>{publication.stats?.totalAmountOfCollects} collects</Text>
                                 <Text fontSize='xs' color={'gray.500'}>{publication.stats?.totalAmountOfMirrors} mirrors</Text>
