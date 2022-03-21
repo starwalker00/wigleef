@@ -2,6 +2,7 @@ import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import dynamic from "next/dynamic";
 import rehypeSanitize from "rehype-sanitize";
+import { Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react'
 
 const MarkdownPreview = dynamic(
     () => import("@uiw/react-markdown-preview"),
