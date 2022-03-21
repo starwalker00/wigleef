@@ -7,6 +7,7 @@ import {
 import { FaTwitter } from 'react-icons/fa'
 import ReactTimeAgo from 'react-time-ago'
 import MarkdownRenderer from './MarkdownRenderer'
+import Pluralize from 'react-pluralize'
 
 function CommentView(dataComment) {
     // console.log(dataComment)
@@ -83,9 +84,15 @@ function CommentView(dataComment) {
                         </Flex>
                         <Divider my='2' />
                         <Flex className='stats' flexDirection='row' justifyContent='space-around' gap='2' alignContent='center'>
-                            <Text fontSize='xs' color={'gray.500'}>{publication.stats?.totalAmountOfComments}{''} comments</Text>
-                            <Text fontSize='xs' color={'gray.500'}>{publication.stats?.totalAmountOfCollects} collects</Text>
-                            <Text fontSize='xs' color={'gray.500'}>{publication.stats?.totalAmountOfMirrors} mirrors</Text>
+                            <Text fontSize='xs' color={'gray.500'}>
+                                <Pluralize singular={'comment'} plural={'comments'} count={publication.stats?.totalAmountOfComments} />
+                            </Text>
+                            <Text fontSize='xs' color={'gray.500'}>
+                                <Pluralize singular={'collect'} plural={'collects'} count={publication.stats?.totalAmountOfCollects} />
+                            </Text>
+                            <Text fontSize='xs' color={'gray.500'}>
+                                <Pluralize singular={'mirror'} plural={'mirrors'} count={publication.stats?.totalAmountOfMirrors} />
+                            </Text>
                         </Flex>
                     </Flex>
                 </LinkOverlay>
