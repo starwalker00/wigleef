@@ -138,7 +138,7 @@ function SelectProfile({ address }) {
                 return (
                   <option
                     key={profileID.toString()}
-                    selected={profileID.eq(profileIDApp)}
+                    defaultValue={profileIDApp.toString()}
                     value={profileID.toString()} >
                     {profile.handle}{'#'}{profileID.toString()}
                   </option>)
