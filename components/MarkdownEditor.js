@@ -1,14 +1,21 @@
-// import { useState } from 'react';
-// import ReactDOM from 'react-dom';
-// import { Editor, EditorState } from 'draft-js';
-// import 'draft-js/dist/Draft.css';
+import { useState } from 'react';
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
+import dynamic from "next/dynamic";
+import { Box } from '@chakra-ui/layout';
 
-// function MarkdownEditor() {
-//     const [editorState, setEditorState] = useState(
-//         () => EditorState.createEmpty(),
-//     );
+const MDEditor = dynamic(
+    () => import("@uiw/react-md-editor").then((mod) => mod.default),
+    { ssr: false }
+);
 
-//     return <Editor editorState={editorState} onChange={setEditorState} />;
-// }
+function MarkdownEditor() {
+    const [markdownValue, setMarkdownValue] = useState("**Hello world!!!**");
+    return (
+        <Box>
+            <MDEditor value={markdownValue} onChange={setMarkdownValue} />
+        </Box>
+    )
+}
 
-// export default MarkdownEditor;
+export default MarkdownEditor;
