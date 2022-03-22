@@ -2,9 +2,7 @@ import Layout from '../components/layout'
 import Sidebar from '../components/sidebar'
 import PublicationView from '../components/PublicationView'
 
-import Link from 'next/link'
-
-import { gql, useQuery, InMemoryCache } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 import { initializeApollo, addApolloState } from "../lib/apolloClient";
 import { prettyJSON } from '../lib/helpers';
 
@@ -322,53 +320,24 @@ const EXPLORE_PUBLICATIONS = `
 `;
 
 function Explore() {
-  // const cache = new InMemoryCache({
-  //   typePolicies: {
-  //     Query: {
-  //       fields: {
-  //         items: {
-  //           keyArgs: false,
-  //           // Concatenate the incoming list items with
-  //           // the existing list items.
-  //           merge(existing = [], incoming) {
-  //             console.log(`existing ${existing}`);
-  //             return [...existing, ...incoming];
-  //           },
-  //         }
-  //       }
-  //     }
-  //   }
-  // })
   const { loading, error, data, fetchMore } = useQuery(
     gql(EXPLORE_PUBLICATIONS),
     {
       variables: {
-        request: { sortCriteria: 'TOP_COMMENTED', limit: 20, cursor: 0 },
+        request: { sortCriteria: 'TOP_COMMENTED', limit: 2, cursor: 0 },
       },
       notifyOnNetworkStatusChange: true,
-      // fetchPolicy: 'no-cache'
-      // fetchPolicy: 'cache-and-network',
-      // nextFetchPolicy: 'no-cache',
-      // fetchPolicy: 'standby',
-      // cache: cache
     },
   );
-  // const posts = data?.posts?.edges?.map((edge) => edge.node) || [];
-  // const havePosts = Boolean(posts.length);
-  // const haveMorePosts = Boolean(data?.posts?.pageInfo?.hasNextPage);
-
   const publications = data?.explorePublications?.items || [];
   const havePublication = Boolean(publications.length);
-  const haveMorePublication = Boolean(true);
-  function getRandomArbitrary(min, max) {
-    // console.log(min)
-    // console.log(max)
-    return Math.floor(Math.random() * (max - min) + min);
-  }
+  const totalCount = data?.explorePublications?.pageInfo?.totalCount || 0;
+  const haveMorePublication = Boolean(publications.length < totalCount);
   return (
     <section>
       {/* {console.log(publications)} */}
       <h1>Explore</h1>
+      <p>{totalCount} publications</p>
       {!havePublication && loading ? (
         <p>Loading...</p>
       ) : error ? (
@@ -380,23 +349,6 @@ function Explore() {
           return (
             <PublicationView key={publication.id} publication={publication} />
           );
-          // return (
-          //   <article key={post.id} style={{ border: "2px solid #eee", padding: "1rem", marginBottom: "1rem", borderRadius: "10px" }}>
-          //     <h2>{post.__typename}</h2>
-          //     <Link
-          //       href={{
-          //         pathname: '/publication/[publicationID]',
-          //         query: { publicationID: post.id },
-          //       }}
-          //     >
-          //       <a><h3>{post.id}</h3></a>
-          //     </Link>
-          //     <p>{post.metadata.content}</p>
-          //     <p>mirror : {post.stats.totalAmountOfMirrors}</p>
-          //     <p>collects : {post.stats.totalAmountOfCollects}</p>
-          //     <p>comments : {post.stats.totalAmountOfComments}</p>
-          //   </article>
-          // );
         })
       )}
       {havePublication ? (
@@ -404,40 +356,25 @@ function Explore() {
           <form onSubmit={event => {
             // prettyJSON('publications.length', publications.length);
             event.preventDefault();
-            // prettyJSON('data', data);
-            const pageInfoNext = JSON.parse(data.explorePublications.pageInfo.next);
-            // const pageInfo = JSON.parse(data.explorePublications.pageInfo);
-            // prettyJSON('pageInfo', pageInfoNext);
-            const randomCursor = getRandomArbitrary(2, data.explorePublications.pageInfo.totalCount);
-            // console.log(randomCursor);
+            const pageInfoNext = data.explorePublications.pageInfo.next;
+            // prettyJSON('pageInfoNext', pageInfoNext);
             fetchMore({
               variables: {
                 request: {
                   sortCriteria: 'TOP_COMMENTED',
                   limit: 1,
-                  // timestamp: pageInfoNext.timestamp,
-                  // cursor: data.explorePublications.items.length + 1,
-                  // cursor: 8,
-                  // cursor: pageInfoNext.offset + 1,
-                  cursor: randomCursor
-                  // randomizer: pageInfoNext.randomizer // param unavailable for now?
+                  cursor: pageInfoNext
                 },
-                // request: { sortCriteria: 'TOP_COMMENTED', limit: 11, cursor: 1 },
               },
               updateQuery: (prevResult, { fetchMoreResult }) => {
                 // prettyJSON('prevResult', fetchMoreResult);
                 // prettyJSON('fetchMoreResult', fetchMoreResult);
-                // console.log('updateQueryupdateQueryupdateQueryupdateQueryupdateQuery')
-                // console.log(prevResult)
-                // console.log(fetchMoreResult)
-                // prettyJSON('fetchMoreResult', fetchMoreResult.explorePublications.items[0].id);
-                // fetchMoreResult.explorePublications.items = [
-                //   ...prevResult.explorePublications.items,
-                //   ...fetchMoreResult.explorePublications.items
-                // ];
-                // fetchMoreResult.explorePublications.items = [...new Set([...prevResult.explorePublications.items, ...fetchMoreResult.explorePublications.items])]
-                let allItems = prevResult.explorePublications.items.concat(fetchMoreResult.explorePublications.items);
-                fetchMoreResult.explorePublications.items = allItems.filter((item, index) => { return (allItems.indexOf(item) == index) })
+                fetchMoreResult.explorePublications.items = [
+                  ...prevResult.explorePublications.items,
+                  ...fetchMoreResult.explorePublications.items
+                ];
+                // remove eventual duplicates, just in case
+                fetchMoreResult.explorePublications.items = [...new Set([...prevResult.explorePublications.items, ...fetchMoreResult.explorePublications.items])]
                 return fetchMoreResult;
               }
             });
@@ -470,7 +407,7 @@ export async function getStaticProps(context) {
   const result = await apolloClient.query({
     query: gql(EXPLORE_PUBLICATIONS),
     variables: {
-      request: { sortCriteria: 'TOP_COMMENTED', limit: 20, cursor: 0 },
+      request: { sortCriteria: 'TOP_COMMENTED', limit: 2, cursor: 0 },
     },
   });
   // prettyJSON('explore: result', result.data);
