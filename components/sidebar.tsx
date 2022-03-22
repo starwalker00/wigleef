@@ -40,7 +40,7 @@ function Sidebar() {
             {/* menu below md size */}
             <Show below='md'>
                 {/* top bar */}
-                <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4} position='fixed' top='0' zIndex='200' width='100%'>
+                <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4} position='sticky' top='0' zIndex='200' width='100%'>
                     <Flex h={16} alignItems={'center'} justifyContent={'center'} >
                         Logo
                     </Flex>
