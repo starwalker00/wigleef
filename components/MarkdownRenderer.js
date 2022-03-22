@@ -12,7 +12,8 @@ const MarkdownPreview = dynamic(
 function MarkdownRenderer({ markdownString }) {
     if (!markdownString || typeof markdownString != "string") {
         return (
-            <Skeleton height='20px' />
+            <div>
+            </div>
         );
     } else {
         return (
