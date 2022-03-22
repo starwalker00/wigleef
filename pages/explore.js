@@ -365,17 +365,23 @@ function Explore() {
       {/* {console.log(publications)} */}
       <h1>Explore</h1>
       <p>{totalCount} publications</p>
-      <InfiniteScroll
-        dataLength={publications.length}
-        next={fetchMorePublications}
-        hasMore={haveMorePublication}
-        loader={<h3>Loading...</h3>}
-        endMessage={<h4>Nothing more to show</h4>}
-      >
-        {publications.map((publication) => (
-          <PublicationView key={publication.id} publication={publication} />
-        ))}
-      </InfiniteScroll>
+      {
+        error
+          ?
+          <h1>error</h1>
+          :
+          <InfiniteScroll
+            dataLength={publications.length}
+            next={fetchMorePublications}
+            hasMore={haveMorePublication}
+            loader={<h3>Loading...</h3>}
+            endMessage={<h4>Nothing more to show</h4>}
+          >
+            {publications.map((publication) => (
+              <PublicationView key={publication.id} publication={publication} />
+            ))}
+          </InfiniteScroll>
+      }
     </section >
   )
 }
