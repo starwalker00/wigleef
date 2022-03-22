@@ -1,6 +1,7 @@
 import Layout from '../components/layout'
 import Sidebar from '../components/sidebar'
 import PublicationView from '../components/PublicationView'
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { gql, useQuery } from "@apollo/client";
 import { initializeApollo, addApolloState } from "../lib/apolloClient";
@@ -324,7 +325,7 @@ function Explore() {
     gql(EXPLORE_PUBLICATIONS),
     {
       variables: {
-        request: { sortCriteria: 'TOP_COMMENTED', limit: 2, cursor: 0 },
+        request: { sortCriteria: 'TOP_COMMENTED', limit: 10, cursor: 0 },
       },
       notifyOnNetworkStatusChange: true,
     },
@@ -333,61 +334,48 @@ function Explore() {
   const havePublication = Boolean(publications.length);
   const totalCount = data?.explorePublications?.pageInfo?.totalCount || 0;
   const haveMorePublication = Boolean(publications.length < totalCount);
+
+  function fetchMorePublications() {
+    // prettyJSON('publications.length', publications.length);
+    const pageInfoNext = data.explorePublications.pageInfo.next;
+    // prettyJSON('pageInfoNext', pageInfoNext);
+    fetchMore({
+      variables: {
+        request: {
+          sortCriteria: 'TOP_COMMENTED',
+          limit: 10,
+          cursor: pageInfoNext
+        },
+      },
+      updateQuery: (prevResult, { fetchMoreResult }) => {
+        // prettyJSON('prevResult', fetchMoreResult);
+        // prettyJSON('fetchMoreResult', fetchMoreResult);
+        fetchMoreResult.explorePublications.items = [
+          ...prevResult.explorePublications.items,
+          ...fetchMoreResult.explorePublications.items
+        ];
+        // remove eventual duplicates, just in case
+        fetchMoreResult.explorePublications.items = [...new Set([...prevResult.explorePublications.items, ...fetchMoreResult.explorePublications.items])]
+        return fetchMoreResult;
+      }
+    });
+  }
   return (
     <section>
       {/* {console.log(publications)} */}
       <h1>Explore</h1>
       <p>{totalCount} publications</p>
-      {!havePublication && loading ? (
-        <p>Loading...</p>
-      ) : error ? (
-        <p>An error has occurred.</p>
-      ) : !havePublication ? (
-        <p>No publications found.</p>
-      ) : (
-        publications.map((publication) => {
-          return (
-            <PublicationView key={publication.id} publication={publication} />
-          );
-        })
-      )}
-      {havePublication ? (
-        haveMorePublication ? (
-          <form onSubmit={event => {
-            // prettyJSON('publications.length', publications.length);
-            event.preventDefault();
-            const pageInfoNext = data.explorePublications.pageInfo.next;
-            // prettyJSON('pageInfoNext', pageInfoNext);
-            fetchMore({
-              variables: {
-                request: {
-                  sortCriteria: 'TOP_COMMENTED',
-                  limit: 1,
-                  cursor: pageInfoNext
-                },
-              },
-              updateQuery: (prevResult, { fetchMoreResult }) => {
-                // prettyJSON('prevResult', fetchMoreResult);
-                // prettyJSON('fetchMoreResult', fetchMoreResult);
-                fetchMoreResult.explorePublications.items = [
-                  ...prevResult.explorePublications.items,
-                  ...fetchMoreResult.explorePublications.items
-                ];
-                // remove eventual duplicates, just in case
-                fetchMoreResult.explorePublications.items = [...new Set([...prevResult.explorePublications.items, ...fetchMoreResult.explorePublications.items])]
-                return fetchMoreResult;
-              }
-            });
-          }}>
-            <button type="submit" disabled={loading}>
-              {loading ? "Loading..." : "Load more"}
-            </button>
-          </form>
-        ) : (
-          <p>✅ All publications loaded.</p>
-        )
-      ) : null
-      }
+      <InfiniteScroll
+        dataLength={publications.length}
+        next={fetchMorePublications}
+        hasMore={haveMorePublication}
+        loader={<h3>Loading...</h3>}
+        endMessage={<h4>Nothing more to show</h4>}
+      >
+        {publications.map((publication) => (
+          <PublicationView key={publication.id} publication={publication} />
+        ))}
+      </InfiniteScroll>
     </section >
   )
 }
@@ -407,7 +395,7 @@ export async function getStaticProps(context) {
   const result = await apolloClient.query({
     query: gql(EXPLORE_PUBLICATIONS),
     variables: {
-      request: { sortCriteria: 'TOP_COMMENTED', limit: 2, cursor: 0 },
+      request: { sortCriteria: 'TOP_COMMENTED', limit: 10, cursor: 0 },
     },
   });
   // prettyJSON('explore: result', result.data);
