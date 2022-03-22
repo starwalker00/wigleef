@@ -2,13 +2,16 @@ import NextLink from 'next/link'
 import {
     Flex,
     Avatar,
-    Box, Text, Badge, Divider, Heading, IconButton, Icon, LinkOverlay, LinkBox, Link
+    Box, Text, Badge, Divider, Heading, IconButton, Icon, LinkOverlay, LinkBox, Link, Button, Collapse, Portal
 } from '@chakra-ui/react'
+import { Fade, ScaleFade, Slide, SlideFade } from '@chakra-ui/react'
+import { useDisclosure } from '@chakra-ui/react'
 import { FaTwitter } from 'react-icons/fa'
 import ReactTimeAgo from 'react-time-ago'
 import CommentView from '../components/CommentView'
 import MarkdownRenderer from './MarkdownRenderer'
 import Pluralize from 'react-pluralize'
+import PublicationStats from './PublicationStats'
 
 function PublicationView(dataPublication) {
     // console.log(dataPublication)
@@ -90,17 +93,7 @@ function PublicationView(dataPublication) {
                         </Box>
                     </Flex>
                     <Divider my='2' />
-                    <Flex className='stats' flexDirection='row' justifyContent='space-around' gap='2' alignContent='center'>
-                        <Text fontSize='xs' color={'gray.500'}>
-                            <Pluralize singular={'comment'} plural={'comments'} zero={'No comments'} count={publication.stats?.totalAmountOfComments} />
-                        </Text>
-                        <Text fontSize='xs' color={'gray.500'}>
-                            <Pluralize singular={'collect'} plural={'collects'} zero={'No collects'} count={publication.stats?.totalAmountOfCollects} />
-                        </Text>
-                        <Text fontSize='xs' color={'gray.500'}>
-                            <Pluralize singular={'mirror'} plural={'mirrors'} zero={'No mirrors'} count={publication.stats?.totalAmountOfMirrors} />
-                        </Text>
-                    </Flex>
+                    <PublicationStats publicationStats={publication.stats} />
                 </Flex>
             </LinkBox>
             {comments && comments.map((comment) => {
