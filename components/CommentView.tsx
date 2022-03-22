@@ -24,15 +24,15 @@ function CommentView(dataComment) {
                 backgroundColor: 'gray.100'
             }}
         >
-            <Flex flexDirection='row' justifyContent='flex-start' gap='2'>
-                <NextLink
-                    href={{
-                        pathname: '/publication/[publicationID]',
-                        query: { publicationID: publication.id },
-                    }}
-                    passHref
+            <NextLink
+                href={{
+                    pathname: '/publication/[publicationID]',
+                    query: { publicationID: publication.id },
+                }}
+                passHref
                 /*auto prefetch : https://nextjs.org/docs/messages/prefetch-true-deprecated is it really working ? */>
-                    <LinkOverlay>
+                <LinkOverlay>
+                    <Flex flexDirection='row' justifyContent='flex-start' gap='2'>
                         <Text
                             color={'green.500'}
                             textTransform={'uppercase'}
@@ -49,9 +49,9 @@ function CommentView(dataComment) {
                             letterSpacing={1.1}>
                             {publication.id}
                         </Text>
-                    </LinkOverlay>
-                </NextLink >
-            </Flex>
+                    </Flex>
+                </LinkOverlay>
+            </NextLink >
             <Flex flexDirection='column'>
                 <Flex className='profile' alignItems='center' bgColor='blue.50' py='1'>
                     <Avatar size='sm' src={publication.profile?.picture} />
