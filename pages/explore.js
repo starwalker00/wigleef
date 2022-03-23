@@ -6,7 +6,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { gql, useQuery } from "@apollo/client";
 import { initializeApollo, addApolloState } from "../lib/apolloClient";
 import { prettyJSON } from '../lib/helpers';
-import { Container } from '@chakra-ui/layout';
+import { Container, Skeleton, Center } from '@chakra-ui/react';
 
 const EXPLORE_PUBLICATIONS = `
   query($request: ExplorePublicationRequest!) {
@@ -364,7 +364,7 @@ function Explore() {
   return (
     <>
       {/* {console.log(publications)} */}
-      < h1 > Explore</h1 >
+      <h1> Explore</h1>
       <p>{totalCount} publications</p>
       {
         error
@@ -381,7 +381,11 @@ function Explore() {
               dataLength={publications.length}
               next={fetchMorePublications}
               hasMore={haveMorePublication}
-              loader={<h3>Loading...</h3>}
+              loader={
+                <Container width='60%'>
+                  <Skeleton startColor='red.500' endColor='orange.500' height='20px' speed='0.231' />
+                </Container>
+              }
               endMessage={<h4>Nothing more to show</h4>}
             >
               {publications.map((publication) => (
