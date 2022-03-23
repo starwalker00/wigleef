@@ -6,7 +6,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { gql, useQuery } from "@apollo/client";
 import { initializeApollo, addApolloState } from "../lib/apolloClient";
 import { prettyJSON } from '../lib/helpers';
-import { Container, Skeleton, Center } from '@chakra-ui/react';
+import { Container, Center, Spinner } from '@chakra-ui/react';
 
 const EXPLORE_PUBLICATIONS = `
   query($request: ExplorePublicationRequest!) {
@@ -382,9 +382,12 @@ function Explore() {
               next={fetchMorePublications}
               hasMore={haveMorePublication}
               loader={
-                <Container width='60%'>
-                  <Skeleton startColor='red.500' endColor='orange.500' height='20px' speed='0.231' />
-                </Container>
+                <Center overflow='hidden'>
+                  <Spinner
+                    thickness='4px'
+                    speed='0.65s'
+                    size='md' />
+                </Center>
               }
               endMessage={<h4>Nothing more to show</h4>}
             >
