@@ -337,10 +337,6 @@ function Profile() {
       notifyOnNetworkStatusChange: true,
       fetchPolicy: "no-cache"
     });
-  // manage edge cases
-  // const posts = data?.posts?.edges?.map((edge) => edge.node) || [];
-  // const havePosts = Boolean(posts.length);
-  // const haveMorePosts = Boolean(data?.posts?.pageInfo?.hasNextPage);
   // prettyJSON('publications', publications);
   const publications = data?.publications?.items || [];
   const havePublication = Boolean(publications.length);
@@ -349,9 +345,9 @@ function Profile() {
   return (
     <section>
       {/* {console.log(publications)} */}
-      <h1>My publications</h1>
+      <h1>profile/[id]</h1>
       {!havePublication && loadingPublication ? (
-        <Skeleton height='20px' />
+        <Skeleton height='20px'>loading</Skeleton>
       ) : error ? (
         <p>An error has occurred.</p>
       ) : !havePublication ? (

@@ -612,8 +612,10 @@ function Publication() {
   // const havePosts = Boolean(posts.length);
   // const haveMorePosts = Boolean(data?.posts?.pageInfo?.hasNextPage);
   // prettyJSON('dataPost', dataPost);
-  const publication = dataPost?.publication || [];
+  const publication = dataPost?.publication ?? undefined;
+  // console.log(publication)
   const havePublication = Boolean(publication);
+  console.log(`havePublication: ${havePublication}`)
   const haveMorePublication = Boolean(false);
 
   // query comments of main publication
@@ -634,60 +636,16 @@ function Publication() {
   return (
     <>
       <h1>publication/[id]</h1>
-      {!havePublication && loadingPublication ? (
-        <Skeleton height='20px' />
+      {!havePublication && (loadingPublication || loadingComments) ? (
+        <Skeleton height='20px'>loading</Skeleton>
       ) : errorPost ? (
         <p>An error has occurred.</p>
       ) : !havePublication ? (
         <p>No posts found.</p>
       ) : (
         <PublicationView key={publication.id} publication={publication} comments={comments} />
-        // <article key={post.id} style={{ border: "2px solid #eee", padding: "1rem", marginBottom: "1rem", borderRadius: "10px" }}>
-        //   <h2>{post.__typename}</h2>
-        //   <h3>{post.id}</h3>
-        //   <p>{post.metadata?.content}</p>
-        //   <p>mirror : {post.stats?.totalAmountOfComments}</p>
-        //   <p>collects : {post.stats?.totalAmountOfCollects}</p>
-        //   <p>comments : {post.stats?.totalAmountOfComments}</p>
-        //   {!haveComments && loadingComments ? (
-        //     <p>Loading comments...</p>
-        //   ) : errorComments ? (
-        //     <p>An error has occurred.</p>
-        //   ) : !haveComments ? (
-        //     <p>No comments found.</p>
-        //   ) : (
-        //     comments.map((comment) => {
-        //       return (
-        //         <div key={comment.id}>
-        //           <p>{comment.id}</p>
-        //           <p>{comment.metadata?.content}</p>
-        //         </div>
-        //       )
-        //     })
-        //   )
-        //   }
-        // </article>
       )
       }
-      {havePublication ? (
-        haveMorePublication ? (
-          <form onSubmit={event => {
-            event.preventDefault();
-            fetchMore({
-              variables: {
-                first: 5,
-                after: data.posts.pageInfo.endCursor,
-              }
-            });
-          }}>
-            <button type="submit" disabled={loading}>
-              {loading ? "Loading..." : "Load more"}
-            </button>
-          </form>
-        ) : (
-          <p>✅ All posts loaded.</p>
-        )
-      ) : null}
     </>
   )
 }
