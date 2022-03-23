@@ -2,7 +2,7 @@ import Layout from '../components/layout'
 import Sidebar from '../components/sidebar'
 import PublicationView from '../components/PublicationView'
 import InfiniteScroll from 'react-infinite-scroll-component';
-
+import { Container } from '@chakra-ui/layout';
 import { gql, useQuery } from "@apollo/client";
 import { initializeApollo, addApolloState } from "../lib/apolloClient";
 import { prettyJSON } from '../lib/helpers';
@@ -361,9 +361,22 @@ function Explore() {
     });
   }
   return (
-    <section>
+    <Container as='section'
+      // width='80%'
+      maxWidth={{ base: '100%', md: '80% ' }}
+      m='0'
+      px={{
+        base: '2', md: '20'
+      }}
+      py='10'
+      // bgColor={{ base: 'blue', md: 'red', lg: 'green' }}
+      display='flex'
+      flexDirection='column'
+      alignItems='center'
+    // flexDirection={{ base: 'column', md: 'row' }}
+    >
       {/* {console.log(publications)} */}
-      <h1>Explore</h1>
+      < h1 > Explore</h1 >
       <p>{totalCount} publications</p>
       {
         error
@@ -382,7 +395,7 @@ function Explore() {
             ))}
           </InfiniteScroll>
       }
-    </section >
+    </Container >
   )
 }
 
