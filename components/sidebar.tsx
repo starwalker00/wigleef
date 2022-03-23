@@ -27,7 +27,7 @@ import ConnectButtonAndModal from '../components/ConnectButtonAndModal'
 import { BigNumber } from "@ethersproject/bignumber";
 import { useProfileID } from "../components/context/AppContext";
 
-function Sidebar() {
+function Sidebar({ children }) {
     const { colorMode, toggleColorMode } = useColorMode();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const profileIDApp: BigNumber = useProfileID();
@@ -46,17 +46,16 @@ function Sidebar() {
                         Logo
                     </Flex>
                 </Box>
+                {children}
                 {/* bottom bar */}
-                <Portal>
-                    <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4} position='fixed' bottom='0' zIndex='200' width='100%'>
-                        <Flex h={16} alignItems={'center'} justifyContent={'space-around'} >
-                            <SunIcon />
-                            <SunIcon />
-                            <SunIcon />
-                            <SunIcon />
-                        </Flex>
-                    </Box>
-                </Portal>
+                <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4} position='sticky' bottom='0' zIndex='200' width='100%'>
+                    <Flex h={16} alignItems={'center'} justifyContent={'space-around'} >
+                        <SunIcon />
+                        <SunIcon />
+                        <SunIcon />
+                        <SunIcon />
+                    </Flex>
+                </Box>
             </Show>
             {/* menu above md size */}
             <Show above='md'>
@@ -133,6 +132,7 @@ function Sidebar() {
                         </Stack>
                     </Flex>
                 </Box>
+                {children}
             </Show>
         </>
     );

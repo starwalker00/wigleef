@@ -12,6 +12,7 @@ function PageContainer({ children }) {
                     base: '2', md: '20'
                 }}
                 py='10'
+                height='100vh'
                 display='flex'
                 flexDirection='column'
                 alignItems='center'

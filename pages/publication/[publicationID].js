@@ -695,10 +695,11 @@ function Publication() {
 Publication.getLayout = function getLayout(page) {
   return (
     <Layout>
-      <Sidebar />
-      <PageContainer>
-        {page}
-      </PageContainer>
+      <Sidebar>
+        <PageContainer>
+          {page}
+        </PageContainer>
+      </Sidebar>
     </Layout>
   )
 }

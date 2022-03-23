@@ -389,10 +389,11 @@ function Explore() {
 Explore.getLayout = function getLayout(page) {
   return (
     <Layout>
-      <Sidebar />
-      <PageContainer>
-        {page}
-      </PageContainer>
+      <Sidebar>
+        <PageContainer>
+          {page}
+        </PageContainer>
+      </Sidebar>
     </Layout>
   )
 }
