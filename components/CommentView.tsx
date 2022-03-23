@@ -2,14 +2,32 @@ import NextLink from 'next/link'
 import {
     Flex,
     Avatar,
-    Box, Text, Badge, Divider, Heading, IconButton, Icon, LinkOverlay, LinkBox, Link
+    Box, Text, Badge, Divider, Heading, IconButton, Icon, LinkOverlay, LinkBox, Link,
+    keyframes
 } from '@chakra-ui/react'
 import { FaTwitter } from 'react-icons/fa'
 import ReactTimeAgo from 'react-time-ago'
 import MarkdownRenderer from './MarkdownRenderer'
 import Pluralize from 'react-pluralize'
 
+// const spin = keyframes`
+//   from {transform: rotate(0deg);}
+//   to {transform: rotate(360deg)}
+// `;
+
+// const spin = keyframes`
+//   from {opacity: 0;}
+//   to {opacity: 100;}
+// `;
+
+const animate = keyframes`
+  from {transform: translateY(40px);}
+  to {transform: translateY(0);}
+`;
+
+
 function CommentView(dataComment) {
+    const animation = `${animate} 0.3s linear`;
     // console.log(dataComment)
     const publication = dataComment.comment;
     // console.log(publication)
@@ -24,6 +42,7 @@ function CommentView(dataComment) {
                 backgroundColor: 'gray.100'
             }}
             width='80%'
+            animation={animation}
         >
             <NextLink
                 href={{
