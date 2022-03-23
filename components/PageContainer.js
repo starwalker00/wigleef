@@ -11,11 +11,14 @@ function PageContainer({ children }) {
                 px={{
                     base: '2', md: '20'
                 }}
-                py='10'
-                height='100vh'
+                // height='100vh'
                 display='flex'
                 flexDirection='column'
                 alignItems='center'
+                pt={12}
+                pb={{
+                    base: 24, md: 12
+                }}
             >
                 {children}
             </Container>
