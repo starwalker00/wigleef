@@ -54,7 +54,8 @@ function PublicationView(dataPublication) {
                                 fontWeight={800}
                                 fontSize={'sm'}
                                 letterSpacing={1.1}>
-                                {publication.id}</Text>
+                                {publication.id}
+                            </Text>
                         </Flex>
                     </LinkOverlay>
                 </NextLink >
