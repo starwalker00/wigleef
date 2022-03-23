@@ -12,6 +12,7 @@ import CommentView from '../components/CommentView'
 import MarkdownRenderer from './MarkdownRenderer'
 import Pluralize from 'react-pluralize'
 import MarkdownEditor from '../components/MarkdownEditor'
+import PublicationCommentEditor from './PublicationCommentEditor'
 
 function PublicationStats({ publicationStats }) {
     const { isOpen: isOpenComment, onToggle: isToggleComment } = useDisclosure()
@@ -41,24 +42,7 @@ function PublicationStats({ publicationStats }) {
                     <Button size='xs' zIndex='2' onClick={isToggleMirror}>Mirror</Button>
                 </Flex>
             </Flex>
-            <Collapse in={isOpenComment} animateOpacity>
-                <Flex flexDirection='column'>
-                    <Flex
-                        flexDirection='column'
-                        p='10px'
-                        color='white'
-                        mt='4'
-                        bg='blue.500'
-                        rounded='md'
-                        shadow='md'
-                        zIndex='2'
-                    >
-                        <CloseButton alignSelf='flex-end' onClick={isToggleComment} size='sm' />
-                        <MarkdownEditor />
-                        <Button alignSelf='flex-end' size='sm' mt='4px'>Post comment</Button>
-                    </Flex>
-                </Flex>
-            </Collapse>
+            <PublicationCommentEditor isOpenComment={isOpenComment} isToggleComment={isToggleComment} />
             <Collapse in={isOpenCollect} animateOpacity>
                 <Flex flexDirection='column'>
                     <Flex
