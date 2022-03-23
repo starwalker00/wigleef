@@ -48,7 +48,7 @@ function Sidebar({ children }) {
                 </Box>
                 {children}
                 {/* bottom bar */}
-                <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4} position='sticky' bottom='0' zIndex='200' width='100%'>
+                <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4} position='fixed' bottom='0' zIndex='200' width='100%'>
                     <Flex h={16} alignItems={'center'} justifyContent={'space-around'} >
                         <SunIcon />
                         <SunIcon />
