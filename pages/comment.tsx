@@ -113,7 +113,7 @@ try {
 }
 
 function Comment() {
-    const profileIDApp: ethers.BigNumber = useProfileID();
+    const { profileIDApp } = useProfileID();
     const apolloClient = useApolloClient();
     const [isLoading, setIsLoading] = useState(false);
     const [{ data, error, loading }, signMessage] = useSignMessage();
@@ -205,7 +205,6 @@ function Comment() {
         }).then(response => {
             prettyJSON('createCommentTypedData: ', response);
             typedData = response.data.createCommentTypedData.typedData;
-            debugger;
             return signTypedData({
                 domain: omit(typedData.domain, '__typename'),
                 types: omit(typedData.types, '__typename'),

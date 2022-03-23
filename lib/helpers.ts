@@ -1,4 +1,5 @@
 import omitDeep from 'omit-deep';
+import jwt_decode from "jwt-decode";
 
 export const namedConsoleLog = (variableName, variableValue) => {
     console.log(`${variableName}:::::`);
@@ -11,4 +12,14 @@ export const prettyJSON = (message, obj) => {
 
 export const omit = (object: any, name: string) => {
     return omitDeep(object, name);
+};
+
+export const isJwtExpired = (jwtToken: string) => {
+    let decoded = jwt_decode(jwtToken);
+    //@ts-ignore
+    let exp = decoded.exp;
+    //1648066579
+    const now = Date.now();
+    //1648065183474
+    return now > exp * 1000;
 };

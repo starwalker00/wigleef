@@ -97,7 +97,7 @@ const GET_PROFILES = `
 `;
 
 function SelectProfile({ address }) {
-  const profileIDApp: BigNumber = useProfileID()
+  const { profileIDApp } = useProfileID();
   const dispatch = useDispatchProfileID()
 
   // get profiles ownedBy connected address

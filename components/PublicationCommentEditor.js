@@ -13,30 +13,22 @@ import { gql, useQuery } from "@apollo/client";
 import { useSignMessage, useSignTypedData, useContractWrite, useSigner, useAccount } from 'wagmi';
 import { generateChallenge } from '../lib/apollo/generate-challenge'
 import { authenticate } from '../lib/apollo/authenticate'
-import { namedConsoleLog, omit } from '../lib/helpers';
+import { namedConsoleLog, omit, isJwtExpired } from '../lib/helpers';
 import { v4 as uuidv4 } from 'uuid';
 import { create, CID, IPFSHTTPClient } from "ipfs-http-client";
 import { createCommentTypedData } from '../lib/apollo/create-comment-typed-data';
 import { ipfsClient } from '../lib/ipfs-client';
 import { Metadata, MetadataVersions } from '../lib/metadata'
-import { useProfileID } from "../components/context/AppContext";
+import { useProfileID, useDispatchProfileID } from "./context/AppContext";
 import { LENS_HUB_ABI } from '../lib/abi';
 import { ethers, utils, Wallet } from 'ethers';
 
-const MDEditor = dynamic(
-    () => import("@uiw/react-md-editor").then((mod) => mod.default),
-    { ssr: false }
-);
-
-const VERIFY = `
-  query($request: VerifyRequest!) {
-    verify(request: $request)
-  }
-`;
-
 function PublicationCommentEditor({ isOpenComment, isToggleComment, publicationID }) {
-    // app context in-use profileID (BN)
-    const profileIDApp = useProfileID();
+    // app context in-use
+    const { profileIDApp, authenticateApp } = useProfileID();
+    const dispatch = useDispatchProfileID();
+    // namedConsoleLog('authenticateApp', authenticateApp);
+
     // wagmi hooks
     const [{ data: dataAccount, error: errorAccount, loading: loadingAccount }, disconnect] = useAccount();
     const [{ data: dataSignMessage, error: errorSignMessage, loading: loadingSignMessage }, signMessage] = useSignMessage();
@@ -53,6 +45,15 @@ function PublicationCommentEditor({ isOpenComment, isToggleComment, publicationI
     // markdown editor
     const [markdownValue, setMarkdownValue] = useState("**Hello world!!!**");
 
+    async function login() {
+        console.log('Requesting JWT')
+        // authenticate
+        const challengeResponse = await generateChallenge(dataAccount.address);
+        // namedConsoleLog('challengeResponse', challengeResponse);
+        const signature = await signMessage({ message: challengeResponse.data.challenge.text });
+        // namedConsoleLog('signature', signature);
+        return authenticate(dataAccount.address, signature.data);
+    }
     async function clickPostComment() {
         // TODO: migrate to apollo hooks later ?
         // alert('clickComment');
@@ -80,18 +81,27 @@ function PublicationCommentEditor({ isOpenComment, isToggleComment, publicationI
             appId: 'testing123',
         }
         try {
-            // authenticate
-            const challengeResponse = await generateChallenge(dataAccount.address);
-            // namedConsoleLog('challengeResponse', challengeResponse);
-            const signature = await signMessage({ message: challengeResponse.data.challenge.text });
-            // namedConsoleLog('signature', signature);
-            const accessTokens = await authenticate(dataAccount.address, signature.data);
-            // namedConsoleLog('accessTokens', accessTokens);
+            let accessToken;
+            // namedConsoleLog('authenticateApp', authenticateApp);
+            // request a login access if there is no accessTokens in context or Jwt in context is expired
+            if (authenticateApp.accessToken.length < 1 || isJwtExpired(authenticateApp.accessToken)) {
+                const accessTokens = await login(dataAccount.address);
+                // namedConsoleLog('accessTokens', accessTokens);
+                let authenticate = accessTokens?.data?.authenticate;
+                dispatch({ type: 'set_authenticateApp', payload: authenticate });
+                accessToken = authenticate.accessToken;
+            }
+            else {
+                accessToken = authenticateApp.accessToken;
+            }
+            // namedConsoleLog('accessToken', accessToken);
 
-            // comment
-            // alert('client')
+            // alert('ipfs')
+            // upload to ipfs
             const ipfsResult = await ipfsClient.add(JSON.stringify(comment));
             // namedConsoleLog('ipfsResult', ipfsResult);
+
+            // namedConsoleLog('publicationID', publicationID);
             const createCommentRequest = {
                 profileId: profileIDApp.toHexString(),
                 publicationId: publicationID,
@@ -113,7 +123,7 @@ function PublicationCommentEditor({ isOpenComment, isToggleComment, publicationI
                     followerOnlyReferenceModule: false,
                 },
             };
-            const result = await createCommentTypedData(createCommentRequest, accessTokens?.data?.authenticate?.accessToken);
+            const result = await createCommentTypedData(createCommentRequest, accessToken);
             // namedConsoleLog('createCommentTypedData', result);
             const typedData = result.data.createCommentTypedData.typedData;
             const commentSignature = await signTypedData({
@@ -121,7 +131,7 @@ function PublicationCommentEditor({ isOpenComment, isToggleComment, publicationI
                 types: omit(typedData.types, '__typename'),
                 value: omit(typedData.value, '__typename'),
             });
-            namedConsoleLog('commentSignature', commentSignature);
+            // namedConsoleLog('commentSignature', commentSignature);
             const { v, r, s } = utils.splitSignature(commentSignature.data);
             const transaction = await write(
                 {
@@ -168,7 +178,7 @@ function PublicationCommentEditor({ isOpenComment, isToggleComment, publicationI
                     zIndex='2'
                 >
                     <CloseButton alignSelf='flex-end' onClick={isToggleComment} size='sm' />
-                    <MarkdownEditor />
+                    <MarkdownEditor markdownValue={markdownValue} onChange={setMarkdownValue} />
                     <Button
                         alignSelf='flex-end'
                         size='sm'

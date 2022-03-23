@@ -9,11 +9,10 @@ const MDEditor = dynamic(
     { ssr: false }
 );
 
-function MarkdownEditor() {
-    const [markdownValue, setMarkdownValue] = useState("**Hello world!!!**");
+function MarkdownEditor({ markdownValue, onChange }) {
     return (
         <Box>
-            <MDEditor value={markdownValue} onChange={setMarkdownValue} />
+            <MDEditor value={markdownValue} onChange={onChange} />
         </Box>
     )
 }

@@ -22,17 +22,19 @@ import { Show, Hide } from '@chakra-ui/react'
 import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 import NextLink from 'next/link'
 import styles from './sidebar.module.css'
+import { UNSET_CONTEXT_PROFILE_ID } from '../lib/config';
 
 import ConnectButtonAndModal from '../components/ConnectButtonAndModal'
 import { BigNumber } from "@ethersproject/bignumber";
 import { useProfileID } from "../components/context/AppContext";
+import { namedConsoleLog } from '../lib/helpers';
 
 function Sidebar({ children }) {
     const { colorMode, toggleColorMode } = useColorMode();
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const profileIDApp: BigNumber = useProfileID();
-
-    const myProfileIDhexString: string = profileIDApp.eq(0) ? '0x49' : profileIDApp.toHexString();
+    //@ts-ignore
+    const { profileIDApp } = useProfileID();
+    const myProfileIDhexString: string = profileIDApp.eq(UNSET_CONTEXT_PROFILE_ID) ? '0x49' : profileIDApp.toHexString();
     // TODO
     // disable "my profile" link if profileIDApp = 0, meaning user not connected
     // or make a beautiful demo profile

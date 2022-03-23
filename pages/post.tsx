@@ -100,7 +100,7 @@ try {
 }
 
 function Post() {
-    const profileIDApp: ethers.BigNumber = useProfileID();
+    const { profileIDApp } = useProfileID();
     const apolloClient = useApolloClient();
     const [isLoading, setIsLoading] = useState(false);
     const [{ data, error, loading }, signMessage] = useSignMessage();
