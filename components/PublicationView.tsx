@@ -69,14 +69,14 @@ function PublicationView(dataPublication) {
                 </NextLink >
                 <Flex flexDirection='column'>
                     <Flex className='profile' alignItems='center' bgColor='blue.50' py='1'>
-                        <Avatar size='md' src={publication.profile?.picture} />
+                        <Avatar size='md' src={publication.profile?.picture?.original?.url} />
                         <Flex ml='2' alignItems='center'>
                             <Text fontSize='lg' fontWeight='bold'>
                                 {publication.profile?.handle}
                                 {/* <Badge ml='1' colorScheme='green'>New</Badge> */}
                                 {publication.profile?.twitterUrl
                                     ?
-                                    <NextLink href={'https://www.google.fr'} passHref>
+                                    <NextLink href='https://www.google.fr' passHref>
                                         <Link>
                                             <IconButton aria-label='Search database'
                                                 variant='ghost'
