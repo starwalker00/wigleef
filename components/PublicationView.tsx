@@ -2,7 +2,8 @@ import NextLink from 'next/link'
 import {
     Flex,
     Avatar,
-    Box, Text, Badge, Divider, Heading, IconButton, Icon, LinkOverlay, LinkBox, Link, Button, Collapse, Portal
+    Box, Text, Badge, Divider, Heading, IconButton, Icon, LinkOverlay, LinkBox, Link, Button, Collapse, Portal,
+    keyframes
 } from '@chakra-ui/react'
 import { Fade, ScaleFade, Slide, SlideFade } from '@chakra-ui/react'
 import { useDisclosure } from '@chakra-ui/react'
@@ -13,7 +14,13 @@ import MarkdownRenderer from './MarkdownRenderer'
 import Pluralize from 'react-pluralize'
 import PublicationStats from './PublicationStats'
 
+const animate = keyframes`
+  from {opacity: 0;}
+  to {opacity: 100;}
+`;
+
 function PublicationView(dataPublication) {
+    const animation = `${animate} 0.1s linear`;
     // console.log(dataPublication)
     const publication = dataPublication.publication;
     // console.log(publication)
@@ -30,6 +37,7 @@ function PublicationView(dataPublication) {
                     backgroundColor: 'gray.100'
                 }}
                 width='100%'
+                animation={animation}
             >
                 <NextLink
                     href={{
