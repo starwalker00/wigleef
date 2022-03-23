@@ -103,7 +103,7 @@ function PublicationView(dataPublication) {
                         </Box>
                     </Flex>
                     <Divider my='2' />
-                    <PublicationStats publicationStats={publication.stats} />
+                    <PublicationStats publicationID={publication.id} publicationStats={publication.stats} />
                 </Flex>
             </LinkBox>
             {comments && comments.map((comment) => {

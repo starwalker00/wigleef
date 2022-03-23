@@ -14,7 +14,7 @@ import Pluralize from 'react-pluralize'
 import MarkdownEditor from '../components/MarkdownEditor'
 import PublicationCommentEditor from './PublicationCommentEditor'
 
-function PublicationStats({ publicationStats }) {
+function PublicationStats({ publicationStats, publicationID }) {
     const { isOpen: isOpenComment, onToggle: isToggleComment } = useDisclosure()
     const { isOpen: isOpenCollect, onToggle: isToggleCollect } = useDisclosure()
     const { isOpen: isOpenMirror, onToggle: isToggleMirror } = useDisclosure()
@@ -42,7 +42,7 @@ function PublicationStats({ publicationStats }) {
                     <Button size='xs' zIndex='2' onClick={isToggleMirror}>Mirror</Button>
                 </Flex>
             </Flex>
-            <PublicationCommentEditor isOpenComment={isOpenComment} isToggleComment={isToggleComment} />
+            <PublicationCommentEditor publicationID={publicationID} isOpenComment={isOpenComment} isToggleComment={isToggleComment} />
             <Collapse in={isOpenCollect} animateOpacity>
                 <Flex flexDirection='column'>
                     <Flex
