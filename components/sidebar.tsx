@@ -15,7 +15,8 @@ import {
     Stack,
     useColorMode,
     Center,
-    VStack
+    VStack,
+    Portal
 } from '@chakra-ui/react';
 import { Show, Hide } from '@chakra-ui/react'
 import { MoonIcon, SunIcon } from '@chakra-ui/icons';
@@ -37,7 +38,7 @@ function Sidebar() {
     // or make a beautiful demo profile
     return (
         <>
-            {/* menu below md size */}
+            {/* menu on md size and below */}
             <Show below='md'>
                 {/* top bar */}
                 <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4} position='sticky' top='0' zIndex='200' width='100%'>
@@ -46,14 +47,16 @@ function Sidebar() {
                     </Flex>
                 </Box>
                 {/* bottom bar */}
-                <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4} position='fixed' bottom='0' zIndex='200' width='100%'>
-                    <Flex h={16} alignItems={'center'} justifyContent={'space-around'} >
-                        <SunIcon />
-                        <SunIcon />
-                        <SunIcon />
-                        <SunIcon />
-                    </Flex>
-                </Box>
+                <Portal>
+                    <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4} position='fixed' bottom='0' zIndex='200' width='100%'>
+                        <Flex h={16} alignItems={'center'} justifyContent={'space-around'} >
+                            <SunIcon />
+                            <SunIcon />
+                            <SunIcon />
+                            <SunIcon />
+                        </Flex>
+                    </Box>
+                </Portal>
             </Show>
             {/* menu above md size */}
             <Show above='md'>
