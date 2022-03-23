@@ -23,6 +23,7 @@ function CommentView(dataComment) {
                 cursor: 'pointer',
                 backgroundColor: 'gray.100'
             }}
+            width='80%'
         >
             <NextLink
                 href={{

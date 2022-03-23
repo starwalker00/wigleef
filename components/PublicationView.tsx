@@ -29,6 +29,7 @@ function PublicationView(dataPublication) {
                     cursor: 'pointer',
                     backgroundColor: 'gray.100'
                 }}
+                width='100%'
             >
                 <NextLink
                     href={{

@@ -1,6 +1,7 @@
 import Layout from '../../components/layout'
 import Sidebar from '../../components/sidebar'
 import PublicationView from '../../components/PublicationView'
+import PageContainer from '../../components/PageContainer'
 import { Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react'
 
 import { gql, useQuery } from "@apollo/client";
@@ -631,7 +632,7 @@ function Publication() {
   const haveComments = Boolean(comments.length);
   const haveMoreComments = Boolean(true);
   return (
-    <section>
+    <>
       <h1>publication/[id]</h1>
       {!havePublication && loadingPublication ? (
         <Skeleton height='20px' />
@@ -687,7 +688,7 @@ function Publication() {
           <p>✅ All posts loaded.</p>
         )
       ) : null}
-    </section>
+    </>
   )
 }
 
@@ -695,7 +696,9 @@ Publication.getLayout = function getLayout(page) {
   return (
     <Layout>
       <Sidebar />
-      {page}
+      <PageContainer>
+        {page}
+      </PageContainer>
     </Layout>
   )
 }

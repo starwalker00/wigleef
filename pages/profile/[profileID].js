@@ -1,6 +1,8 @@
 import Layout from '../../components/layout'
 import Sidebar from '../../components/sidebar'
 import PublicationView from '../../components/PublicationView'
+import PageContainer from '../../components/PageContainer'
+
 import {
   Text,
   Button,
@@ -388,7 +390,9 @@ Profile.getLayout = function getLayout(page) {
   return (
     <Layout>
       <Sidebar />
-      {page}
+      <PageContainer>
+        {page}
+      </PageContainer>
     </Layout>
   )
 }
