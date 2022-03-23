@@ -272,8 +272,9 @@ function Comment() {
 Comment.getLayout = function getLayout(page) {
     return (
         <Layout>
-            <Sidebar />
-            {page}
+            <Sidebar>
+                {page}
+            </Sidebar>
         </Layout>
     )
 }
