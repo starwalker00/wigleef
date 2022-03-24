@@ -357,6 +357,7 @@ function About() {
     });
   }, []);
 
+  // query a search to the API, called on search input change
   function fetchProfile(query) {
     if (!query) return
     // debouncing
@@ -371,6 +372,7 @@ function About() {
       });
     }, 500)
   }
+
   // if (loadingSearch) return <p>Loading ...</p>;
   if (errorSearch) return `Error! ${errorSearch}`;
   return (
@@ -399,7 +401,7 @@ function About() {
                   <AutoCompleteItem
                     key={`option-${person?.profileId}`}
                     value={person}
-                    getValue={val => val.name}
+                    getValue={val => val?.name || ''}
                     textTransform="capitalize"
                     align="center"
                   >

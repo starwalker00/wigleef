@@ -12,7 +12,9 @@ import {
     Link,
     Spacer
 } from '@chakra-ui/react';
-import { ExternalLinkIcon } from '@chakra-ui/icons'
+import { ExternalLinkIcon } from '@chakra-ui/icons';
+import FollowingListDrawer from './FollowingListDrawer';
+import FollowerListDrawer from './FollowerListDrawer';
 
 export default function SocialProfileWithImage({ profile }) {
     return (
@@ -63,12 +65,14 @@ export default function SocialProfileWithImage({ profile }) {
                             <Text fontSize={'sm'} color={'gray.500'}>
                                 Followers
                             </Text>
+                            <FollowerListDrawer profileString={profile?.name || profile?.handle} profileId={profile.id} />
                         </Stack>
                         <Stack spacing={0} align={'center'}>
                             <Text fontWeight={600}>{profile?.stats?.totalFollowing || 0}</Text>
                             <Text fontSize={'sm'} color={'gray.500'}>
                                 Following
                             </Text>
+                            <FollowingListDrawer walletAddress={profile.ownedBy} />
                         </Stack>
                     </Stack>
                     {/* bio */}
@@ -91,6 +95,11 @@ export default function SocialProfileWithImage({ profile }) {
                             : null
                         }
                     </Stack>
+                    <Stack direction={'row'} width={'full'} spacing={1}>
+                        <Text fontSize={'sm'} fontWeight={100}>Owner :</Text>
+                        <Text fontSize={'sm'} fontWeight={100}>{profile.ownedBy}</Text>
+                    </Stack>
+
 
                     {
                         false ?
