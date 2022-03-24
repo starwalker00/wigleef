@@ -141,10 +141,10 @@ function SelectProfile({ address }) {
                 let profileID = BigNumber.from(profile.id);
                 return (
                   <option
-                    key={profileID.toString()}
-                    defaultValue={profileIDApp.toString()}
-                    value={profileID.toString()} >
-                    {profile.handle}{'#'}{profileID.toString()}
+                    key={profileID.toHexString()}
+                    defaultValue={profileIDApp.toHexString()}
+                    value={profileID.toHexString()} >
+                    {profile.handle}{'#'}{profileID.toHexString()}
                   </option>)
               })
             }
