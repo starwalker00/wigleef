@@ -10,13 +10,29 @@ import {
     Button,
     useColorModeValue,
     Link,
-    Spacer
+    Spacer,
+    Tag
 } from '@chakra-ui/react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import FollowingListDrawer from './FollowingListDrawer';
 import FollowerListDrawer from './FollowerListDrawer';
+import { useAccount } from 'wagmi';
+import { useProfileID } from "./context/AppContext";
+import { BigNumber } from "@ethersproject/bignumber";
+import { namedConsoleLog } from '../lib/helpers';
 
 export default function SocialProfileWithImage({ profile }) {
+    // check connected wallet
+    const [{ data: accountData }, disconnect] = useAccount();
+    const connectedWalletAddress = accountData?.address;
+    const isProfileOfConnectedWalletAddress = accountData?.address === profile.ownedBy;
+    // namedConsoleLog('isProfileOfConnectedWalletAddress', isProfileOfConnectedWalletAddress);
+
+    // check connected profileID
+    const { profileIDApp } = useProfileID();
+    const isProfileIDConnected = isProfileOfConnectedWalletAddress && profileIDApp.eq(BigNumber.from(profile?.id));
+    // namedConsoleLog('isProfileOfConnectedWalletAddress', isProfileOfConnectedWalletAddress);
+
     return (
         <Center py={6}>
             <Box
@@ -57,7 +73,7 @@ export default function SocialProfileWithImage({ profile }) {
                             <Heading fontSize={'2xl'} fontWeight={500} fontFamily={'body'}>
                                 {profile?.name}
                             </Heading>
-                            <Text fontSize={'sm'} color={'gray.500'}>@{profile?.handle} — {profile?.id}</Text>
+                            <Text fontSize={'sm'} color={'gray.500'}>@{profile?.handle} — {profile?.id}</Text>{isProfileIDConnected ? <Tag size='sm'>YOU!</Tag> : null}
                         </Stack>
                         <Spacer />
                         <Stack spacing={0} align={'center'}>
@@ -97,7 +113,7 @@ export default function SocialProfileWithImage({ profile }) {
                     </Stack>
                     <Stack direction={'row'} width={'full'} spacing={1}>
                         <Text fontSize={'sm'} fontWeight={100}>Owner :</Text>
-                        <Text fontSize={'sm'} fontWeight={100}>{profile.ownedBy}</Text>
+                        <Text fontSize={'sm'} fontWeight={100}>{profile.ownedBy}</Text>{isProfileOfConnectedWalletAddress ? <Tag size='sm'>YOU!</Tag> : null}
                     </Stack>
 
 
