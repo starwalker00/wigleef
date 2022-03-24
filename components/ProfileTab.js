@@ -368,7 +368,7 @@ function ProfileTab({ constCurrentProfileID, publicationType }) {
               // maxWidth={{ base: '100%', md: '80% ' }}
               width={{ base: '100%', md: '80% ' }}
             >
-              <Pluralize singular={capitalize(publicationType[0])} plural={capitalize(publicationType[0].concat('S'))} count={totalCount} />
+              {/* <Pluralize singular={capitalize(publicationType[0])} plural={capitalize(publicationType[0].concat('S'))} count={totalCount} /> */}
               <InfiniteScroll
                 dataLength={publications.length}
                 next={fetchMorePublications}

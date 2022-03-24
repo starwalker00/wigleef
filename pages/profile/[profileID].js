@@ -27,295 +27,84 @@ import { useRouter } from 'next/router'
 import { DEMO_PROFILE_ID } from '../../lib/config';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import ProfileTab from '../../components/ProfileTab';
+import Pluralize from 'react-pluralize'
 
-const GET_PUBLICATIONS = `
-  query($request: PublicationsQueryRequest!) {
-    publications(request: $request) {
+const GET_PROFILES = `
+  query($request: ProfileQueryRequest!) {
+    profiles(request: $request) {
       items {
-        __typename 
-        ... on Post {
-          ...PostFields
+        id
+        name
+        bio
+        location
+        website
+        twitterUrl
+        picture {
+          ... on NftImage {
+            contractAddress
+            tokenId
+            uri
+            verified
+          }
+          ... on MediaSet {
+            original {
+              url
+              mimeType
+            }
+          }
+          __typename
         }
-        ... on Comment {
-          ...CommentFields
+        handle
+        coverPicture {
+          ... on NftImage {
+            contractAddress
+            tokenId
+            uri
+            verified
+          }
+          ... on MediaSet {
+            original {
+              url
+              mimeType
+            }
+          }
+          __typename
         }
-        ... on Mirror {
-          ...MirrorFields
+        ownedBy
+        depatcher {
+          address
+          canUseRelay
+        }
+        stats {
+          totalFollowers
+          totalFollowing
+          totalPosts
+          totalComments
+          totalMirrors
+          totalPublications
+          totalCollects
+        }
+        followModule {
+          ... on FeeFollowModuleSettings {
+            type
+            amount {
+              asset {
+                symbol
+                name
+                decimals
+                address
+              }
+              value
+            }
+            recipient
+          }
+          __typename
         }
       }
       pageInfo {
         prev
         next
         totalCount
-      }
-    }
-  }
-
-  fragment MediaFields on Media {
-    url
-    mimeType
-  }
-
-  fragment ProfileFields on Profile {
-    id
-    name
-    bio
-    location
-    website
-    twitterUrl
-    handle
-    picture {
-      ... on NftImage {
-        contractAddress
-        tokenId
-        uri
-        verified
-      }
-      ... on MediaSet {
-        original {
-          ...MediaFields
-        }
-      }
-    }
-    coverPicture {
-      ... on NftImage {
-        contractAddress
-        tokenId
-        uri
-        verified
-      }
-      ... on MediaSet {
-        original {
-          ...MediaFields
-        }
-      }
-    }
-    ownedBy
-    depatcher {
-      address
-    }
-    stats {
-      totalFollowers
-      totalFollowing
-      totalPosts
-      totalComments
-      totalMirrors
-      totalPublications
-      totalCollects
-    }
-    followModule {
-      ... on FeeFollowModuleSettings {
-        type
-        amount {
-          asset {
-            name
-            symbol
-            decimals
-            address
-          }
-          value
-        }
-        recipient
-      }
-    }
-  }
-
-  fragment PublicationStatsFields on PublicationStats { 
-    totalAmountOfMirrors
-    totalAmountOfCollects
-    totalAmountOfComments
-  }
-
-  fragment MetadataOutputFields on MetadataOutput {
-    name
-    description
-    content
-    media {
-      original {
-        ...MediaFields
-      }
-    }
-    attributes {
-      displayType
-      traitType
-      value
-    }
-  }
-
-  fragment Erc20Fields on Erc20 {
-    name
-    symbol
-    decimals
-    address
-  }
-
-  fragment CollectModuleFields on CollectModule {
-    __typename
-    ... on EmptyCollectModuleSettings {
-      type
-    }
-    ... on FeeCollectModuleSettings {
-      type
-      amount {
-        asset {
-          ...Erc20Fields
-        }
-        value
-      }
-      recipient
-      referralFee
-    }
-    ... on LimitedFeeCollectModuleSettings {
-      type
-      collectLimit
-      amount {
-        asset {
-          ...Erc20Fields
-        }
-        value
-      }
-      recipient
-      referralFee
-    }
-    ... on LimitedTimedFeeCollectModuleSettings {
-      type
-      collectLimit
-      amount {
-        asset {
-          ...Erc20Fields
-        }
-        value
-      }
-      recipient
-      referralFee
-      endTimestamp
-    }
-    ... on RevertCollectModuleSettings {
-      type
-    }
-    ... on TimedFeeCollectModuleSettings {
-      type
-      amount {
-        asset {
-          ...Erc20Fields
-        }
-        value
-      }
-      recipient
-      referralFee
-      endTimestamp
-    }
-  }
-
-  fragment PostFields on Post {
-    id
-    profile {
-      ...ProfileFields
-    }
-    stats {
-      ...PublicationStatsFields
-    }
-    metadata {
-      ...MetadataOutputFields
-    }
-    createdAt
-    collectModule {
-      ...CollectModuleFields
-    }
-    referenceModule {
-      ... on FollowOnlyReferenceModuleSettings {
-        type
-      }
-    }
-    appId
-  }
-
-  fragment MirrorBaseFields on Mirror {
-    id
-    profile {
-      ...ProfileFields
-    }
-    stats {
-      ...PublicationStatsFields
-    }
-    metadata {
-      ...MetadataOutputFields
-    }
-    createdAt
-    collectModule {
-      ...CollectModuleFields
-    }
-    referenceModule {
-      ... on FollowOnlyReferenceModuleSettings {
-        type
-      }
-    }
-    appId
-  }
-
-  fragment MirrorFields on Mirror {
-    ...MirrorBaseFields
-    mirrorOf {
-     ... on Post {
-        ...PostFields          
-     }
-     ... on Comment {
-        ...CommentFields          
-     }
-    }
-  }
-
-  fragment CommentBaseFields on Comment {
-    id
-    profile {
-      ...ProfileFields
-    }
-    stats {
-      ...PublicationStatsFields
-    }
-    metadata {
-      ...MetadataOutputFields
-    }
-    createdAt
-    collectModule {
-      ...CollectModuleFields
-    }
-    referenceModule {
-      ... on FollowOnlyReferenceModuleSettings {
-        type
-      }
-    }
-    appId
-  }
-
-  fragment CommentFields on Comment {
-    ...CommentBaseFields
-    mainPost {
-      ... on Post {
-        ...PostFields
-      }
-      ... on Mirror {
-        ...MirrorBaseFields
-        mirrorOf {
-          ... on Post {
-             ...PostFields          
-          }
-          ... on Comment {
-             ...CommentMirrorOfFields        
-          }
-        }
-      }
-    }
-  }
-
-  fragment CommentMirrorOfFields on Comment {
-    ...CommentBaseFields
-    mainPost {
-      ... on Post {
-        ...PostFields
-      }
-      ... on Mirror {
-         ...MirrorBaseFields
       }
     }
   }
@@ -330,27 +119,56 @@ function Profile() {
   // prettyJSON('profileID', profileID);
   const constCurrentProfileID = BigNumber.from(profileID);
 
+  const { loading: loadingProfile, error: errorProfile, data: dataProfile } = useQuery(
+    gql(GET_PROFILES),
+    {
+      variables: {
+        request: {
+          profileIds: profileID
+        }
+      },
+      notifyOnNetworkStatusChange: true
+    });
+
+  const profile = dataProfile?.profiles?.items?.[0] || undefined;
+  const haveProfile = Boolean(profile?.id);
 
   return (
     <section>
-      <Tabs isFitted isLazy lazyBehavior="keepMounted">
-        <TabList>
-          <Tab>One</Tab>
-          <Tab>Two</Tab>
-          <Tab>Three</Tab>
-        </TabList>
-        <TabPanels>
-          <TabPanel>
-            <ProfileTab constCurrentProfileID={constCurrentProfileID} publicationType={['POST']} />
-          </TabPanel>
-          <TabPanel>
-            <ProfileTab constCurrentProfileID={constCurrentProfileID} publicationType={['COMMENT']} />
-          </TabPanel >
-          <TabPanel>
-            <ProfileTab constCurrentProfileID={constCurrentProfileID} publicationType={['MIRROR']} />
-          </TabPanel>
-        </TabPanels >
-      </Tabs >
+      {
+        !haveProfile && loadingProfile ? (
+          <Skeleton height='20px'>loading</Skeleton>
+        ) : errorProfile ? (
+          <p>An error has occurred.</p>
+        ) : !haveProfile ? (
+          <p>Profile not found</p>
+        ) : (
+          <Tabs isFitted isLazy lazyBehavior="keepMounted">
+            <TabList>
+              <Tab isDisabled={profile.stats.totalPosts < 1}>
+                <Pluralize singular={'Post'} plural={'Posts'} zero={'No posts'} count={profile.stats.totalPosts} />
+              </Tab>
+              <Tab isDisabled={profile.stats.totalComments < 1}>
+                <Pluralize singular={'Comment'} plural={'Comments'} zero={'No comments'} count={profile.stats.totalComments} />
+              </Tab>
+              <Tab isDisabled={profile.stats.totalMirrors < 1}>
+                <Pluralize singular={'Mirror'} plural={'Mirrors'} zero={'No mirrors'} count={profile.stats.totalMirrors} />
+              </Tab>
+            </TabList>
+            <TabPanels>
+              <TabPanel>
+                <ProfileTab constCurrentProfileID={constCurrentProfileID} publicationType={['POST']} />
+              </TabPanel>
+              <TabPanel>
+                <ProfileTab constCurrentProfileID={constCurrentProfileID} publicationType={['COMMENT']} />
+              </TabPanel >
+              <TabPanel>
+                <ProfileTab constCurrentProfileID={constCurrentProfileID} publicationType={['MIRROR']} />
+              </TabPanel>
+            </TabPanels >
+          </Tabs>
+        )
+      }
     </section >
   )
 }
