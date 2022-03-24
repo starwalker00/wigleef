@@ -326,7 +326,7 @@ function ProfileTab({ constCurrentProfileID, publicationType }) {
   const havePublication = Boolean(publications.length);
   const totalCount = data?.publications?.pageInfo?.totalCount || 0;
   const haveMorePublication = Boolean(publications.length < totalCount);
-  namedConsoleLog('data?.publications', data?.publications)
+  // namedConsoleLog('data?.publications', data?.publications)
 
   function fetchMorePublications() {
     // prettyJSON('publications.length', publications.length);
