@@ -1,7 +1,7 @@
 
 import PublicationView from './PublicationView'
 
-import { Container } from '@chakra-ui/react';
+import { Container, Skeleton } from '@chakra-ui/react';
 import { gql, useQuery } from "@apollo/client";
 import { initializeApollo, addApolloState } from "../lib/apolloClient";
 import { namedConsoleLog, prettyJSON, capitalize } from '../lib/helpers';
@@ -309,7 +309,7 @@ const GET_PUBLICATIONS = `
 function ProfileTab({ constCurrentProfileID, publicationType }) {
   // fetch publications of profileID
   namedConsoleLog('publicationType', publicationType);
-  const { loading: loadingPublication, error, data, fetchMore, refetch } = useQuery(
+  const { loading: loadingPublication, error: errorPublication, data, fetchMore, refetch } = useQuery(
     gql(GET_PUBLICATIONS),
     {
       variables: {
@@ -356,35 +356,38 @@ function ProfileTab({ constCurrentProfileID, publicationType }) {
   }
   return (
     <>
-      <>
-        {
-          error
-            ?
-            <h1>error</h1>
-            :
-            <Container
-              display='flex'
-              flexDirection='column'
-              // maxWidth={{ base: '100%', md: '80% ' }}
-              width={{ base: '100%', md: '80% ' }}
+      {
+        !havePublication && loadingPublication ? (
+          <Skeleton height='20px'>loading</Skeleton>
+        ) : errorPublication ? (
+          <p>An error has occurred.</p>
+        ) : !havePublication ? (
+          <p>Publication not found</p>
+        ) : (
+          <Container
+            display='flex'
+            flexDirection='column'
+            // maxWidth={{ base: '100%', md: '80% ' }}
+            width={{ base: '100%', md: '80% ' }}
+          >
+            {/* <Pluralize singular={capitalize(publicationType[0])} plural={capitalize(publicationType[0].concat('S'))} count={totalCount} /> */}
+            <InfiniteScroll
+              dataLength={publications.length}
+              next={fetchMorePublications}
+              hasMore={haveMorePublication}
+              loader={<InfiniteScrollLoading />}
+              endMessage={<InfiniteScrollLoaded />}
             >
-              {/* <Pluralize singular={capitalize(publicationType[0])} plural={capitalize(publicationType[0].concat('S'))} count={totalCount} /> */}
-              <InfiniteScroll
-                dataLength={publications.length}
-                next={fetchMorePublications}
-                hasMore={haveMorePublication}
-                loader={<InfiniteScrollLoading />}
-                endMessage={<InfiniteScrollLoaded />}
-              >
-                {publications.map((publication) => (
-                  <PublicationView key={publication.id} publication={publication} />
-                ))}
-              </InfiniteScroll>
-            </Container>
-        }
-      </>
+              {publications.map((publication) => (
+                <PublicationView key={publication.id} publication={publication} />
+              ))}
+            </InfiniteScroll>
+          </Container>
+        )
+      }
     </>
   )
 }
+
 
 export default ProfileTab

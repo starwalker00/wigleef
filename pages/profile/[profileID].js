@@ -143,7 +143,7 @@ function Profile() {
         ) : !haveProfile ? (
           <p>Profile not found</p>
         ) : (
-          <Tabs isFitted isLazy lazyBehavior="keepMounted">
+          <Tabs isFitted isLazy /*lazyBehavior="keepMounted"*/>
             <TabList>
               <Tab isDisabled={profile.stats.totalPosts < 1}>
                 <Pluralize singular={'Post'} plural={'Posts'} zero={'No posts'} count={profile.stats.totalPosts} />
