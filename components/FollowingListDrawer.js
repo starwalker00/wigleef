@@ -223,7 +223,7 @@ export default function FollowingListDrawer({ walletAddress }) {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>
-            <Pluralize singular={'profile is'} plural={'profiles are'} zero={'No profiles'} count={totalCount} />
+            <Pluralize singular={'profile is'} plural={'profiles are'} zero={'No profiles are'} count={totalCount} />
             {' '}following {walletAddress}
             .
           </DrawerHeader>
