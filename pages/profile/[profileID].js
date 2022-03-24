@@ -28,6 +28,7 @@ import { DEMO_PROFILE_ID } from '../../lib/config';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import ProfileTab from '../../components/ProfileTab';
 import Pluralize from 'react-pluralize'
+import SocialProfileWithImage from '../../components/SocialProfileWithImage';
 
 const GET_PROFILES = `
   query($request: ProfileQueryRequest!) {
@@ -124,7 +125,7 @@ function Profile() {
     {
       variables: {
         request: {
-          profileIds: profileID
+          profileIds: constCurrentProfileID.toHexString()
         }
       },
       notifyOnNetworkStatusChange: true
@@ -132,7 +133,7 @@ function Profile() {
 
   const profile = dataProfile?.profiles?.items?.[0] || undefined;
   const haveProfile = Boolean(profile?.id);
-
+  namedConsoleLog('profile', profile);
   return (
     <section>
       {
@@ -143,30 +144,33 @@ function Profile() {
         ) : !haveProfile ? (
           <p>Profile not found</p>
         ) : (
-          <Tabs isFitted isLazy /*lazyBehavior="keepMounted"*/>
-            <TabList>
-              <Tab isDisabled={profile.stats.totalPosts < 1}>
-                <Pluralize singular={'Post'} plural={'Posts'} zero={'No posts'} count={profile.stats.totalPosts} />
-              </Tab>
-              <Tab isDisabled={profile.stats.totalComments < 1}>
-                <Pluralize singular={'Comment'} plural={'Comments'} zero={'No comments'} count={profile.stats.totalComments} />
-              </Tab>
-              <Tab isDisabled={profile.stats.totalMirrors < 1}>
-                <Pluralize singular={'Mirror'} plural={'Mirrors'} zero={'No mirrors'} count={profile.stats.totalMirrors} />
-              </Tab>
-            </TabList>
-            <TabPanels>
-              <TabPanel>
-                <ProfileTab constCurrentProfileID={constCurrentProfileID} publicationType={['POST']} />
-              </TabPanel>
-              <TabPanel>
-                <ProfileTab constCurrentProfileID={constCurrentProfileID} publicationType={['COMMENT']} />
-              </TabPanel >
-              <TabPanel>
-                <ProfileTab constCurrentProfileID={constCurrentProfileID} publicationType={['MIRROR']} />
-              </TabPanel>
-            </TabPanels >
-          </Tabs>
+          <>
+            <SocialProfileWithImage profile={profile} />
+            <Tabs isFitted isLazy /*lazyBehavior="keepMounted"*/>
+              <TabList>
+                <Tab isDisabled={profile.stats.totalPosts < 1}>
+                  <Pluralize singular={'Post'} plural={'Posts'} zero={'No posts'} count={profile.stats.totalPosts} />
+                </Tab>
+                <Tab isDisabled={profile.stats.totalComments < 1}>
+                  <Pluralize singular={'Comment'} plural={'Comments'} zero={'No comments'} count={profile.stats.totalComments} />
+                </Tab>
+                <Tab isDisabled={profile.stats.totalMirrors < 1}>
+                  <Pluralize singular={'Mirror'} plural={'Mirrors'} zero={'No mirrors'} count={profile.stats.totalMirrors} />
+                </Tab>
+              </TabList>
+              <TabPanels>
+                <TabPanel>
+                  <ProfileTab constCurrentProfileID={constCurrentProfileID} publicationType={['POST']} />
+                </TabPanel>
+                <TabPanel>
+                  <ProfileTab constCurrentProfileID={constCurrentProfileID} publicationType={['COMMENT']} />
+                </TabPanel >
+                <TabPanel>
+                  <ProfileTab constCurrentProfileID={constCurrentProfileID} publicationType={['MIRROR']} />
+                </TabPanel>
+              </TabPanels >
+            </Tabs>
+          </>
         )
       }
     </section >
@@ -213,3 +217,42 @@ Profile.getLayout = function getLayout(page) {
 // }
 
 export default Profile
+
+// {
+//   "data": {
+//     "profiles": {
+//       "items": [
+//         {
+//           "id": "0x01",
+//           "name": "Josh",
+//           "bio": "Amazing docs",
+//           "location": "UK",
+//           "website": "https://mumbai.polygonscan.com/",
+//           "twitterUrl": "devjoshstevens",
+//           "picture": null,
+//           "handle": "josh.dev",
+//           "coverPicture": null,
+//           "ownedBy": "0xD020E01C0c90Ab005A01482d34B808874345FD82",
+//           "depatcher": {
+//             "address": "0xEEA0C1f5ab0159dba749Dc0BAee462E5e293daaF"
+//           },
+//           "stats": {
+//             "totalFollowers": 2,
+//             "totalFollowing": 1,
+//             "totalPosts": 1,
+//             "totalComments": 0,
+//             "totalMirrors": 0,
+//             "totalPublications": 1,
+//             "totalCollects": 6
+//           },
+//           "followModule": null
+//         }
+//       ],
+//       "pageInfo": {
+//         "prev": "{\"offset\":0}",
+//         "next": "{\"offset\":1}",
+//         "totalCount": 1
+//       }
+//     }
+//   }
+// }
