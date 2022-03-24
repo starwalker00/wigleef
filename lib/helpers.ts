@@ -23,3 +23,7 @@ export const isJwtExpired = (jwtToken: string) => {
     //1648065183474
     return now > exp * 1000;
 };
+
+export const capitalize = (value: string) => {
+    return value.charAt(0).toUpperCase().concat(value.slice(1).toLowerCase());
+}

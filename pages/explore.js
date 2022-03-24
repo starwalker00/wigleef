@@ -2,11 +2,12 @@ import Layout from '../components/layout'
 import Sidebar from '../components/sidebar'
 import PageContainer from '../components/PageContainer'
 import PublicationView from '../components/PublicationView'
+import { InfiniteScrollLoading, InfiniteScrollLoaded } from '../components/InfiniteScrollStates';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { gql, useQuery } from "@apollo/client";
 import { initializeApollo, addApolloState } from "../lib/apolloClient";
 import { prettyJSON } from '../lib/helpers';
-import { Container, Center, Spinner } from '@chakra-ui/react';
+import { Container } from '@chakra-ui/react';
 
 const EXPLORE_PUBLICATIONS = `
   query($request: ExplorePublicationRequest!) {
@@ -381,15 +382,8 @@ function Explore() {
               dataLength={publications.length}
               next={fetchMorePublications}
               hasMore={haveMorePublication}
-              loader={
-                <Center overflow='hidden'>
-                  <Spinner
-                    thickness='4px'
-                    speed='0.65s'
-                    size='md' />
-                </Center>
-              }
-              endMessage={<h4>Nothing more to show</h4>}
+              loader={<InfiniteScrollLoading />}
+              endMessage={<InfiniteScrollLoaded />}
             >
               {publications.map((publication) => (
                 <PublicationView key={publication.id} publication={publication} />

@@ -339,21 +339,18 @@ function Profile() {
           <Tab>Two</Tab>
           <Tab>Three</Tab>
         </TabList>
-
         <TabPanels>
           <TabPanel>
-            <p>one!</p>
+            <ProfileTab constCurrentProfileID={constCurrentProfileID} publicationType={['POST']} />
           </TabPanel>
           <TabPanel>
-            <ProfileTab constCurrentProfileID={constCurrentProfileID} />
+            <ProfileTab constCurrentProfileID={constCurrentProfileID} publicationType={['COMMENT']} />
           </TabPanel >
           <TabPanel>
-            <p>three!</p>
+            <ProfileTab constCurrentProfileID={constCurrentProfileID} publicationType={['MIRROR']} />
           </TabPanel>
         </TabPanels >
       </Tabs >
-      {/* {console.log(publications)} */}
-      < h1 > profile / [id]</h1 >
     </section >
   )
 }
