@@ -20,7 +20,7 @@ export default function SocialProfileWithImage({ profile }) {
             <Box
                 // maxW={'270px'}
                 w={'full'}
-                bg={useColorModeValue('white', 'gray.800')}
+                // bg={useColorModeValue('white', 'gray.800')}
                 boxShadow={'lg'}
                 rounded={'md'}
                 overflow={'hidden'}>
@@ -31,7 +31,7 @@ export default function SocialProfileWithImage({ profile }) {
                     // src={
                     //     'https://images.unsplash.com/photo-1612865547334-09cb8cb455da?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80'
                     // }
-                    src={profile?.coverPicture?.original?.url}
+                    src={profile?.coverPicture?.original?.url || 'https://via.placeholder.com/1200x400?text=No+cover+picture+set'}
                     objectFit={'cover'}
                 />
                 <Flex justify={'center'} mt={-12}>
@@ -98,8 +98,8 @@ export default function SocialProfileWithImage({ profile }) {
                                 w={'full'}
                                 mt={8}
                                 // bg={useColorModeValue('#151f21', 'gray.900')}
-                                colorScheme={'green'}
-                                color={'white'}
+                                // colorScheme={'green'}
+                                // color={'white'}
                                 rounded={'md'}
                                 isActive={false}
                                 // isDisabled={true}
@@ -116,8 +116,8 @@ export default function SocialProfileWithImage({ profile }) {
                                 w={'full'}
                                 mt={8}
                                 // bg={useColorModeValue('#151f21', 'gray.900')}
-                                backgroundColor={'#151f21'}
-                                color={'white'}
+                                // backgroundColor={'#151f21'}
+                                // color={'white'}
                                 rounded={'md'}
                                 _hover={{
                                     transform: 'translateY(-2px)',
