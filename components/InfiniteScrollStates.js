@@ -2,14 +2,15 @@ import {
     Text,
     Box,
     Center,
-    CircularProgress
+    CircularProgress,
+    Spinner
 } from '@chakra-ui/react';
 
 export function InfiniteScrollLoading() {
     return (
         <Center overflow='hidden' color='green.500'>
             <Box textAlign='center'>
-                <CircularProgress isIndeterminate color='green.500' thickness='6px' />
+                <Spinner isIndeterminate size='xl' color='green.500' thickness='4px' />
                 <Text>Loading</Text>
             </Box>
         </Center>
