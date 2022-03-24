@@ -34,10 +34,13 @@ import {
   TableCaption,
 } from '@chakra-ui/react'
 import { ExternalLinkIcon } from '@chakra-ui/icons';
+import NextLink from 'next/link'
 import { gql, useLazyQuery } from '@apollo/client';
 import { useEffect, useRef } from 'react';
 import { namedConsoleLog } from '../lib/helpers';
 import Pluralize from 'react-pluralize';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { InfiniteScrollLoading, InfiniteScrollLoaded } from '../components/InfiniteScrollStates';
 
 const GET_FOLLOWERS = `
   query($request: FollowersRequest!) {
@@ -125,7 +128,7 @@ const GET_FOLLOWERS = `
 `;
 
 export default function FollowerListDrawer({ profileString, profileId }) {
-  const [getFollower, { loading: loadingFollower, error: errorFollower, data: dataFollower }] = useLazyQuery(
+  const [getFollower, { loading: loadingFollower, error: errorFollower, data: dataFollower, fetchMore }] = useLazyQuery(
     gql(GET_FOLLOWERS),
     {
       variables: {
@@ -140,11 +143,40 @@ export default function FollowerListDrawer({ profileString, profileId }) {
   namedConsoleLog('dataFollower', dataFollower);
   const followers = dataFollower?.followers?.items || [];
   namedConsoleLog('followers', followers);
+  const haveFollowers = Boolean(followers.length);
+  const totalCount = dataFollower?.followers?.pageInfo?.totalCount || 0;
+  const haveMoreFollowers = Boolean(followers.length < totalCount);
 
   // first query
   useEffect(() => {
     getFollower();
   }, []);
+  // next queries followers
+  function fetchMoreFollowers() {
+    // prettyJSON('publications.length', publications.length);
+    const pageInfoNext = dataFollower.followers.pageInfo.next;
+    // prettyJSON('pageInfoNext', pageInfoNext);
+    fetchMore({
+      variables: {
+        request: {
+          profileId: profileId,
+          limit: 10,
+          cursor: pageInfoNext
+        },
+      },
+      updateQuery: (prevResult, { fetchMoreResult }) => {
+        // prettyJSON('prevResult', fetchMoreResult);
+        // prettyJSON('fetchMoreResult', fetchMoreResult);
+        fetchMoreResult.followers.items = [
+          ...prevResult.followers.items,
+          ...fetchMoreResult.followers.items
+        ];
+        // remove eventual duplicates, just in case
+        fetchMoreResult.followers.items = [...new Set([...prevResult.followers.items, ...fetchMoreResult.followers.items])]
+        return fetchMoreResult;
+      }
+    });
+  }
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = useRef();
@@ -167,13 +199,13 @@ export default function FollowerListDrawer({ profileString, profileId }) {
           <DrawerHeader>
             {profileString} — {profileId}
             {' '}has{' '}
-            <Pluralize singular={'follower'} plural={'followers'} zero={'no followers'} count={followers.length} />
+            <Pluralize singular={'follower'} plural={'followers'} zero={'no followers'} count={totalCount} />
             .
           </DrawerHeader>
 
           <DrawerBody>
-            <Table>
-              <Thead textAlign='center !important'>
+            <Table size='xs'>
+              <Thead>
                 <Tr>
                   <Th></Th>
                   <Th>name</Th>
@@ -185,13 +217,28 @@ export default function FollowerListDrawer({ profileString, profileId }) {
               <Tbody>
                 {
                   followers?.map((item, index) => (
-                    <Tr key={index}>
-                      <Td><Avatar size="sm" name={item?.wallet?.defaultProfile?.name || item?.wallet?.defaultProfile?.handle} src={item?.wallet?.defaultProfile?.picture} /></Td>
-                      <Td><Text fontSize='sm' ml="4">{item?.wallet?.defaultProfile?.name}</Text></Td>
-                      <Td><Text fontSize='sm' ml="4">{item?.wallet?.defaultProfile?.handle}</Text></Td>
-                      <Td><Text fontSize='sm' ml="4">{item?.wallet?.defaultProfile?.id}</Text></Td>
-                      <Td><Text fontSize='sm' ml="4">{item?.wallet?.defaultProfile?.ownedBy}</Text></Td>
-                    </Tr>
+                    <NextLink
+                      href={{
+                        pathname: '/profile/[profileID]',
+                        query: { profileID: item?.wallet?.defaultProfile?.id },
+                      }}
+                      passHref
+                    >
+                      <Tr key={index}
+                        _hover={{
+                          transform: 'translateY(-2px)',
+                          boxShadow: 'xl',
+                          cursor: 'pointer'
+                        }}
+                        onClick={onClose}
+                      >
+                        <Td><Avatar size="sm" name={item?.wallet?.defaultProfile?.name || item?.wallet?.defaultProfile?.handle} src={item?.wallet?.defaultProfile?.picture} /></Td>
+                        <Td><Text fontSize='sm' ml="4">{item?.wallet?.defaultProfile?.name}</Text></Td>
+                        <Td><Text fontSize='sm' ml="4">{item?.wallet?.defaultProfile?.handle}</Text></Td>
+                        <Td><Text fontSize='sm' ml="4">{item?.wallet?.defaultProfile?.id}</Text></Td>
+                        <Td><Text fontSize='sm' ml="4">{item?.wallet?.defaultProfile?.ownedBy}</Text></Td>
+                      </Tr>
+                    </NextLink>
                   ))
                 }
               </Tbody>
@@ -205,13 +252,24 @@ export default function FollowerListDrawer({ profileString, profileId }) {
                 </Tr>
               </Tfoot>
             </Table>
+            {
+              !haveFollowers && loadingFollower ? (
+                <InfiniteScrollLoading />
+              ) : errorFollower ? (
+                <p>An error has occurred.</p>
+              ) : haveMoreFollowers ? (
+                <Stack><Button size='sm' onClick={fetchMoreFollowers}>Fetch more</Button></Stack>
+              ) : (
+                <InfiniteScrollLoaded />
+              )
+            }
           </DrawerBody>
 
           <DrawerFooter>
             <Button onClick={onClose}>Close</Button>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
+          </DrawerFooter >
+        </DrawerContent >
+      </Drawer >
     </>
   );
 }
