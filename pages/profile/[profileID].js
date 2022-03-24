@@ -13,6 +13,7 @@ import {
   Select
 } from '@chakra-ui/react';
 import { Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react'
+import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 
 import { gql, useQuery } from "@apollo/client";
 import { initializeApollo, addApolloState } from "../../lib/apolloClient";
@@ -344,41 +345,62 @@ function Profile() {
 
   return (
     <section>
-      {/* {console.log(publications)} */}
-      <h1>profile/[id]</h1>
-      {!havePublication && loadingPublication ? (
-        <Skeleton height='20px'>loading</Skeleton>
-      ) : error ? (
-        <p>An error has occurred.</p>
-      ) : !havePublication ? (
-        <p>No publications found.</p>
-      ) : (
-        publications.map((publication) => {
-          return (
-            <PublicationView key={publication.id} publication={publication} />
-          );
-        })
-      )}
-      {havePublication ? (
-        haveMorePublication ? (
-          <form onSubmit={event => {
-            event.preventDefault();
-            fetchMore({
-              variables: {
-                first: 5,
-                after: data.posts.pageInfo.endCursor,
+      <Tabs isFitted isLazy lazyBehavior="keepMounted">
+        <TabList>
+          <Tab>One</Tab>
+          <Tab>Two</Tab>
+          <Tab>Three</Tab>
+        </TabList>
+
+        <TabPanels>
+          <TabPanel>
+            <p>one!</p>
+          </TabPanel>
+          <TabPanel>
+            <>
+              {!havePublication && loadingPublication ? (
+                <Skeleton height='20px'>loading</Skeleton>
+              ) : error ? (
+                <p>An error has occurred.</p>
+              ) : !havePublication ? (
+                <p>No publications found.</p>
+              ) : (
+                publications.map((publication) => {
+                  return (
+                    <PublicationView key={publication.id} publication={publication} />
+                  );
+                })
+              )}
+              {havePublication ? (
+                haveMorePublication ? (
+                  <form onSubmit={event => {
+                    event.preventDefault();
+                    fetchMore({
+                      variables: {
+                        first: 5,
+                        after: data.posts.pageInfo.endCursor,
+                      }
+                    });
+                  }}>
+                    <button type="submit" disabled={loadingPublication}>
+                      {loadingPublication ? "Loading..." : "Load more"}
+                    </button>
+                  </form >
+                ) : (
+                  <p>✅ All publications loaded.</p>
+                )
+              ) : null
               }
-            });
-          }}>
-            <button type="submit" disabled={loadingPublication}>
-              {loadingPublication ? "Loading..." : "Load more"}
-            </button>
-          </form>
-        ) : (
-          <p>✅ All publications loaded.</p>
-        )
-      ) : null}
-    </section>
+            </>
+          </TabPanel >
+          <TabPanel>
+            <p>three!</p>
+          </TabPanel>
+        </TabPanels >
+      </Tabs >
+      {/* {console.log(publications)} */}
+      < h1 > profile / [id]</h1 >
+    </section >
   )
 }
 
