@@ -134,6 +134,10 @@ function Profile() {
   const profile = dataProfile?.profiles?.items?.[0] || undefined;
   const haveProfile = Boolean(profile?.id);
   namedConsoleLog('profile', profile);
+
+  // set default selected tab
+  const defaultTabIndex = profile?.stats?.totalPosts > 0 ? 1 : profile?.stats?.totalComments > 0 ? 2 : profile?.stats?.totalMirrors > 0 ? 3 : 0;
+
   return (
     <section>
       {
@@ -147,7 +151,7 @@ function Profile() {
           <>
             <SocialProfileWithImage profile={profile} />
             <Tabs isFitted isLazy /*lazyBehavior="keepMounted"*/>
-              <TabList>
+              <TabList defaultIndex={defaultTabIndex}>
                 <Tab isDisabled={profile.stats.totalPosts < 1}>
                   <Pluralize singular={'Post'} plural={'Posts'} zero={'No posts'} count={profile.stats.totalPosts} />
                 </Tab>
@@ -158,17 +162,23 @@ function Profile() {
                   <Pluralize singular={'Mirror'} plural={'Mirrors'} zero={'No mirrors'} count={profile.stats.totalMirrors} />
                 </Tab>
               </TabList>
-              <TabPanels>
-                <TabPanel>
-                  <ProfileTab constCurrentProfileID={constCurrentProfileID} publicationType={['POST']} />
-                </TabPanel>
-                <TabPanel>
-                  <ProfileTab constCurrentProfileID={constCurrentProfileID} publicationType={['COMMENT']} />
-                </TabPanel >
-                <TabPanel>
-                  <ProfileTab constCurrentProfileID={constCurrentProfileID} publicationType={['MIRROR']} />
-                </TabPanel>
-              </TabPanels >
+              {// display tab content is there is data
+                defaultTabIndex > 0
+                  ?
+                  <TabPanels>
+                    <TabPanel>
+                      <ProfileTab constCurrentProfileID={constCurrentProfileID} publicationType={['POST']} />
+                    </TabPanel>
+                    <TabPanel>
+                      <ProfileTab constCurrentProfileID={constCurrentProfileID} publicationType={['COMMENT']} />
+                    </TabPanel >
+                    <TabPanel>
+                      <ProfileTab constCurrentProfileID={constCurrentProfileID} publicationType={['MIRROR']} />
+                    </TabPanel>
+                  </TabPanels >
+                  :
+                  null
+              }
             </Tabs>
           </>
         )
