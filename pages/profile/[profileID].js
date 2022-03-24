@@ -10,18 +10,22 @@ import {
   Box,
   Spacer,
   Stack,
-  Select
+  Select,
+  Container,
+  Center,
+  Spinner
 } from '@chakra-ui/react';
 import { Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react'
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
 
 import { gql, useQuery } from "@apollo/client";
 import { initializeApollo, addApolloState } from "../../lib/apolloClient";
-import { prettyJSON } from '../../lib/helpers';
+import { namedConsoleLog, prettyJSON } from '../../lib/helpers';
 import { BigNumber } from "@ethersproject/bignumber";
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { DEMO_PROFILE_ID } from '../../lib/config';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const GET_PUBLICATIONS = `
   query($request: PublicationsQueryRequest!) {
@@ -333,16 +337,44 @@ function Profile() {
         request: {
           profileId: constCurrentProfileID.toHexString(),
           publicationTypes: ['POST', 'COMMENT', 'MIRROR'],
+          limit: 10
         },
       },
-      notifyOnNetworkStatusChange: true,
-      fetchPolicy: "no-cache"
+      notifyOnNetworkStatusChange: true
     });
   // prettyJSON('publications', publications);
   const publications = data?.publications?.items || [];
   const havePublication = Boolean(publications.length);
-  const haveMorePublication = Boolean(true);
+  const totalCount = data?.publications?.pageInfo?.totalCount || 0;
+  const haveMorePublication = Boolean(publications.length < totalCount);
+  namedConsoleLog('data?.publications', data?.publications)
 
+  function fetchMorePublications() {
+    // prettyJSON('publications.length', publications.length);
+    const pageInfoNext = data.publications.pageInfo.next;
+    prettyJSON('pageInfoNext', pageInfoNext);
+    fetchMore({
+      variables: {
+        request: {
+          profileId: constCurrentProfileID.toHexString(),
+          publicationTypes: ['POST', 'COMMENT', 'MIRROR'],
+          limit: 10,
+          cursor: pageInfoNext
+        },
+      },
+      updateQuery: (prevResult, { fetchMoreResult }) => {
+        namedConsoleLog('prevResult', prevResult);
+        namedConsoleLog('fetchMoreResult', fetchMoreResult);
+        fetchMoreResult.publications.items = [
+          ...prevResult.publications.items,
+          ...fetchMoreResult.publications.items
+        ];
+        // remove eventual duplicates, just in case
+        fetchMoreResult.publications.items = [...new Set([...prevResult.publications.items, ...fetchMoreResult.publications.items])]
+        return fetchMoreResult;
+      }
+    });
+  }
   return (
     <section>
       <Tabs isFitted isLazy lazyBehavior="keepMounted">
@@ -358,38 +390,37 @@ function Profile() {
           </TabPanel>
           <TabPanel>
             <>
-              {!havePublication && loadingPublication ? (
-                <Skeleton height='20px'>loading</Skeleton>
-              ) : error ? (
-                <p>An error has occurred.</p>
-              ) : !havePublication ? (
-                <p>No publications found.</p>
-              ) : (
-                publications.map((publication) => {
-                  return (
-                    <PublicationView key={publication.id} publication={publication} />
-                  );
-                })
-              )}
-              {havePublication ? (
-                haveMorePublication ? (
-                  <form onSubmit={event => {
-                    event.preventDefault();
-                    fetchMore({
-                      variables: {
-                        first: 5,
-                        after: data.posts.pageInfo.endCursor,
+              {
+                error
+                  ?
+                  <h1>error</h1>
+                  :
+                  <Container
+                    display='flex'
+                    flexDirection='column'
+                    // maxWidth={{ base: '100%', md: '80% ' }}
+                    width={{ base: '100%', md: '80% ' }}
+                  >
+                    <p>{totalCount} publications</p>
+                    <InfiniteScroll
+                      dataLength={publications.length}
+                      next={fetchMorePublications}
+                      hasMore={haveMorePublication}
+                      loader={
+                        <Center overflow='hidden'>
+                          <Spinner
+                            thickness='4px'
+                            speed='0.65s'
+                            size='md' />
+                        </Center>
                       }
-                    });
-                  }}>
-                    <button type="submit" disabled={loadingPublication}>
-                      {loadingPublication ? "Loading..." : "Load more"}
-                    </button>
-                  </form >
-                ) : (
-                  <p>✅ All publications loaded.</p>
-                )
-              ) : null
+                      endMessage={<h4>Nothing more to show</h4>}
+                    >
+                      {publications.map((publication) => (
+                        <PublicationView key={publication.id} publication={publication} />
+                      ))}
+                    </InfiniteScroll>
+                  </Container>
               }
             </>
           </TabPanel >
