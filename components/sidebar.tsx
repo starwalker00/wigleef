@@ -100,6 +100,9 @@ function Sidebar({ children }) {
                                 <NextLink href={'/comment'} passHref>
                                     <Link>Comment</Link>
                                 </NextLink>
+                                <NextLink href={'/about'} passHref>
+                                    <Link>About</Link>
+                                </NextLink>
                                 <NextLink
                                     href={{
                                         pathname: '/profile/[profileID]',
