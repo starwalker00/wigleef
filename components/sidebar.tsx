@@ -23,7 +23,7 @@ import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 import NextLink from 'next/link'
 import styles from './sidebar.module.css'
 import { UNSET_CONTEXT_PROFILE_ID } from '../lib/config';
-
+import { BiSpreadsheet, BiWorld, BiSearch, BiUserCircle } from 'react-icons/bi'
 import ConnectButtonAndModal from '../components/ConnectButtonAndModal'
 import { BigNumber } from "@ethersproject/bignumber";
 import { useProfileID } from "../components/context/AppContext";
@@ -52,10 +52,26 @@ function Sidebar({ children }) {
                 {/* bottom bar */}
                 <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4} position='fixed' bottom='0' zIndex='200' width='100%'>
                     <Flex h={16} alignItems={'center'} justifyContent={'space-around'} >
-                        <SunIcon />
-                        <SunIcon />
-                        <SunIcon />
-                        <SunIcon />
+                        <NextLink href={'/feed'} passHref>
+                            <Link aria-disabled="true">
+                                <BiSpreadsheet />
+                            </Link>
+                        </NextLink>
+                        <NextLink href={'/explore'} passHref>
+                            <Link>
+                                <BiWorld />
+                            </Link>
+                        </NextLink>
+                        <NextLink href={'/profile/0x49'} passHref>
+                            <Link>
+                                <BiUserCircle />
+                            </Link>
+                        </NextLink>
+                        <NextLink href={'#'} passHref>
+                            <Link aria-disabled="true">
+                                <BiSearch />
+                            </Link>
+                        </NextLink>
                     </Flex>
                 </Box>
             </Show>
