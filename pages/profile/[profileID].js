@@ -150,8 +150,8 @@ function Profile() {
         ) : (
           <>
             <SocialProfileWithImage profile={profile} />
-            <Tabs isFitted isLazy /*lazyBehavior="keepMounted"*/>
-              <TabList defaultIndex={defaultTabIndex}>
+            <Tabs isFitted isLazy /*lazyBehavior="keepMounted"*/ defaultIndex={defaultTabIndex - 1}>
+              <TabList>
                 <Tab isDisabled={profile.stats.totalPosts < 1}>
                   <Pluralize singular={'Post'} plural={'Posts'} zero={'No posts'} count={profile.stats.totalPosts} />
                 </Tab>
