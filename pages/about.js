@@ -7,14 +7,15 @@ import { Flex, FormControl, FormHelperText, FormLabel, Avatar, Text, Link, Stack
 import { LinkBox, LinkOverlay } from '@chakra-ui/react'
 import NextLink from 'next/link'
 import {
-    AutoComplete,
-    AutoCompleteInput,
-    AutoCompleteItem,
-    AutoCompleteList,
+  AutoComplete,
+  AutoCompleteInput,
+  AutoCompleteItem,
+  AutoCompleteList,
 } from "@choc-ui/chakra-autocomplete";
 import { namedConsoleLog } from '../lib/helpers'
 import { gql, useLazyQuery } from "@apollo/client"
 import _ from 'lodash'
+import { useRouter } from 'next/router'
 
 // const isServerSide = typeof window === 'undefined'
 // const people = [
@@ -26,9 +27,9 @@ import _ from 'lodash'
 // ];
 
 const people = [
-    { profileId: '0x01ac', name: 'josh stevens', picture: "https://bit.ly/prosper-baba" },
-    { profileId: '0x01ac', name: 'josh stevens', picture: "https://bit.ly/prosper-baba" },
-    { profileId: '0x01ac', name: 'josh steverrns', picture: "https://bit.ly/ryan-florence" },
+  { profileId: '0x01ac', name: 'josh stevens', picture: "https://bit.ly/prosper-baba" },
+  { profileId: '0x01ac', name: 'josh stevens', picture: "https://bit.ly/prosper-baba" },
+  { profileId: '0x01ac', name: 'josh steverrns', picture: "https://bit.ly/ryan-florence" },
 ];
 
 
@@ -327,111 +328,104 @@ fragment CommentMirrorOfFields on Comment {
 `;
 
 function About() {
-    // search query
-    const [searchProfile, { loading: loadingSearch, error: errorSearch, data: dataSearch }] = useLazyQuery(
-        gql(SEARCH),
-        {
-            variables: {
-                request: {
-                    query: 'josh', type: 'PROFILE', limit: 10
-                },
-            },
-            notifyOnNetworkStatusChange: true,
-            fetchPolicy: "no-cache"
+  const router = useRouter()
+  // search query
+  const [searchProfile, { loading: loadingSearch, error: errorSearch, data: dataSearch }] = useLazyQuery(
+    gql(SEARCH),
+    {
+      variables: {
+        request: {
+          query: 'josh', type: 'PROFILE', limit: 10
         },
-    );
-    // namedConsoleLog('dataSearch', dataSearch);
-    const profiles = dataSearch?.search?.items || [];
-    // namedConsoleLog('profiles', profiles);
-    // var mapped = _.map(profiles, _.partialRight(_.pick, ['id', 'name']));
-    // namedConsoleLog('mapped', mapped);
+      },
+      notifyOnNetworkStatusChange: true,
+      fetchPolicy: "no-cache"
+    },
+  );
+  // namedConsoleLog('dataSearch', dataSearch);
+  const profiles = dataSearch?.search?.items || [];
+  // namedConsoleLog('profiles', profiles);
 
-    useEffect(() => {
-        // fetch once on mount to fill initial profile suggestions
-        searchProfile({
-            variables: {
-                request: {
-                    query: 'z', type: 'PROFILE', limit: 10
-                },
-            }
-        });
-    }, []);
+  useEffect(() => {
+    // fetch once on mount to fill initial profile suggestions
+    searchProfile({
+      variables: {
+        request: {
+          query: 'a', type: 'PROFILE', limit: 10
+        },
+      }
+    });
+  }, []);
 
-    function fetchProfile(query) {
-        if (!query) return
-        // debouncing
-        setTimeout(() => {
-            // querying
-            searchProfile({
-                variables: {
-                    request: {
-                        query: query, type: 'PROFILE', limit: 10
-                    },
-                }
-            });
-        }, 500)
-    }
-    // if (loadingSearch) return <p>Loading ...</p>;
-    if (errorSearch) return `Error! ${errorSearch}`;
-    return (
-        <section>
-            <h2>Layout Example (About)</h2>
-            <Input placeholder='Basic usage' />
+  function fetchProfile(query) {
+    if (!query) return
+    // debouncing
+    setTimeout(() => {
+      // querying
+      searchProfile({
+        variables: {
+          request: {
+            query: query, type: 'PROFILE', limit: 10
+          },
+        }
+      });
+    }, 500)
+  }
+  // if (loadingSearch) return <p>Loading ...</p>;
+  if (errorSearch) return `Error! ${errorSearch}`;
+  return (
+    <section>
+      <h2>Layout Example (About)</h2>
+      <Input placeholder='Basic usage' />
 
-            <Flex pt="48" justify="center" align="center" w="full" direction="column">
-                <FormControl id="email" w="60" >
-                    <FormLabel>Olympics Soccer Winner</FormLabel>
-                    <AutoComplete openOnFocus>
-                        <AutoCompleteInput
-                            variant="filled"
-                            autoComplete="off" /* browser autocomplete */
-                            // onChange={event => (doCityFilter(event.target.value))} 
-                            // onChange={event => (console.log(event.target.value))}
-                            onChange={event => (fetchProfile(event.target.value))}
-                        />
-                        <AutoCompleteList>
-                            {
-                                profiles.map((person, oid) => (
-                                    <AutoCompleteItem
-                                        key={`option-${oid}`}
-                                        value={person?.name || ''}
-                                        textTransform="capitalize"
-                                        align="center"
-                                    >
-                                        <LinkBox as='div'>
-                                            <NextLink
-                                                href={{
-                                                    pathname: '/profile/[profileID]',
-                                                    query: { profileID: person?.profileId },
-                                                }}
-                                                passHref>
-                                                <LinkOverlay>
-                                                    <Stack direction='row'>
-                                                        <Avatar size="sm" name={person.name} src={person?.picture} />
-                                                        <Text fontSize='sm' ml="4">{person?.name} — {person?.profileId}</Text>
-                                                    </Stack>
-                                                </LinkOverlay>
-                                            </NextLink>
-                                        </LinkBox>
-                                    </AutoCompleteItem>
-                                ))
-                            }
-                        </AutoCompleteList>
-                    </AutoComplete>
-                    <FormHelperText>Who do you support.</FormHelperText>
-                </FormControl>
-            </Flex >
-        </section >
-    )
+      <Flex pt="48" justify="center" align="center" w="full" direction="column">
+        <FormControl id="email" w="60" >
+          <FormLabel>Olympics Soccer Winner</FormLabel>
+          <AutoComplete openOnFocus
+            onSelectOption={({ item }) => {
+              router.push({
+                pathname: '/profile/[profileID]',
+                query: { profileID: item.originalValue.profileId },
+              })
+            }}>
+            <AutoCompleteInput
+              variant="filled"
+              autoComplete="off" /* browser autocomplete off*/
+              onChange={event => (fetchProfile(event.target.value))}
+            />
+            <AutoCompleteList>
+              {
+                profiles.map((person, oid) => (
+                  <AutoCompleteItem
+                    key={`option-${person?.profileId}`}
+                    value={person}
+                    getValue={val => val.name}
+                    textTransform="capitalize"
+                    align="center"
+                  >
+                    <Stack direction='row'>
+                      <Avatar size="sm" name={person.name} src={person?.picture} />
+                      <Text fontSize='sm' ml="4">{person?.name} — {person?.profileId}</Text>
+                    </Stack>
+                  </AutoCompleteItem>
+                ))
+              }
+            </AutoCompleteList>
+          </AutoComplete>
+          <FormHelperText>Who do you support.</FormHelperText>
+        </FormControl>
+      </Flex >
+    </section >
+  )
 }
 
 About.getLayout = function getLayout(page) {
-    return (
-        <Layout>
-            <Sidebar />
-            {page}
-        </Layout>
-    )
+  return (
+    <Layout>
+      <Sidebar />
+      {page}
+    </Layout>
+  )
 }
 
 export default About
