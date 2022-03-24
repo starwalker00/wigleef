@@ -70,9 +70,20 @@ function PublicationView(dataPublication) {
                 <Flex flexDirection='column'>
                     <Flex className='profile' alignItems='center' bgColor='blue.50' py='1'>
                         <Avatar size='md' src={publication.profile?.picture?.original?.url} />
-                        <Flex ml='2' alignItems='center'>
+                        <Flex ml='2' alignItems='center' gap={2}>
+                            <NextLink
+                                href={{
+                                    pathname: '/profile/[profileID]',
+                                    query: { profileID: publication?.profile?.id },
+                                }}
+                                passHref>
+                                <Link>
+                                    <Text fontSize='md' fontWeight='bold'>
+                                        {publication.profile?.handle}
+                                    </Text>
+                                </Link>
+                            </NextLink>
                             <Text fontSize='lg' fontWeight='bold'>
-                                {publication.profile?.handle}
                                 {/* <Badge ml='1' colorScheme='green'>New</Badge> */}
                                 {publication.profile?.twitterUrl
                                     ?
