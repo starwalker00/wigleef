@@ -220,13 +220,14 @@ export default function FollowerListDrawer({ profileString, profileId }) {
                 {
                   followers?.map((item, index) => (
                     <NextLink
+                      key={index}
                       href={{
                         pathname: '/profile/[profileID]',
                         query: { profileID: item?.wallet?.defaultProfile?.id },
                       }}
                       passHref
                     >
-                      <Tr key={index}
+                      <Tr
                         _hover={{
                           transform: 'translateY(-2px)',
                           boxShadow: 'xl',

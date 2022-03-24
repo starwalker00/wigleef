@@ -243,13 +243,14 @@ export default function FollowingListDrawer({ walletAddress }) {
                 {
                   following?.map((item, index) => (
                     <NextLink
+                      key={index}
                       href={{
                         pathname: '/profile/[profileID]',
                         query: { profileID: item?.profile?.id },
                       }}
                       passHref
                     >
-                      <Tr key={index}
+                      <Tr
                         _hover={{
                           transform: 'translateY(-2px)',
                           boxShadow: 'xl',
