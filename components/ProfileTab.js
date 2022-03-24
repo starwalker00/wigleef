@@ -1,7 +1,7 @@
 
 import PublicationView from './PublicationView'
 
-import { Container, Skeleton } from '@chakra-ui/react';
+import { Container, Skeleton, SkeletonText, SkeletonCircle, Box } from '@chakra-ui/react';
 import { gql, useQuery } from "@apollo/client";
 import { initializeApollo, addApolloState } from "../lib/apolloClient";
 import { namedConsoleLog, prettyJSON, capitalize } from '../lib/helpers';
@@ -356,9 +356,22 @@ function ProfileTab({ constCurrentProfileID, publicationType }) {
   }
   return (
     <>
+
       {
         !havePublication && loadingPublication ? (
-          <Skeleton height='20px'>loading</Skeleton>
+          // <Skeleton height='20px'>loading</Skeleton>
+          <Container
+            display='flex'
+            flexDirection='column'
+            // maxWidth={{ base: '100%', md: '80% ' }}
+            width={{ base: '100%', md: '80% ' }}
+          >{
+              Array.from({ length: 20 }, (x, i) => i).map((val) =>
+                <Box key={val} alignItems='stretch' display="flex" flexDirection='column' padding='6' boxShadow='lg' bg='white'>
+                  <SkeletonCircle size='10' />
+                  <SkeletonText width={'full'} mt='4' noOfLines={4} spacing='4' />
+                </Box>)
+            }</Container>
         ) : errorPublication ? (
           <p>An error has occurred.</p>
         ) : !havePublication ? (

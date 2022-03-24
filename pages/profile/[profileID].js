@@ -142,7 +142,12 @@ function Profile() {
     <section>
       {
         !haveProfile && loadingProfile ? (
-          <Skeleton height='20px'>loading</Skeleton>
+          // <Skeleton height='20px'>loading</Skeleton>
+          Array.from({ length: 20 }, (x, i) => i).map((val) =>
+            <Box key={val} display="flex" flexDirection='column' boxSize="sm" padding='6' boxShadow='lg' bg='white'>
+              <SkeletonCircle size='10' />
+              <SkeletonText mt='4' noOfLines={4} spacing='4' />
+            </Box>)
         ) : errorProfile ? (
           <p>An error has occurred.</p>
         ) : !haveProfile ? (
