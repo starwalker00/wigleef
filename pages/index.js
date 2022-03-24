@@ -1,10 +1,12 @@
 import Layout from '../components/layout'
 import Sidebar from '../components/sidebar'
+import SearchBar from '../components/SearchBar'
 
 function Index() {
   return (
     <section>
       <h2>Layout Example (Index)</h2>
+      <SearchBar />
       <p>
         This example adds a property <code>getLayout</code> to your page,
         allowing you to return a React component for the layout. This allows you
