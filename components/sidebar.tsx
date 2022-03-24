@@ -23,7 +23,7 @@ import { MoonIcon, SunIcon } from '@chakra-ui/icons';
 import NextLink from 'next/link'
 import styles from './sidebar.module.css'
 import { UNSET_CONTEXT_PROFILE_ID } from '../lib/config';
-import { BiSpreadsheet, BiWorld, BiSearch, BiUserCircle } from 'react-icons/bi'
+import { BiSpreadsheet, BiHomeAlt, BiWorld, BiSearch, BiUserCircle } from 'react-icons/bi'
 import ConnectButtonAndModal from '../components/ConnectButtonAndModal'
 import { BigNumber } from "@ethersproject/bignumber";
 import { useProfileID } from "../components/context/AppContext";
@@ -54,7 +54,7 @@ function Sidebar({ children }) {
                     <Flex h={16} alignItems={'center'} justifyContent={'space-around'} >
                         <NextLink href={'/feed'} passHref>
                             <Link aria-disabled="true">
-                                <BiSpreadsheet />
+                                <BiHomeAlt />
                             </Link>
                         </NextLink>
                         <NextLink href={'/explore'} passHref>
