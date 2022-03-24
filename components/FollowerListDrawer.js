@@ -33,13 +33,11 @@ import {
   Td,
   TableCaption,
 } from '@chakra-ui/react'
-import { ExternalLinkIcon } from '@chakra-ui/icons';
 import NextLink from 'next/link'
 import { gql, useLazyQuery } from '@apollo/client';
 import { useEffect, useRef } from 'react';
 import { namedConsoleLog } from '../lib/helpers';
 import Pluralize from 'react-pluralize';
-import InfiniteScroll from 'react-infinite-scroll-component';
 import { InfiniteScrollLoading, InfiniteScrollLoaded } from '../components/InfiniteScrollStates';
 
 const GET_FOLLOWERS = `
@@ -128,6 +126,10 @@ const GET_FOLLOWERS = `
 `;
 
 export default function FollowerListDrawer({ profileString, profileId }) {
+  // drawer management hooks
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = useRef();
+
   const [getFollower, { loading: loadingFollower, error: errorFollower, data: dataFollower, fetchMore }] = useLazyQuery(
     gql(GET_FOLLOWERS),
     {
@@ -140,18 +142,21 @@ export default function FollowerListDrawer({ profileString, profileId }) {
       notifyOnNetworkStatusChange: true
     },
   );
-  namedConsoleLog('dataFollower', dataFollower);
+  // namedConsoleLog('dataFollower', dataFollower);
   const followers = dataFollower?.followers?.items || [];
-  namedConsoleLog('followers', followers);
+  // namedConsoleLog('followers', followers);
   const haveFollowers = Boolean(followers.length);
   const totalCount = dataFollower?.followers?.pageInfo?.totalCount || 0;
   const haveMoreFollowers = Boolean(followers.length < totalCount);
 
   // first query
   useEffect(() => {
-    getFollower();
-  }, []);
-  // next queries followers
+    // mimic lazy loading
+    if (isOpen) {
+      getFollower();
+    }
+  }, [isOpen]);
+  // next queries
   function fetchMoreFollowers() {
     // prettyJSON('publications.length', publications.length);
     const pageInfoNext = dataFollower.followers.pageInfo.next;
@@ -177,9 +182,6 @@ export default function FollowerListDrawer({ profileString, profileId }) {
       }
     });
   }
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = useRef();
 
   return (
     <>
@@ -267,9 +269,9 @@ export default function FollowerListDrawer({ profileString, profileId }) {
 
           <DrawerFooter>
             <Button onClick={onClose}>Close</Button>
-          </DrawerFooter >
-        </DrawerContent >
-      </Drawer >
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
     </>
   );
 }

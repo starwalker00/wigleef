@@ -33,11 +33,12 @@ import {
   Td,
   TableCaption,
 } from '@chakra-ui/react'
-import { ExternalLinkIcon } from '@chakra-ui/icons';
+import NextLink from 'next/link'
 import { gql, useLazyQuery } from '@apollo/client';
 import { useEffect, useRef } from 'react';
 import { namedConsoleLog } from '../lib/helpers';
 import Pluralize from 'react-pluralize';
+import { InfiniteScrollLoading, InfiniteScrollLoaded } from '../components/InfiniteScrollStates';
 
 const GET_FOLLOWING = `
   query($request: FollowingRequest!) {
@@ -149,7 +150,11 @@ const GET_FOLLOWING = `
 `;
 
 export default function FollowingListDrawer({ walletAddress }) {
-  const [getFollowing, { loading: loadingFollowing, error: errorFollowing, data: dataFollowing }] = useLazyQuery(
+  // drawer management hooks
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = useRef();
+
+  const [getFollowing, { loading: loadingFollowing, error: errorFollowing, data: dataFollowing, fetchMore }] = useLazyQuery(
     gql(GET_FOLLOWING),
     {
       variables: {
@@ -164,14 +169,43 @@ export default function FollowingListDrawer({ walletAddress }) {
   // namedConsoleLog('dataFollowing', dataFollowing);
   const following = dataFollowing?.following?.items || [];
   // namedConsoleLog('following', following);
+  const haveFollowing = Boolean(following.length);
+  const totalCount = dataFollowing?.following?.pageInfo?.totalCount || 0;
+  const haveMoreFollowing = Boolean(following.length < totalCount);
 
   // first query
   useEffect(() => {
-    getFollowing();
-  }, []);
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = useRef();
+    // mimic lazy loading
+    if (isOpen) {
+      getFollowing();
+    }
+  }, [isOpen]);
+  // next queries
+  function fetchMoreFollowing() {
+    // prettyJSON('publications.length', publications.length);
+    const pageInfoNext = dataFollowing.following.pageInfo.next;
+    // prettyJSON('pageInfoNext', pageInfoNext);
+    fetchMore({
+      variables: {
+        request: {
+          address: walletAddress,
+          limit: 10,
+          cursor: pageInfoNext
+        },
+      },
+      updateQuery: (prevResult, { fetchMoreResult }) => {
+        // prettyJSON('prevResult', fetchMoreResult);
+        // prettyJSON('fetchMoreResult', fetchMoreResult);
+        fetchMoreResult.following.items = [
+          ...prevResult.following.items,
+          ...fetchMoreResult.following.items
+        ];
+        // remove eventual duplicates, just in case
+        fetchMoreResult.following.items = [...new Set([...prevResult.following.items, ...fetchMoreResult.following.items])]
+        return fetchMoreResult;
+      }
+    });
+  }
 
   return (
     <>
@@ -189,14 +223,14 @@ export default function FollowingListDrawer({ walletAddress }) {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>
-            <Pluralize singular={'profile is'} plural={'profiles are'} zero={'No profiles'} count={following.length} />
+            <Pluralize singular={'profile is'} plural={'profiles are'} zero={'No profiles'} count={totalCount} />
             {' '}following {walletAddress}
             .
           </DrawerHeader>
 
           <DrawerBody>
-            <Table>
-              <Thead textAlign='center !important'>
+            <Table size='xs'>
+              <Thead>
                 <Tr>
                   <Th></Th>
                   <Th>name</Th>
@@ -208,13 +242,28 @@ export default function FollowingListDrawer({ walletAddress }) {
               <Tbody>
                 {
                   following?.map((item, index) => (
-                    <Tr key={index}>
-                      <Td><Avatar size="sm" name={item?.profile?.name || item?.profile?.handle} src={item?.profile?.picture} /></Td>
-                      <Td><Text fontSize='sm' ml="4">{item?.profile?.name}</Text></Td>
-                      <Td><Text fontSize='sm' ml="4">{item?.profile?.handle}</Text></Td>
-                      <Td><Text fontSize='sm' ml="4">{item?.profile?.id}</Text></Td>
-                      <Td><Text fontSize='sm' ml="4">{item?.profile?.ownedBy}</Text></Td>
-                    </Tr>
+                    <NextLink
+                      href={{
+                        pathname: '/profile/[profileID]',
+                        query: { profileID: item?.profile?.id },
+                      }}
+                      passHref
+                    >
+                      <Tr key={index}
+                        _hover={{
+                          transform: 'translateY(-2px)',
+                          boxShadow: 'xl',
+                          cursor: 'pointer'
+                        }}
+                        onClick={onClose}
+                      >
+                        <Td><Avatar size="sm" name={item?.profile?.name || item?.profile?.handle} src={item?.profile?.picture} /></Td>
+                        <Td><Text fontSize='sm' ml="4">{item?.profile?.name}</Text></Td>
+                        <Td><Text fontSize='sm' ml="4">{item?.profile?.handle}</Text></Td>
+                        <Td><Text fontSize='sm' ml="4">{item?.profile?.id}</Text></Td>
+                        <Td><Text fontSize='sm' ml="4">{item?.profile?.ownedBy}</Text></Td>
+                      </Tr>
+                    </NextLink>
                   ))
                 }
               </Tbody>
@@ -228,6 +277,17 @@ export default function FollowingListDrawer({ walletAddress }) {
                 </Tr>
               </Tfoot>
             </Table>
+            {
+              !haveFollowing && loadingFollowing ? (
+                <InfiniteScrollLoading />
+              ) : errorFollowing ? (
+                <p>An error has occurred.</p>
+              ) : haveMoreFollowing ? (
+                <Stack><Button size='sm' onClick={fetchMoreFollowing}>Fetch more</Button></Stack>
+              ) : (
+                <InfiniteScrollLoaded />
+              )
+            }
           </DrawerBody>
 
           <DrawerFooter>
