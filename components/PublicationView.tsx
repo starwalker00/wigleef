@@ -13,6 +13,7 @@ import CommentView from '../components/CommentView'
 import MarkdownRenderer from './MarkdownRenderer'
 import Pluralize from 'react-pluralize'
 import PublicationStats from './PublicationStats'
+import { namedConsoleLog } from '../lib/helpers'
 
 const animate = keyframes`
   from {opacity: 0;}
@@ -20,6 +21,18 @@ const animate = keyframes`
 `;
 
 function PublicationView(dataPublication) {
+    let hoverStyle;
+    if (dataPublication?.comments?.length > 0) {
+        hoverStyle = {};
+    }
+    else {
+        hoverStyle = {
+            cursor: 'pointer',
+            // backgroundColor: 'rgb(245, 255, 250)',
+            bgGradient: 'linear(to-br,rgb(229, 255, 245), rgb(245, 255, 250), rgb(229, 255, 245) )'
+        };
+    }
+
     const animation = `${animate} 0.1s linear`;
     // console.log(dataPublication)
     const publication = dataPublication.publication;
@@ -39,11 +52,7 @@ function PublicationView(dataPublication) {
                     // marginBottom: "1rem",
                     // borderRadius: "10px"
                 }}
-                _hover={{
-                    cursor: 'pointer',
-                    // backgroundColor: 'rgb(245, 255, 250)',
-                    bgGradient: 'linear(to-br,rgb(229, 255, 245), rgb(245, 255, 250), rgb(229, 255, 245) )'
-                }}
+                _hover={hoverStyle}
                 width='100%'
                 animation={animation}
             >
@@ -132,7 +141,10 @@ function PublicationView(dataPublication) {
                         <Box m='3' p='3' borderLeft='1px solid green'
                             maxHeight='720px'
                             overflow='auto'
-                            zIndex='300'
+                            zIndex='2'
+                            _hover={{
+                                cursor: 'auto'
+                            }}
                         >
                             <MarkdownRenderer markdownString={publication.metadata?.content} />
                         </Box>
