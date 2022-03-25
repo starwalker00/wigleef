@@ -10,7 +10,8 @@ import {
     useColorModeValue,
     createIcon,
     Link,
-    Image
+    Image,
+    Flex
 } from '@chakra-ui/react';
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/router';
@@ -22,17 +23,20 @@ export default function CallToActionWithAnnotation() {
             <Head>
             </Head>
 
-            <Container maxW={'3xl'}
+            <Container
+                maxW={'unset'}
                 // style={{ backgroundImage: 'url("./landing-img1.jpg")!important;', width: '100 %;' }}
                 bgGradient='linear(to-r, teal.500, green.500)'
                 color={'whiteAlpha.900'}
                 minHeight='100%'
             >
                 <Stack
-                    as={Box}
+                    as={Flex}
+                    direction={'column'}
                     textAlign={'center'}
-                    spacing={{ base: 16, md: 24 }}
-                    py={{ base: 36, md: 36 }}>
+                    spacing={{ base: 12, md: 24 }}
+                    py={{ base: 12, md: 24 }}
+                >
                     <Heading
                         fontWeight={600}
                         fontSize={{ base: '2xl', sm: '4xl', md: '6xl' }}
@@ -61,7 +65,6 @@ export default function CallToActionWithAnnotation() {
                         direction={'column'}
                         spacing={3}
                         align={'center'}
-                        alignSelf={'center'}
                         position={'relative'}>
                         <Button
                             px={6}

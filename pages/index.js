@@ -1,6 +1,7 @@
 import Layout from '../components/layout'
 import CallToActionWithAnnotation from '../components/landing/CallToActionWithAnnotation'
 
+// Landing page
 function Index() {
   return (
     <>
@@ -11,9 +12,9 @@ function Index() {
 
 Index.getLayout = function getLayout(page) {
   return (
-    <Layout>
+    <>
       {page}
-    </Layout>
+    </>
   )
 }
 
