@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import dynamic from "next/dynamic";
@@ -6,8 +6,17 @@ import {
     Flex,
     Avatar,
     Box, Text, Badge, Divider, Heading, IconButton, Icon, LinkOverlay, LinkBox, Link, Button, Collapse, Portal, Spacer, CloseButton,
-    Skeleton
-} from '@chakra-ui/react'
+    Skeleton,
+    Stack, Code
+} from '@chakra-ui/react';
+import {
+    FormControl,
+    FormLabel,
+    FormErrorMessage,
+    FormHelperText,
+    Input,
+    Progress
+} from '@chakra-ui/react';
 import MarkdownEditor from '../components/MarkdownEditor'
 import { gql, useQuery } from "@apollo/client";
 import { useSignMessage, useSignTypedData, useContractWrite, useSigner, useAccount } from 'wagmi';
@@ -22,6 +31,7 @@ import { Metadata, MetadataVersions } from '../lib/metadata'
 import { useProfileID, useDispatchProfileID } from "./context/AppContext";
 import { LENS_HUB_ABI } from '../lib/abi';
 import { ethers, utils, Wallet } from 'ethers';
+import NextLink from 'next/link'
 
 function PublicationCommentEditor({ isOpenComment, isToggleComment, publicationID }) {
     // app context in-use
@@ -40,10 +50,48 @@ function PublicationCommentEditor({ isOpenComment, isToggleComment, publicationI
         },
         'commentWithSig'
     );
+
+    // lens-api status
+    const [isLoading, setIsLoading] = useState(false);
     // transaction status
     const [isBlockchainTxPending, setIsBlockchainTxPending] = useState(false);
+    // error status
+    const [isError, setIsError] = useState(false);
+    // reset error status after X milliseconds
+    useEffect(() => {
+        if (isError) {
+            setTimeout(() => {
+                setIsError(false);
+            }, 5000);
+        }
+    }, [isError]);
+
     // markdown editor
     const [markdownValue, setMarkdownValue] = useState("**Hello world!!!**");
+
+    // newly created comment id
+    const [newCommentId, setNewCommentId] = useState("");
+
+    // comment template
+    let comment = {
+        version: MetadataVersions.one,
+        metadata_id: uuidv4(),
+        description: 'Description',
+        content: markdownValue,
+        external_url: null,
+        image: null,
+        imageMimeType: null,
+        name: 'Name',
+        attributes: [],
+        media: [
+            // {
+            //   item: 'https://scx2.b-cdn.net/gfx/news/hires/2018/lion.jpg',
+            //   // item: 'https://assets-global.website-files.com/5c38aa850637d1e7198ea850/5f4e173f16b537984687e39e_AAVE%20ARTICLE%20website%20main%201600x800.png',
+            //   type: 'image/jpeg',
+            // },
+        ],
+        appId: 'testing123',
+    }
 
     // authenticate wallet to lens-api
     async function login() {
@@ -61,32 +109,16 @@ function PublicationCommentEditor({ isOpenComment, isToggleComment, publicationI
         // namedConsoleLog('dataAccount', dataAccount);
         // namedConsoleLog('errorAccount', errorAccount);
         // namedConsoleLog('loadingAccount', loadingAccount);
-
-        let comment = {
-            version: MetadataVersions.one,
-            metadata_id: uuidv4(),
-            description: 'Description',
-            content: markdownValue,
-            external_url: null,
-            image: null,
-            imageMimeType: null,
-            name: 'Name',
-            attributes: [],
-            media: [
-                // {
-                //   item: 'https://scx2.b-cdn.net/gfx/news/hires/2018/lion.jpg',
-                //   // item: 'https://assets-global.website-files.com/5c38aa850637d1e7198ea850/5f4e173f16b537984687e39e_AAVE%20ARTICLE%20website%20main%201600x800.png',
-                //   type: 'image/jpeg',
-                // },
-            ],
-            appId: 'testing123',
-        }
+        let accessToken;
+        // namedConsoleLog('authenticateApp', authenticateApp);
+        // request a login access if there is no accessTokens in context or Jwt in context has expired
+        setIsLoading(true);
         try {
+            setIsError(false);
+            // check if connected user has a valid jwt token
             let accessToken;
-            // namedConsoleLog('authenticateApp', authenticateApp);
-            // request a login access if there is no accessTokens in context or Jwt in context has expired
             if (authenticateApp.accessToken.length < 1 || isJwtExpired(authenticateApp.accessToken)) {
-                const accessTokens = await login(dataAccount.address);
+                const accessTokens = await login();
                 // namedConsoleLog('accessTokens', accessTokens);
                 let authenticate = accessTokens?.data?.authenticate;
                 dispatch({ type: 'set_authenticateApp', payload: authenticate });
@@ -97,7 +129,6 @@ function PublicationCommentEditor({ isOpenComment, isToggleComment, publicationI
             }
             // namedConsoleLog('accessToken', accessToken);
 
-            // alert('ipfs')
             // upload to ipfs
             const ipfsResult = await ipfsClient.add(JSON.stringify(comment));
             // namedConsoleLog('ipfsResult', ipfsResult);
@@ -153,15 +184,23 @@ function PublicationCommentEditor({ isOpenComment, isToggleComment, publicationI
                         },
                     }
                 });
-            // namedConsoleLog('transaction', transaction);
+            namedConsoleLog('transaction', transaction);
             setIsBlockchainTxPending(true);
             const receipt = await transaction.data.wait();
-            // namedConsoleLog('receipt', receipt);
+            namedConsoleLog('receipt', receipt);
             setIsBlockchainTxPending(false);
-        }
-        catch (error) {
-            namedConsoleLog('clickPostComment error', error);
+            setIsLoading(false);
+            let postId = ethers.BigNumber.from(receipt.logs[0].topics[2]);
+            let newProfileCommentId = profileIDApp.toHexString().concat('-').concat(postId.toHexString()).trim();
+            namedConsoleLog('newProfileCommentId', newProfileCommentId);
+            setNewCommentId(newProfileCommentId);
+            console.log('done post ok');
+        } catch (error) {
+            namedConsoleLog('error', error);
             setIsBlockchainTxPending(false);
+            setIsLoading(false);
+            setIsError(true);
+            console.log('done comment failed');
         }
     }
 
@@ -190,13 +229,68 @@ function PublicationCommentEditor({ isOpenComment, isToggleComment, publicationI
                         Post comment
                     </Button>
                     {
-                        isBlockchainTxPending || Boolean(dataContractWrite)
-                            ?
-                            <Skeleton isLoaded={!isBlockchainTxPending} startColor='pink.500' endColor='orange.500' height='20px'>
-                                <Text textAlign='center'>Commented</Text>
-                            </Skeleton>
-                            :
-                            null
+                        // waiting signature and lens-api calls
+                        isLoading && !isBlockchainTxPending && (
+                            <Stack direction='column' spacing={0}>
+                                <Code alignSelf='center' colorScheme='teal' children="Loading" />
+                                <Progress size='lg' isIndeterminate colorScheme='teal' />
+                            </Stack>
+                        )
+                    }
+                    {
+                        // waiting blockchain write
+                        isLoading && isBlockchainTxPending && (
+                            <Stack direction='column' spacing={0}>
+                                <Code alignSelf='center' colorScheme='orange' children="Loading" />
+                                <Progress size='lg' isIndeterminate colorScheme='orange' />
+                            </Stack>
+                        )
+                    }
+                    {
+                        // post action errored
+                        !isLoading && !isBlockchainTxPending && isError && (
+                            <Stack direction='column' spacing={0}>
+                                <Code alignSelf='center' colorScheme='red' children="Error. Reload page and retry." />
+                                <Progress size='lg' value={100} colorScheme='red' />
+                            </Stack>
+                        )
+                    }
+                    {
+                        // post action completed (has a newPostId gathered from blockchain receipt)
+                        !isLoading && !isBlockchainTxPending && !isError && Boolean(newCommentId) && (
+                            <Stack direction='column' spacing={0}>
+                                <Stack alignSelf='center' direction='row' spacing={0} alignItems='baseline'>
+                                    <Code colorScheme='green' children="Posted !" m={0} p={0}></Code>
+                                    <NextLink
+                                        href={{
+                                            pathname: '/publication/[publicationID]',
+                                            query: { publicationID: newCommentId },
+                                        }}
+                                        passHref
+                                    >
+                                        <Link m={0} p={0}
+                                            textDecoration='underline overline #FF3028'
+                                            _hover={{
+                                                transform: 'translateY(-2px)',
+                                                boxShadow: 'lg',
+                                            }}
+                                        >
+                                            <Code colorScheme='green'>{' '}—{' '}Click here to see it.</Code>
+                                        </Link>
+                                    </NextLink>
+                                </Stack>
+                                <Progress size='lg' value={100} colorScheme='green' />
+                            </Stack>
+                        )
+                    }
+                    {
+                        // waiting for user action before calling
+                        !isLoading && !isBlockchainTxPending && !isError && !Boolean(newCommentId) && (
+                            <Stack direction='column' spacing={0}>
+                                <Code alignSelf='center' colorScheme='green' children="Waiting" visibility="hidden" />
+                                <Progress size='lg' value={0} />
+                            </Stack>
+                        )
                     }
                 </Flex>
             </Flex>
