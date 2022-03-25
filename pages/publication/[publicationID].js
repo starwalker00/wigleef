@@ -2,7 +2,7 @@ import Layout from '../../components/layout'
 import Sidebar from '../../components/sidebar'
 import PublicationView from '../../components/PublicationView'
 import PageContainer from '../../components/PageContainer'
-import { Container, Stack, Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react'
+import { Container, Stack, Skeleton, SkeletonCircle, SkeletonText, Divider, Heading, Text } from '@chakra-ui/react'
 
 import { gql, useQuery } from "@apollo/client";
 import { initializeApollo, addApolloState } from "../../lib/apolloClient";
@@ -635,7 +635,12 @@ function Publication() {
   const haveMoreComments = Boolean(true);
   return (
     <>
-      <h1>publication/[id]</h1>
+      <Stack direction='column'>
+        <Heading alignSelf={'center'}>Publication</Heading>
+        {
+          publication?.id && <Text alignSelf={'center'}>{publication?.id}</Text>
+        }
+      </Stack>
       {!havePublication && (loadingPublication || loadingComments) ? (
         <Skeleton height='20px'>loading</Skeleton>
       ) : errorPost ? (
@@ -644,15 +649,16 @@ function Publication() {
         <p>No posts found.</p>
       ) : (
         <Container
-          border='2px solid blue'
+        // border='2px solid blue'
         >
           <Stack
-            border='2px solid green'
+            // border='2px solid green'
             direction='column'
             alignItems='center'
           // justifyContent='space-around'
           // alignItems='stretch'
           >
+            <Divider py={4} />
             <PublicationView key={publication.id} publication={publication} comments={comments} />
           </Stack>
         </Container>

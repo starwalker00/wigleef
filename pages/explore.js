@@ -7,7 +7,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { gql, useQuery } from "@apollo/client";
 import { initializeApollo, addApolloState } from "../lib/apolloClient";
 import { prettyJSON } from '../lib/helpers';
-import { Container, Stack, Heading, Link, Text } from '@chakra-ui/react';
+import { Container, Stack, Heading, Link, Text, Divider } from '@chakra-ui/react';
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import { DEMO_PROFILE_ID } from '../lib/config';
@@ -392,13 +392,14 @@ function Explore() {
             // justifyContent='space-around'
             // alignItems='stretch'
             >
+              <Divider py={4} />
               <InfiniteScroll
                 dataLength={publications.length}
                 next={fetchMorePublications}
                 hasMore={haveMorePublication}
                 loader={<InfiniteScrollLoading />}
                 endMessage={<InfiniteScrollLoaded />}
-                style={{ border: '2px solid #eee' }}
+              // style={{ border: '2px solid #eee' }}
               // style={{ width: '100%' }}
               >
                 {publications.map((publication) => (

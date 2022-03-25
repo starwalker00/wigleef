@@ -15,7 +15,8 @@ import {
   Center,
   Spinner,
   Heading,
-  Link
+  Link,
+  Divider
 } from '@chakra-ui/react';
 import { Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react'
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
@@ -458,14 +459,15 @@ function Timeline() {
           <p>Publication not found</p>
         ) : (
           <Container
-            border='2px solid blue'
+          // border='2px solid blue'
           >
             <Stack
-              border='2px solid green'
+              // border='2px solid green'
               direction='column'
             // justifyContent='space-around'
             // alignItems='stretch'
             >
+              <Divider py={4} />
               <InfiniteScroll
                 dataLength={publications.length}
                 next={fetchMorePublications}

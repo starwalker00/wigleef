@@ -30,7 +30,7 @@ function PublicationView(dataPublication) {
     const comments = dataPublication.comments;
     // console.log(comments)
     return (
-        <>
+        <Flex flexDirection='column' width={'full'}>
             <LinkBox as='article'
                 style={{
                     // border: "2px solid #eee",
@@ -149,7 +149,7 @@ function PublicationView(dataPublication) {
                     )
                 })
             }
-        </>
+        </Flex>
     );
 }
 
