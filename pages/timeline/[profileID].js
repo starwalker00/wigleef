@@ -14,7 +14,8 @@ import {
   Container,
   Center,
   Spinner,
-  Heading
+  Heading,
+  Link
 } from '@chakra-ui/react';
 import { Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react'
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from '@chakra-ui/react'
@@ -24,7 +25,6 @@ import { gql, useQuery } from "@apollo/client";
 import { initializeApollo, addApolloState } from "../../lib/apolloClient";
 import { namedConsoleLog, prettyJSON } from '../../lib/helpers';
 import { BigNumber } from "@ethersproject/bignumber";
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { DEMO_PROFILE_ID } from '../../lib/config';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -458,22 +458,26 @@ function Timeline() {
           <p>Publication not found</p>
         ) : (
           <Container
-            display='flex'
-            flexDirection='column'
-            // maxWidth={{ base: '100%', md: '80% ' }}
-            width={{ base: '100%', md: '80% ' }}
+            border='2px solid blue'
           >
-            <InfiniteScroll
-              dataLength={publications.length}
-              next={fetchMorePublications}
-              hasMore={haveMorePublication}
-              loader={<InfiniteScrollLoading />}
-              endMessage={<InfiniteScrollLoaded />}
+            <Stack
+              border='2px solid green'
+              direction='column'
+            // justifyContent='space-around'
+            // alignItems='stretch'
             >
-              {publications.map((publication) => (
-                <PublicationView key={publication.id} publication={publication} />
-              ))}
-            </InfiniteScroll>
+              <InfiniteScroll
+                dataLength={publications.length}
+                next={fetchMorePublications}
+                hasMore={haveMorePublication}
+                loader={<InfiniteScrollLoading />}
+                endMessage={<InfiniteScrollLoaded />}
+              >
+                {publications.map((publication) => (
+                  <PublicationView key={publication.id} publication={publication} />
+                ))}
+              </InfiniteScroll>
+            </Stack>
           </Container>
         )
       }

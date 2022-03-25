@@ -15,7 +15,9 @@ function Layout({ children }) {
                 p='0'
                 // bgColor={{ base: 'blue', md: 'red', lg: 'green' }}
                 display='flex'
-                flexDirection={{ base: 'column', md: 'row' }}>
+                flexDirection={{ base: 'column', md: 'row' }}
+                style={{ border: '3px solid red' }}
+            >
                 {children}
             </Container>
             <NewPostButton />

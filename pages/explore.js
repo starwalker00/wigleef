@@ -7,7 +7,11 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { gql, useQuery } from "@apollo/client";
 import { initializeApollo, addApolloState } from "../lib/apolloClient";
 import { prettyJSON } from '../lib/helpers';
-import { Container } from '@chakra-ui/react';
+import { Container, Stack, Heading, Link, Text } from '@chakra-ui/react';
+import NextLink from 'next/link'
+import { useRouter } from 'next/router'
+import { DEMO_PROFILE_ID } from '../lib/config';
+import { BigNumber } from "@ethersproject/bignumber";
 
 const EXPLORE_PUBLICATIONS = `
   query($request: ExplorePublicationRequest!) {
@@ -323,6 +327,11 @@ const EXPLORE_PUBLICATIONS = `
 `;
 
 function Explore() {
+  // get profileID from params
+  const router = useRouter();
+  const profileID = router.query.profileID ?? DEMO_PROFILE_ID;
+  // prettyJSON('profileID', profileID);
+  const constCurrentProfileID = BigNumber.from(profileID);
   const { loading, error, data, fetchMore } = useQuery(
     gql(EXPLORE_PUBLICATIONS),
     {
@@ -365,30 +374,38 @@ function Explore() {
   return (
     <>
       {/* {console.log(publications)} */}
-      <h1> Explore</h1>
-      <p>{totalCount} publications</p>
+      <Stack direction='column'>
+        <Heading alignSelf={'center'}>Explore</Heading>
+        <Text alignSelf={'center'}>{totalCount} publications</Text>
+      </Stack>
       {
         error
           ?
           <h1>error</h1>
           :
           <Container
-            display='flex'
-            flexDirection='column'
-            // maxWidth={{ base: '100%', md: '80% ' }}
-            width={{ base: '100%', md: '80% ' }}
+            border='2px solid blue'
           >
-            <InfiniteScroll
-              dataLength={publications.length}
-              next={fetchMorePublications}
-              hasMore={haveMorePublication}
-              loader={<InfiniteScrollLoading />}
-              endMessage={<InfiniteScrollLoaded />}
+            <Stack
+              border='2px solid green'
+              direction='column'
+            // justifyContent='space-around'
+            // alignItems='stretch'
             >
-              {publications.map((publication) => (
-                <PublicationView key={publication.id} publication={publication} />
-              ))}
-            </InfiniteScroll>
+              <InfiniteScroll
+                dataLength={publications.length}
+                next={fetchMorePublications}
+                hasMore={haveMorePublication}
+                loader={<InfiniteScrollLoading />}
+                endMessage={<InfiniteScrollLoaded />}
+                style={{ border: '1px solid blue' }}
+              // style={{ width: '100%' }}
+              >
+                {publications.map((publication) => (
+                  <PublicationView key={publication.id} publication={publication} />
+                ))}
+              </InfiniteScroll>
+            </Stack>
           </Container>
       }
     </>

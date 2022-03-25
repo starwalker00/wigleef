@@ -19,7 +19,8 @@ function PageContainer({ children }) {
                 pb={{
                     base: 24, md: 12
                 }}
-            // width={{ base: "100%", sm: "20em", md: "50em" }}
+                // width={{ base: "100%", sm: "20em", md: "50em" }}
+                style={{ border: '2px solid green' }}
             >
                 {children}
             </Container>

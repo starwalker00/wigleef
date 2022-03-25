@@ -2,7 +2,7 @@ import Layout from '../../components/layout'
 import Sidebar from '../../components/sidebar'
 import PublicationView from '../../components/PublicationView'
 import PageContainer from '../../components/PageContainer'
-import { Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react'
+import { Container, Stack, Skeleton, SkeletonCircle, SkeletonText } from '@chakra-ui/react'
 
 import { gql, useQuery } from "@apollo/client";
 import { initializeApollo, addApolloState } from "../../lib/apolloClient";
@@ -643,7 +643,19 @@ function Publication() {
       ) : !havePublication ? (
         <p>No posts found.</p>
       ) : (
-        <PublicationView key={publication.id} publication={publication} comments={comments} />
+        <Container
+          border='2px solid blue'
+        >
+          <Stack
+            border='2px solid green'
+            direction='column'
+            alignItems='center'
+          // justifyContent='space-around'
+          // alignItems='stretch'
+          >
+            <PublicationView key={publication.id} publication={publication} comments={comments} />
+          </Stack>
+        </Container>
       )
       }
     </>
@@ -664,26 +676,26 @@ Publication.getLayout = function getLayout(page) {
 
 // TODO? : use static generation on useful pages
 
-// export async function getStaticProps({ params }) {
+// export async function getStaticProps({params}) {
 //   prettyJSON('params', params);
 //   const apolloClient = initializeApollo();
 
 //   const result = await apolloClient.query({
 //     query: gql(GET_PUBLICATIONS),
 //     variables: {
-//       request: { publicationId: params.publicationID },
-//       // request: { publicationId: '0x49-0x02' },
+//       request: {publicationId: params.publicationID },
+//       // request: {publicationId: '0x49-0x02' },
 //     },
 //   });
 //   prettyJSON(`GET_PUBLICATION ${params.publicationID}`, result);
 //   return addApolloState(apolloClient, {
-//     props: {},
+//     props: { },
 //   });
 // }
 
 // export async function getStaticPaths() {
 //   const paths = []
-//   return { paths, fallback: true }
+//   return {paths, fallback: true }
 // }
 
 export default Publication
