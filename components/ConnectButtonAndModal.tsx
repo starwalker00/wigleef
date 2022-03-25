@@ -19,14 +19,14 @@ import { useDisclosure } from '@chakra-ui/react';
 import { useConnect, useAccount } from 'wagmi';
 import SelectProfile from '../components/SelectProfile'
 
-function ConnectButtonAndModal() {
+function ConnectButtonAndModal({ showConnected = true }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [{ data: connectData, error: connectError }, connect] = useConnect();
     const [{ data: accountData }, disconnect] = useAccount({
         fetchEns: true,
     });
 
-    if (accountData) {
+    if (accountData && showConnected) {
         return (
             <>
                 <Flex flexDirection='column'>
@@ -46,6 +46,9 @@ function ConnectButtonAndModal() {
                 </Flex>
             </>
         )
+    }
+    else if (accountData && !showConnected) {
+        return (<></>)
     }
     else {
         return (
