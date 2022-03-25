@@ -9,6 +9,7 @@ import { FaTwitter } from 'react-icons/fa'
 import ReactTimeAgo from 'react-time-ago'
 import MarkdownRenderer from './MarkdownRenderer'
 import Pluralize from 'react-pluralize'
+import PublicationView from './PublicationView'
 
 // const spin = keyframes`
 //   from {transform: rotate(0deg);}
@@ -35,104 +36,109 @@ function CommentView(dataComment) {
         return <h1>no comment</h1>
     }
     return (
-        // <PublicationView publication={publication} />
-        <LinkBox as='article' style={{ border: "1px solid #eee", padding: "1rem", marginBottom: "0rem", borderRadius: "10px" }}
-            _hover={{
-                cursor: 'pointer',
-                backgroundColor: 'gray.100'
-            }}
-            width='80%'
-            animation={animation}
-        >
-            <NextLink
-                href={{
-                    pathname: '/publication/[publicationID]',
-                    query: { publicationID: publication.id },
-                }}
-                passHref
-                /*auto prefetch : https://nextjs.org/docs/messages/prefetch-true-deprecated is it really working ? */>
-                <LinkOverlay>
-                    <Flex flexDirection='row' justifyContent='flex-start' gap='2'>
-                        <Text
-                            color={'green.500'}
-                            textTransform={'uppercase'}
-                            fontWeight={800}
-                            fontSize={'sm'}
-                            letterSpacing={1.1}>
-                            {publication.__typename}
-                        </Text>
-                        <Text
-                            color={'green.500'}
-                            textTransform={'uppercase'}
-                            fontWeight={800}
-                            fontSize={'sm'}
-                            letterSpacing={1.1}>
-                            {publication.id}
-                        </Text>
-                    </Flex>
-                </LinkOverlay>
-            </NextLink >
-            <Flex flexDirection='column'>
-                <Flex className='profile' alignItems='center' bgColor='blue.50' py='1'>
-                    <Avatar size='sm' src={publication.profile?.picture?.original?.url} />
-                    <Flex ml='2' alignItems='center' gap={2}>
-                        <NextLink
-                            href={{
-                                pathname: '/profile/[profileID]',
-                                query: { profileID: publication?.profile?.id },
-                            }}
-                            passHref>
-                            <Link>
-                                <Text fontSize='sm' fontWeight='bold'>
-                                    {publication.profile?.handle}
-                                </Text>
-                            </Link>
-                        </NextLink>
-                        <Text fontSize='lg' fontWeight='bold'>
-                            {/* <Badge ml='1' colorScheme='green'>New</Badge> */}
-                            {publication.profile?.twitterUrl
-                                ?
-                                <NextLink href='https://www.google.fr' passHref>
-                                    <Link>
-                                        <IconButton aria-label='Search database'
-                                            variant='ghost'
-                                            icon={<Icon as={FaTwitter} w={6} h={6} color='blue.500' />} />
-                                    </Link>
-                                </NextLink>
-                                :
-                                null}
-                        </Text>
-                        <Text fontSize='xs'><ReactTimeAgo date={new Date(publication.createdAt)} timeStyle="twitter" /></Text>
-                    </Flex>
-                </Flex>
-                <Divider orientation='vertical' />
-                <Flex className='metadata' flexDirection='column' alignContent='center' bgColor='blue.100'>
-                    <Heading
-                        color={'gray.700'}
-                        fontSize={'sm'}
-                        fontFamily={'body'}>
-                        {publication.metadata?.name}
-                    </Heading>
-                    <Text fontSize='xs' color={'gray.500'}>{publication.metadata?.description}</Text>
-                    <Box m='3' p='3' borderLeft='1px solid green'>
-                        <MarkdownRenderer markdownString={publication.metadata?.content} />
-                    </Box>
-                </Flex>
-                <Divider my='2' />
-                <Flex className='stats' flexDirection='row' justifyContent='space-around' gap='2' alignContent='center'>
-                    <Text fontSize='xs' color={'gray.500'}>
-                        <Pluralize singular={'comment'} plural={'comments'} count={publication.stats?.totalAmountOfComments} />
-                    </Text>
-                    <Text fontSize='xs' color={'gray.500'}>
-                        <Pluralize singular={'collect'} plural={'collects'} count={publication.stats?.totalAmountOfCollects} />
-                    </Text>
-                    <Text fontSize='xs' color={'gray.500'}>
-                        <Pluralize singular={'mirror'} plural={'mirrors'} count={publication.stats?.totalAmountOfMirrors} />
-                    </Text>
-                </Flex>
-            </Flex>
-        </LinkBox >
-    );
+        <Flex width='80%' backgroundColor=''>
+            <PublicationView publication={publication} />
+        </Flex>
+    )
+    // return (
+    //     // <PublicationView publication={publication} />
+    //     <LinkBox as='article' style={{ border: "1px solid #eee", padding: "1rem", marginBottom: "0rem", borderRadius: "10px" }}
+    //         _hover={{
+    //             cursor: 'pointer',
+    //             backgroundColor: 'gray.100'
+    //         }}
+    //         width='80%'
+    //         animation={animation}
+    //     >
+    //         <NextLink
+    //             href={{
+    //                 pathname: '/publication/[publicationID]',
+    //                 query: { publicationID: publication.id },
+    //             }}
+    //             passHref
+    //             /*auto prefetch : https://nextjs.org/docs/messages/prefetch-true-deprecated is it really working ? */>
+    //             <LinkOverlay>
+    //                 <Flex flexDirection='row' justifyContent='flex-start' gap='2'>
+    //                     <Text
+    //                         color={'green.500'}
+    //                         textTransform={'uppercase'}
+    //                         fontWeight={800}
+    //                         fontSize={'sm'}
+    //                         letterSpacing={1.1}>
+    //                         {publication.__typename}
+    //                     </Text>
+    //                     <Text
+    //                         color={'green.500'}
+    //                         textTransform={'uppercase'}
+    //                         fontWeight={800}
+    //                         fontSize={'sm'}
+    //                         letterSpacing={1.1}>
+    //                         {publication.id}
+    //                     </Text>
+    //                 </Flex>
+    //             </LinkOverlay>
+    //         </NextLink >
+    //         <Flex flexDirection='column'>
+    //             <Flex className='profile' alignItems='center' bgColor='blue.50' py='1'>
+    //                 <Avatar size='sm' src={publication.profile?.picture?.original?.url} />
+    //                 <Flex ml='2' alignItems='center' gap={2}>
+    //                     <NextLink
+    //                         href={{
+    //                             pathname: '/profile/[profileID]',
+    //                             query: { profileID: publication?.profile?.id },
+    //                         }}
+    //                         passHref>
+    //                         <Link>
+    //                             <Text fontSize='sm' fontWeight='bold'>
+    //                                 {publication.profile?.handle}
+    //                             </Text>
+    //                         </Link>
+    //                     </NextLink>
+    //                     <Text fontSize='lg' fontWeight='bold'>
+    //                         {/* <Badge ml='1' colorScheme='green'>New</Badge> */}
+    //                         {publication.profile?.twitterUrl
+    //                             ?
+    //                             <NextLink href='https://www.google.fr' passHref>
+    //                                 <Link>
+    //                                     <IconButton aria-label='Search database'
+    //                                         variant='ghost'
+    //                                         icon={<Icon as={FaTwitter} w={6} h={6} color='blue.500' />} />
+    //                                 </Link>
+    //                             </NextLink>
+    //                             :
+    //                             null}
+    //                     </Text>
+    //                     <Text fontSize='xs'><ReactTimeAgo date={new Date(publication.createdAt)} timeStyle="twitter" /></Text>
+    //                 </Flex>
+    //             </Flex>
+    //             <Divider orientation='vertical' />
+    //             <Flex className='metadata' flexDirection='column' alignContent='center' bgColor='blue.100'>
+    //                 <Heading
+    //                     color={'gray.700'}
+    //                     fontSize={'sm'}
+    //                     fontFamily={'body'}>
+    //                     {publication.metadata?.name}
+    //                 </Heading>
+    //                 <Text fontSize='xs' color={'gray.500'}>{publication.metadata?.description}</Text>
+    //                 <Box m='3' p='3' borderLeft='1px solid green'>
+    //                     <MarkdownRenderer markdownString={publication.metadata?.content} />
+    //                 </Box>
+    //             </Flex>
+    //             <Divider my='2' />
+    //             <Flex className='stats' flexDirection='row' justifyContent='space-around' gap='2' alignContent='center'>
+    //                 <Text fontSize='xs' color={'gray.500'}>
+    //                     <Pluralize singular={'comment'} plural={'comments'} count={publication.stats?.totalAmountOfComments} />
+    //                 </Text>
+    //                 <Text fontSize='xs' color={'gray.500'}>
+    //                     <Pluralize singular={'collect'} plural={'collects'} count={publication.stats?.totalAmountOfCollects} />
+    //                 </Text>
+    //                 <Text fontSize='xs' color={'gray.500'}>
+    //                     <Pluralize singular={'mirror'} plural={'mirrors'} count={publication.stats?.totalAmountOfMirrors} />
+    //                 </Text>
+    //             </Flex>
+    //         </Flex>
+    //     </LinkBox >
+    // );
 }
 
 export default CommentView;
