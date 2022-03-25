@@ -15,7 +15,8 @@ import {
     FormLabel,
     FormErrorMessage,
     FormHelperText,
-    Input
+    Input,
+    Progress
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useProfileID, useDispatchProfileID } from "./context/AppContext";
@@ -61,6 +62,8 @@ export default function PostForm() {
     const [isLoading, setIsLoading] = useState(false);
     // transaction status
     const [isBlockchainTxPending, setIsBlockchainTxPending] = useState(false);
+    // error status
+    const [isError, setIsError] = useState(false);
 
     // markdown editor value
     const [markdownValue, setMarkdownValue] = useState("**Hello world!!!**");
@@ -190,9 +193,9 @@ export default function PostForm() {
             console.log('done post ok');
         } catch (error) {
             namedConsoleLog('error', error);
-            //     setError('Invalid username or password');
             setIsBlockchainTxPending(false);
             setIsLoading(false);
+            setIsError(true);
             console.log('done post failed');
         }
     };
@@ -230,8 +233,38 @@ export default function PostForm() {
                             </Button>
                         </Stack>
                 }
-                <Button isLoading={isLoading} loadingText='loading'>loader</Button>
             </form>
+            <Button isLoading={isLoading} loadingText='loading'>loader</Button>
+            {
+                // waiting signature and lens-api calls
+                isLoading && !isBlockchainTxPending &&
+                <Progress size='lg' isIndeterminate colorScheme='teal' />
+            }
+            {
+                // waiting blockchain write
+                isLoading && isBlockchainTxPending &&
+                <Progress size='lg' isIndeterminate colorScheme='orange' />
+            }
+            {
+                // post action errored
+                !isLoading && !isBlockchainTxPending && isError &&
+                <Progress size='lg' value={100} colorScheme='red' />
+            }
+            {
+                // post action completed (has a newPostId gathered from blockchain receipt)
+                !isLoading && !isBlockchainTxPending && !isError && Boolean(newPostId) &&
+                <Progress size='lg' value={100} colorScheme='green' />
+            }
+            {
+                // waiting for user action before calling
+                !isLoading && !isBlockchainTxPending && !isError && !Boolean(newPostId) &&
+                <Progress size='lg' value={0} />
+            }
+            {/* <Progress size='lg' isIndeterminate colorScheme='teal' />
+            <Progress size='lg' isIndeterminate colorScheme='orange' />
+            <Progress size='lg' value={100} colorScheme='red' />
+            <Progress size='lg' value={100} colorScheme='green' />
+            <Progress size='lg' value={0} /> */}
         </Box>
     )
 }
