@@ -17,7 +17,7 @@ import { ExternalLinkIcon } from '@chakra-ui/icons';
 import FollowingListDrawer from './FollowingListDrawer';
 import FollowerListDrawer from './FollowerListDrawer';
 import { useAccount } from 'wagmi';
-import { useProfileID } from "./context/AppContext";
+import { useProfileID, useDispatchProfileID } from "./context/AppContext";
 import { BigNumber } from "@ethersproject/bignumber";
 import { namedConsoleLog } from '../lib/helpers';
 
@@ -32,6 +32,11 @@ export default function SocialProfileWithImage({ profile }) {
     const { profileIDApp } = useProfileID();
     const isProfileIDConnected = isProfileOfConnectedWalletAddress && profileIDApp.eq(BigNumber.from(profile?.id));
     // namedConsoleLog('isProfileOfConnectedWalletAddress', isProfileOfConnectedWalletAddress);
+    const dispatch = useDispatchProfileID();
+
+    function changeProfileID(event) {
+        dispatch({ type: 'set_profileID', payload: BigNumber.from(profile?.id) });
+    }
 
     return (
         <Center py={6}>
@@ -74,7 +79,8 @@ export default function SocialProfileWithImage({ profile }) {
                             <Heading fontSize={'2xl'} fontWeight={500} fontFamily={'body'}>
                                 {profile?.name}
                             </Heading>
-                            <Text fontSize={'sm'} color={'gray.500'}>@{profile?.handle} — {profile?.id}</Text>{isProfileIDConnected ? <Tag size='sm'>YOU!</Tag> : null}
+                            <Text fontSize={'sm'} color={'gray.500'}>@{profile?.handle} — {profile?.id}</Text>
+                            {isProfileIDConnected ? <Tag size='sm'>YOU!</Tag> : null}
                         </Stack>
                         <Spacer />
                         <Stack spacing={0} align={'center'}>
@@ -115,6 +121,7 @@ export default function SocialProfileWithImage({ profile }) {
                     <Stack direction={'row'} width={'full'} spacing={1}>
                         <Text fontSize={'sm'} fontWeight={100}>Owner :</Text>
                         <Text fontSize={'sm'} fontWeight={100}>{profile.ownedBy}</Text>{isProfileOfConnectedWalletAddress ? <Tag size='sm'>YOU!</Tag> : null}
+                        {isProfileOfConnectedWalletAddress && !isProfileIDConnected ? <Button size='sm' variant='outline' onClick={changeProfileID} >use this profile</Button> : null}
                     </Stack>
 
 
