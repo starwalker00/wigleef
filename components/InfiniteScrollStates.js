@@ -8,9 +8,9 @@ import {
 
 export function InfiniteScrollLoading() {
     return (
-        <Center overflow='hidden' color='green.500'>
+        <Center overflow='hidden' color='green.500' padding={4}>
             <Box textAlign='center'>
-                <Spinner isIndeterminate size='xl' color='green.500' thickness='4px' />
+                <Spinner size='xl' color='green.500' thickness='4px' />
                 <Text>Loading</Text>
             </Box>
         </Center>
@@ -19,7 +19,7 @@ export function InfiniteScrollLoading() {
 
 export function InfiniteScrollLoaded() {
     return (
-        <Center overflow='hidden' color='green.500'>
+        <Center overflow='hidden' color='green.500' padding={4}>
             <Box textAlign='center'>
                 <CircularProgress value={100} color='green.500' thickness='6px' />
                 <Text>Everything has been loaded</Text>
