@@ -17,7 +17,7 @@ import {
     Input,
     Progress
 } from '@chakra-ui/react';
-import MarkdownEditor from '../components/MarkdownEditor'
+import MarkdownEditor from './MarkdownEditor'
 import { gql, useQuery } from "@apollo/client";
 import { useSignMessage, useSignTypedData, useContractWrite, useSigner, useAccount } from 'wagmi';
 import { generateChallenge } from '../lib/apollo/generate-challenge'
@@ -33,7 +33,7 @@ import { LENS_HUB_ABI } from '../lib/abi';
 import { ethers, utils, Wallet } from 'ethers';
 import NextLink from 'next/link'
 
-function PublicationCommentEditor({ isOpenComment, isToggleComment, publicationID }) {
+function PublicationCommentForm({ isOpenComment, isToggleComment, publicationID }) {
     // app context in-use
     const { profileIDApp, authenticateApp } = useProfileID();
     const dispatch = useDispatchProfileID();
@@ -298,4 +298,4 @@ function PublicationCommentEditor({ isOpenComment, isToggleComment, publicationI
     )
 }
 
-export default PublicationCommentEditor;
+export default PublicationCommentForm;
