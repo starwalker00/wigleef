@@ -24,15 +24,19 @@ function PublicationView(dataPublication) {
     let hoverStyle;
     if (dataPublication?.comments?.length > 0) {
         hoverStyle = {};
-    }
-    else {
+    } else {
         hoverStyle = {
             cursor: 'pointer',
             // backgroundColor: 'rgb(245, 255, 250)',
             bgGradient: 'linear(to-br,rgb(229, 255, 245), rgb(245, 255, 250), rgb(229, 255, 245) )'
         };
     }
-
+    let zIndex; let cursor; // fix styling of content of excessive size, temporary fix
+    if (dataPublication?.publication?.metadata?.content?.length > 500) {
+        zIndex = '200';
+    } else {
+        zIndex = 'auto';
+    }
     const animation = `${animate} 0.1s linear`;
     // console.log(dataPublication)
     const publication = dataPublication.publication;
@@ -141,7 +145,7 @@ function PublicationView(dataPublication) {
                         <Box m='3' p='3' borderLeft='1px solid green'
                             maxHeight='720px'
                             overflow='auto'
-                            zIndex='2'
+                            zIndex={zIndex}
                             _hover={{
                                 cursor: 'auto'
                             }}
