@@ -4,6 +4,9 @@ import { useRouter } from 'next/router';
 
 export default function NewPostButton() {
     const router = useRouter();
+    console.log(router.pathname);
+    const hideNewPostButton = router.pathname === '/post';
+    if (hideNewPostButton) return (<></>);
     return (
         <Portal>
             <Button
