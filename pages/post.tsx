@@ -7,7 +7,17 @@ import {
     Box,
     Spacer,
     Spinner,
+    Stack,
+    Container
 } from '@chakra-ui/react';
+import {
+    FormControl,
+    FormLabel,
+    FormErrorMessage,
+    FormHelperText,
+    Input
+} from '@chakra-ui/react'
+import PostForm from '../components/PostForm';
 import { BeatLoader } from 'react-spinners';
 import { TypedDataDomain, TypedDataField } from '@ethersproject/abstract-signer';
 import { ethers, utils, Wallet } from 'ethers';
@@ -249,33 +259,31 @@ function Post() {
         });
     }
     return (
-        <section>
+        <Container border='2px solid blue'>
             <h2>Post</h2>
-            <p>
-                This example adds a property <code>getLayout</code> to your page,
-                allowing you to return a React component for the layout. This allows you
-                to define the layout on a per-page basis. Since we&apos;re returning a
-                function, we can have complex nested layouts if desired.
-            </p>
-            <div>
-                {// @ts-ignore
-                    <MDEditor value={markdownValue} onChange={setMarkdownValue} />
-                }
-            </div>
-            <p>
-                {dataAccount
-                    ? <Button isLoading={isLoading} onClick={() => clickPost()} spinner={<BeatLoader size={8} />}>Post</Button>
-                    : <Text>No account connected</Text>
-                }
-            </p>
-            <p>
-                <span>
-                    {!ipfsClient && (
-                        <span>Oh oh, Not connected to IPFS. Checkout out the logs for errors</span>
-                    )}
-                </span>
-            </p>
-        </section>
+            <Stack
+                border='2px solid green'
+                direction='column'
+            // justifyContent='space-around'
+            // alignItems='stretch'
+            >
+                <Text>
+                    This example adds a property
+                </Text>
+                <Flex border='2px solid red'>
+                    {// @ts-ignore
+                        <MDEditor value={markdownValue} onChange={setMarkdownValue} />
+                    }
+                </Flex>
+                <p>
+                    {dataAccount
+                        ? <Button isLoading={isLoading} onClick={() => clickPost()} spinner={<BeatLoader size={8} />}>Post</Button>
+                        : <Text>No account connected</Text>
+                    }
+                </p>
+                <PostForm />
+            </Stack>
+        </Container>
     )
 }
 

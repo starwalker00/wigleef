@@ -19,7 +19,7 @@ import { useDisclosure } from '@chakra-ui/react';
 import { useConnect, useAccount } from 'wagmi';
 import SelectProfile from '../components/SelectProfile'
 
-function ConnectButtonAndModal({ showConnected = true }) {
+function ConnectButtonAndModal({ showConnected = true, autoFocus = false }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [{ data: connectData, error: connectError }, connect] = useConnect();
     const [{ data: accountData }, disconnect] = useAccount({
@@ -47,13 +47,14 @@ function ConnectButtonAndModal({ showConnected = true }) {
             </>
         )
     }
+    // option to hide when connected
     else if (accountData && !showConnected) {
         return (<></>)
     }
     else {
         return (
             <>
-                <Button onClick={onOpen}>Connect Wallet</Button>
+                <Button onClick={onOpen} autoFocus={autoFocus}>Connect Wallet</Button>
 
                 <Modal isOpen={isOpen} onClose={onClose}>
                     <ModalOverlay />
