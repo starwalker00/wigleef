@@ -28,7 +28,8 @@ import ConnectButtonAndModal from '../components/ConnectButtonAndModal'
 import { BigNumber } from "@ethersproject/bignumber";
 import { useProfileID } from "../components/context/AppContext";
 import { namedConsoleLog } from '../lib/helpers';
-import SearchBar from '../components/SearchBar'
+import SearchBar from '../components/SearchBar';
+import SearchModal from '../components/mobileOnly/SearchModal';
 
 function Sidebar({ children }) {
     const { colorMode, toggleColorMode } = useColorMode();
@@ -68,11 +69,7 @@ function Sidebar({ children }) {
                                 <BiUserCircle />
                             </Link>
                         </NextLink>
-                        <NextLink href={'#'} passHref>
-                            <Link aria-disabled="true">
-                                <BiSearch />
-                            </Link>
-                        </NextLink>
+                        <SearchModal />
                     </Flex>
                 </Box>
             </Show>

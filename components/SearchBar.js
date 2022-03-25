@@ -311,7 +311,7 @@ fragment CommentMirrorOfFields on Comment {
 }
 `;
 
-export default function SearchBar() {
+export default function SearchBar({ afterSelected = () => { } }) {
   const router = useRouter();
   // search query
   const [searchProfile, { loading: loadingSearch, error: errorSearch, data: dataSearch }] = useLazyQuery(
@@ -370,6 +370,7 @@ export default function SearchBar() {
               pathname: '/profile/[profileID]',
               query: { profileID: item.originalValue.profileId },
             })
+            afterSelected();
           }}>
           <AutoCompleteInput
             // variant="filled"
