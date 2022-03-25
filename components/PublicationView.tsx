@@ -13,6 +13,7 @@ import CommentView from '../components/CommentView'
 import MarkdownRenderer from './MarkdownRenderer'
 import Pluralize from 'react-pluralize'
 import PublicationStats from './PublicationStats'
+import ReferenceInPublication from './ReferenceInPublication'
 import { namedConsoleLog } from '../lib/helpers'
 
 const animate = keyframes`
@@ -20,9 +21,10 @@ const animate = keyframes`
   to {opacity: 100;}
 `;
 
-function PublicationView(dataPublication) {
+function PublicationView(dataPublication, { hideReference }) {
     let hoverStyle;
-    if (dataPublication?.comments?.length > 0) {
+    let hasComments = dataPublication?.comments?.length > 0;
+    if (hasComments) {
         hoverStyle = {};
     } else {
         hoverStyle = {
@@ -38,16 +40,33 @@ function PublicationView(dataPublication) {
         zIndex = 'auto';
     }
     const animation = `${animate} 0.1s linear`;
-    // console.log(dataPublication)
+    // namedConsoleLog('dataPublication', dataPublication)
     const publication = dataPublication.publication;
-    // console.log(publication)
+    // namedConsoleLog('publication', publication);
     if (publication.length < 1) {
         return <h1>no pub</h1>
     }
     const comments = dataPublication.comments;
     // console.log(comments)
+
+    // handle links from mirror or comments to main post
+    const mainPost = publication.mainPost;
+    // namedConsoleLog('mainPost', mainPost);
+    const hasMainPost = Boolean(mainPost);
+    // namedConsoleLog('hasMainPost', hasMainPost);
+    const mirrorOf = publication.mirrorOf;
+    // namedConsoleLog('mirrorPost', mirrorOf);
+    const hasMirrorOf = Boolean(mirrorOf);
+    // namedConsoleLog('hasMirrorOf', hasMirrorOf);
+
     return (
         <Flex flexDirection='column' width={'full'}>
+            {
+                !Boolean(dataPublication.hideReference) && hasMainPost ? <ReferenceInPublication mainPost={mainPost} mainType={'mainPost'} /> : null
+            }
+            {
+                !Boolean(dataPublication.hideReference) && hasMirrorOf ? <ReferenceInPublication mainPost={mirrorOf} mainType={'mirrorOf'} /> : null
+            }
             <LinkBox as='article'
                 style={{
                     // border: "2px solid #eee",

@@ -39,7 +39,7 @@ function CommentView(dataComment) {
         <Flex
             width={{ base: '100%', md: '85%' }}
             backgroundColor='gray.50' alignSelf='flex-end'>
-            <PublicationView publication={publication} />
+            <PublicationView publication={publication} hideReference={true} />
         </Flex>
     )
     // return (
