@@ -1,11 +1,19 @@
-import Layout from '../components/layout'
 import CallToActionWithAnnotation from '../components/landing/CallToActionWithAnnotation'
+import TopBar from '../components/landing/TopBar'
+import {
+  Container,
+} from '@chakra-ui/react';
+import Head from 'next/head';
 
 // Landing page
 function Index() {
   return (
     <>
-      <CallToActionWithAnnotation />
+      <Head></Head>
+      <Container maxW={'7xl'}>
+        <TopBar />
+        <CallToActionWithAnnotation />
+      </Container>
     </>
   )
 }
