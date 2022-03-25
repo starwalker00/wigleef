@@ -45,6 +45,7 @@ function PublicationCommentEditor({ isOpenComment, isToggleComment, publicationI
     // markdown editor
     const [markdownValue, setMarkdownValue] = useState("**Hello world!!!**");
 
+    // authenticate wallet to lens-api
     async function login() {
         console.log('Requesting JWT')
         // authenticate
@@ -83,7 +84,7 @@ function PublicationCommentEditor({ isOpenComment, isToggleComment, publicationI
         try {
             let accessToken;
             // namedConsoleLog('authenticateApp', authenticateApp);
-            // request a login access if there is no accessTokens in context or Jwt in context is expired
+            // request a login access if there is no accessTokens in context or Jwt in context has expired
             if (authenticateApp.accessToken.length < 1 || isJwtExpired(authenticateApp.accessToken)) {
                 const accessTokens = await login(dataAccount.address);
                 // namedConsoleLog('accessTokens', accessTokens);
