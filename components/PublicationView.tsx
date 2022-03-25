@@ -31,10 +31,18 @@ function PublicationView(dataPublication) {
     // console.log(comments)
     return (
         <>
-            <LinkBox as='article' style={{ border: "2px solid #eee", padding: "1rem", marginBottom: "1rem", borderRadius: "10px" }}
+            <LinkBox as='article'
+                style={{
+                    // border: "2px solid #eee",
+                    borderBottom: "2px solid #eee",
+                    padding: "1rem",
+                    // marginBottom: "1rem",
+                    // borderRadius: "10px"
+                }}
                 _hover={{
                     cursor: 'pointer',
-                    backgroundColor: 'gray.100'
+                    // backgroundColor: 'rgb(245, 255, 250)',
+                    bgGradient: 'linear(to-br,rgb(229, 255, 245), rgb(245, 255, 250), rgb(229, 255, 245) )'
                 }}
                 width='100%'
                 animation={animation}
@@ -68,7 +76,10 @@ function PublicationView(dataPublication) {
                     </LinkOverlay>
                 </NextLink>
                 <Flex flexDirection='column'>
-                    <Flex className='profile' alignItems='center' bgColor='blue.50' py='1'>
+                    <Flex className='profile' alignItems='center' py='1'
+                    // bgColor='rgb(245, 255, 250)'
+                    // bgColor='blue.50'
+                    >
                         <Avatar size='md' src={publication.profile?.picture?.original?.url} />
                         <Flex ml='2' alignItems='center' gap={2}>
                             <NextLink
@@ -85,7 +96,7 @@ function PublicationView(dataPublication) {
                             </NextLink>
                             <Text fontSize='lg' fontWeight='bold'>
                                 {/* <Badge ml='1' colorScheme='green'>New</Badge> */}
-                                {publication.profile?.twitterUrl
+                                {/* {publication.profile?.twitterUrl
                                     ?
                                     <NextLink href='https://www.google.fr' passHref>
                                         <Link>
@@ -95,12 +106,21 @@ function PublicationView(dataPublication) {
                                         </Link>
                                     </NextLink>
                                     :
-                                    null}
+                                    null} */}
                             </Text>
                             <Text fontSize='xs'><ReactTimeAgo date={new Date(publication.createdAt)} timeStyle="twitter" /></Text>
                         </Flex>
                     </Flex>
-                    <Flex className='metadata' flexDirection='column' alignContent='center' bgColor='blue.100'>
+                    <Flex className='metadata' flexDirection='column' alignContent='center'
+                        // bgColor='blue.100'
+                        // borderBottom='1px dotted Gainsboro'
+                        marginBottom={2}
+                        p={2}
+                        backgroundImage='linear-gradient(to right, #333 10%, rgba(255, 255, 255, 0) 0%)'
+                        backgroundPosition='bottom;'
+                        backgroundSize='10px 1px'
+                        backgroundRepeat='repeat-x'
+                    >
                         <Heading
                             color={'gray.700'}
                             fontSize={'sm'}
@@ -109,19 +129,25 @@ function PublicationView(dataPublication) {
                         </Heading>
                         <Text fontSize='xs' color={'gray.500'}>{publication.metadata?.description}</Text>
                         {/* <Text fontSize='sm' color={'gray.800'}>{publication.metadata?.content}</Text> */}
-                        <Box m='3' p='3' borderLeft='1px solid green'>
+                        <Box m='3' p='3' borderLeft='1px solid green'
+                            maxHeight='720px'
+                            overflow='auto'
+                            zIndex='300'
+                        >
                             <MarkdownRenderer markdownString={publication.metadata?.content} />
                         </Box>
                     </Flex>
-                    <Divider my='2' />
+                    {/* <Divider my='2' /> */}
                     <PublicationStats publicationID={publication.id} publicationStats={publication.stats} />
                 </Flex>
+                {/* <Divider marginTop="5" /> */}
             </LinkBox>
-            {comments && comments.map((comment) => {
-                return (
-                    <CommentView key={comment.id} comment={comment} />
-                )
-            })
+            {
+                comments && comments.map((comment) => {
+                    return (
+                        <CommentView key={comment.id} comment={comment} />
+                    )
+                })
             }
         </>
     );

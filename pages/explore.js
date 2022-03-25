@@ -384,10 +384,10 @@ function Explore() {
           <h1>error</h1>
           :
           <Container
-            border='2px solid blue'
+          // border='2px solid blue'
           >
             <Stack
-              border='2px solid green'
+              // border='2px solid green'
               direction='column'
             // justifyContent='space-around'
             // alignItems='stretch'
@@ -398,7 +398,7 @@ function Explore() {
                 hasMore={haveMorePublication}
                 loader={<InfiniteScrollLoading />}
                 endMessage={<InfiniteScrollLoaded />}
-                style={{ border: '1px solid blue' }}
+                style={{ border: '2px solid #eee' }}
               // style={{ width: '100%' }}
               >
                 {publications.map((publication) => (
