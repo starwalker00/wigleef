@@ -20,6 +20,7 @@ import { useAccount } from 'wagmi';
 import { useProfileID, useDispatchProfileID } from "./context/AppContext";
 import { BigNumber } from "@ethersproject/bignumber";
 import { namedConsoleLog } from '../lib/helpers';
+import NextLink from 'next/link'
 
 export default function SocialProfileWithImage({ profile }) {
     // check connected wallet
@@ -123,8 +124,17 @@ export default function SocialProfileWithImage({ profile }) {
                         <Text fontSize={'sm'} fontWeight={100}>{profile.ownedBy}</Text>{isProfileOfConnectedWalletAddress ? <Tag size='sm'>YOU!</Tag> : null}
                         {isProfileOfConnectedWalletAddress && !isProfileIDConnected ? <Button size='sm' variant='outline' onClick={changeProfileID} >use this profile</Button> : null}
                     </Stack>
-
-
+                    <NextLink
+                        href={{
+                            pathname: '/timeline/[profileID]',
+                            query: { profileID: BigNumber.from(profile?.id).toHexString() },
+                        }}
+                        passHref
+                    >
+                        <Link _hover={{}}> {/*reset hover, use the button style */}
+                            <Button size='sm' variant='outline'>Timeline</Button>
+                        </Link>
+                    </NextLink>
                     {
                         false ?
                             <Button
