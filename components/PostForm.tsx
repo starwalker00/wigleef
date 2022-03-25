@@ -8,7 +8,9 @@ import {
     Spacer,
     Spinner,
     Stack,
-    Container
+    Container,
+    Code,
+    Link
 } from '@chakra-ui/react';
 import {
     FormControl,
@@ -18,7 +20,7 @@ import {
     Input,
     Progress
 } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useProfileID, useDispatchProfileID } from "./context/AppContext";
 import { namedConsoleLog, omit, isJwtExpired } from '../lib/helpers';
 import { useSignMessage, useSignTypedData, useContractWrite, useSigner, useAccount } from 'wagmi';
@@ -34,6 +36,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { createPostTypedData } from '../lib/apollo/create-post-typed-data';
 import { ethers, utils, Wallet } from 'ethers';
 import { LENS_HUB_ABI } from '../lib/abi';
+import NextLink from 'next/link'
 
 const MDEditor = dynamic(
     () => import("@uiw/react-md-editor").then((mod) => mod.default),
@@ -64,6 +67,14 @@ export default function PostForm() {
     const [isBlockchainTxPending, setIsBlockchainTxPending] = useState(false);
     // error status
     const [isError, setIsError] = useState(false);
+    // reset error status after X milliseconds
+    useEffect(() => {
+        if (isError) {
+            setTimeout(() => {
+                setIsError(false);
+            }, 5000);
+        }
+    }, [isError]);
 
     // markdown editor value
     const [markdownValue, setMarkdownValue] = useState("**Hello world!!!**");
@@ -114,6 +125,7 @@ export default function PostForm() {
         console.log(post)
         setIsLoading(true);
         try {
+            setIsError(false);
             // check if connected user has a valid jwt token
             let accessToken;
             namedConsoleLog('profileIDApp', profileIDApp);
@@ -234,37 +246,109 @@ export default function PostForm() {
                         </Stack>
                 }
             </form>
-            <Button isLoading={isLoading} loadingText='loading'>loader</Button>
             {
                 // waiting signature and lens-api calls
-                isLoading && !isBlockchainTxPending &&
-                <Progress size='lg' isIndeterminate colorScheme='teal' />
+                isLoading && !isBlockchainTxPending && (
+                    <Stack direction='column' spacing={0}>
+                        <Code alignSelf='center' colorScheme='teal' children="Loading" />
+                        <Progress size='lg' isIndeterminate colorScheme='teal' />
+                    </Stack>
+                )
             }
             {
                 // waiting blockchain write
-                isLoading && isBlockchainTxPending &&
-                <Progress size='lg' isIndeterminate colorScheme='orange' />
+                isLoading && isBlockchainTxPending && (
+                    <Stack direction='column' spacing={0}>
+                        <Code alignSelf='center' colorScheme='orange' children="Loading" />
+                        <Progress size='lg' isIndeterminate colorScheme='orange' />
+                    </Stack>
+                )
             }
             {
                 // post action errored
-                !isLoading && !isBlockchainTxPending && isError &&
-                <Progress size='lg' value={100} colorScheme='red' />
+                !isLoading && !isBlockchainTxPending && isError && (
+                    <Stack direction='column' spacing={0}>
+                        <Code alignSelf='center' colorScheme='red' children="Error. Reload page and retry." />
+                        <Progress size='lg' value={100} colorScheme='red' />
+                    </Stack>
+                )
             }
             {
                 // post action completed (has a newPostId gathered from blockchain receipt)
-                !isLoading && !isBlockchainTxPending && !isError && Boolean(newPostId) &&
-                <Progress size='lg' value={100} colorScheme='green' />
+                !isLoading && !isBlockchainTxPending && !isError && Boolean(newPostId) && (
+                    <Stack direction='column' spacing={0}>
+                        <Stack alignSelf='center' direction='row' spacing={0} alignItems='baseline'>
+                            <Code colorScheme='green' children="Posted !" m={0} p={0}></Code>
+                            <NextLink
+                                href={{
+                                    pathname: '/publication/[publicationID]',
+                                    query: { publicationID: newPostId },
+                                }}
+                                passHref
+                            >
+                                <Link m={0} p={0}
+                                    textDecoration='underline overline #FF3028'
+                                    _hover={{
+                                        transform: 'translateY(-2px)',
+                                        boxShadow: 'lg',
+                                    }}
+                                >
+                                    <Code colorScheme='green'>{' '}—{' '}Click here to see it.</Code>
+                                </Link>
+                            </NextLink>
+                        </Stack>
+                        <Progress size='lg' value={100} colorScheme='green' />
+                    </Stack>
+                )
             }
             {
                 // waiting for user action before calling
-                !isLoading && !isBlockchainTxPending && !isError && !Boolean(newPostId) &&
-                <Progress size='lg' value={0} />
+                !isLoading && !isBlockchainTxPending && !isError && !Boolean(newPostId) && (
+                    <Stack direction='column' spacing={0}>
+                        <Code alignSelf='center' colorScheme='green' children="Waiting" visibility="hidden" />
+                        <Progress size='lg' value={0} />
+                    </Stack>
+                )
             }
-            {/* <Progress size='lg' isIndeterminate colorScheme='teal' />
-            <Progress size='lg' isIndeterminate colorScheme='orange' />
-            <Progress size='lg' value={100} colorScheme='red' />
-            <Progress size='lg' value={100} colorScheme='green' />
-            <Progress size='lg' value={0} /> */}
+            {/* <Stack direction='column' spacing={0}>
+                <Code alignSelf='center' colorScheme='teal' children="Loading" />
+                <Progress size='lg' isIndeterminate colorScheme='teal' />
+            </Stack>
+            <Stack direction='column' spacing={0}>
+                <Code alignSelf='center' colorScheme='orange' children="Loading" />
+                <Progress size='lg' isIndeterminate colorScheme='orange' />
+            </Stack>
+            <Stack direction='column' spacing={0}>
+                <Code alignSelf='center' colorScheme='red' children="Error" />
+                <Progress size='lg' value={100} colorScheme='red' />
+            </Stack>
+            <Stack direction='column' spacing={0}>
+                <Stack alignSelf='center' direction='row' spacing={0} alignItems='baseline'>
+                    <Code colorScheme='green' children="Posted !" m={0} p={0}></Code>
+                    <NextLink
+                        href={{
+                            pathname: '/publication/[publicationID]',
+                            query: { publicationID: newPostId },
+                        }}
+                        passHref
+                    >
+                        <Link m={0} p={0}
+                            textDecoration='underline overline #FF3028'
+                            _hover={{
+                                transform: 'translateY(-2px)',
+                                boxShadow: 'lg',
+                            }}
+                        >
+                            <Code colorScheme='green'>{' '}—{' '}Click here to see it.</Code>
+                        </Link>
+                    </NextLink>
+                </Stack>
+                <Progress size='lg' value={100} colorScheme='green' />
+            </Stack>
+            <Stack direction='column' spacing={0}>
+                <Code alignSelf='center' colorScheme='green' children="Waiting" visibility="hidden" />
+                <Progress size='lg' value={0} />
+            </Stack> */}
         </Box>
     )
 }
