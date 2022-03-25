@@ -78,7 +78,6 @@ export default function CallToActionWithAnnotation() {
                         alignSelf={'center'}
                     /> */}
                     <Stack
-                        direction={'row'}
                         direction={{ base: 'column', sm: 'row' }}
                         spacing={2}
                         align={'baseline'}
