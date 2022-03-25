@@ -27,3 +27,8 @@ export const isJwtExpired = (jwtToken: string) => {
 export const capitalize = (value: string) => {
     return value.charAt(0).toUpperCase().concat(value.slice(1).toLowerCase());
 }
+
+export function isaValidHandleFormat(candidateHandle: string) {
+    let regExp = /^[a-z0-9.]*$/
+    return regExp.test(candidateHandle)
+}
