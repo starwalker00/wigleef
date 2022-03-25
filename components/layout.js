@@ -1,9 +1,8 @@
 import Head from 'next/head'
-import styles from './layout.module.css'
 import { Container } from '@chakra-ui/react'
+import NewPostButton from '../components/NewPostButton'
 
 function Layout({ children }) {
-
     return (
         <>
             <Head>
@@ -19,6 +18,7 @@ function Layout({ children }) {
                 flexDirection={{ base: 'column', md: 'row' }}>
                 {children}
             </Container>
+            <NewPostButton />
         </>
     )
 }
