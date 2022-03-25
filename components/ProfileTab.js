@@ -356,7 +356,6 @@ function ProfileTab({ constCurrentProfileID, publicationType }) {
   }
   return (
     <>
-
       {
         !havePublication && loadingPublication ? (
           // <Skeleton height='20px'>loading</Skeleton>

@@ -66,7 +66,7 @@ function PublicationView(dataPublication) {
                             </Text>
                         </Flex>
                     </LinkOverlay>
-                </NextLink >
+                </NextLink>
                 <Flex flexDirection='column'>
                     <Flex className='profile' alignItems='center' bgColor='blue.50' py='1'>
                         <Avatar size='md' src={publication.profile?.picture?.original?.url} />
