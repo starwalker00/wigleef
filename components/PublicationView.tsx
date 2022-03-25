@@ -55,7 +55,7 @@ function PublicationView(dataPublication) {
                     passHref
                     /*auto prefetch : https://nextjs.org/docs/messages/prefetch-true-deprecated is it really working ? */>
                     <LinkOverlay>
-                        <Flex flexDirection='row' justifyContent='flex-start' gap='2'>
+                        {/* <Flex flexDirection='row' justifyContent='flex-start' gap='2'>
                             <Text
                                 color={'green.500'}
                                 textTransform={'uppercase'}
@@ -71,8 +71,8 @@ function PublicationView(dataPublication) {
                                 fontSize={'sm'}
                                 letterSpacing={1.1}>
                                 {publication.id}
-                            </Text>
-                        </Flex>
+                            </Text> 
+                    </Flex>*/}
                     </LinkOverlay>
                 </NextLink>
                 <Flex flexDirection='column'>
