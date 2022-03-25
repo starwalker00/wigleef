@@ -250,7 +250,7 @@ export default function PostForm() {
                 // waiting signature and lens-api calls
                 isLoading && !isBlockchainTxPending && (
                     <Stack direction='column' spacing={0}>
-                        <Code alignSelf='center' colorScheme='teal' children="Loading" />
+                        <Code alignSelf='center' colorScheme='teal'>Loading</Code>
                         <Progress size='lg' isIndeterminate colorScheme='teal' />
                     </Stack>
                 )
@@ -259,7 +259,7 @@ export default function PostForm() {
                 // waiting blockchain write
                 isLoading && isBlockchainTxPending && (
                     <Stack direction='column' spacing={0}>
-                        <Code alignSelf='center' colorScheme='orange' children="Loading" />
+                        <Code alignSelf='center' colorScheme='orange'>Loading</Code>
                         <Progress size='lg' isIndeterminate colorScheme='orange' />
                     </Stack>
                 )
@@ -268,7 +268,7 @@ export default function PostForm() {
                 // post action errored
                 !isLoading && !isBlockchainTxPending && isError && (
                     <Stack direction='column' spacing={0}>
-                        <Code alignSelf='center' colorScheme='red' children="Error. Reload page and retry." />
+                        <Code alignSelf='center' colorScheme='red'>Error. Reload page and retry.</Code>
                         <Progress size='lg' value={100} colorScheme='red' />
                     </Stack>
                 )
@@ -278,7 +278,7 @@ export default function PostForm() {
                 !isLoading && !isBlockchainTxPending && !isError && Boolean(newPostId) && (
                     <Stack direction='column' spacing={0}>
                         <Stack alignSelf='center' direction='row' spacing={0} alignItems='baseline'>
-                            <Code colorScheme='green' children="Posted !" m={0} p={0}></Code>
+                            <Code colorScheme='green' m={0} p={0}>Posted !</Code>
                             <NextLink
                                 href={{
                                     pathname: '/publication/[publicationID]',
@@ -305,50 +305,11 @@ export default function PostForm() {
                 // waiting for user action before calling
                 !isLoading && !isBlockchainTxPending && !isError && !Boolean(newPostId) && (
                     <Stack direction='column' spacing={0}>
-                        <Code alignSelf='center' colorScheme='green' children="Waiting" visibility="hidden" />
+                        <Code alignSelf='center' colorScheme='green' visibility="hidden" >Waiting</Code>
                         <Progress size='lg' value={0} />
                     </Stack>
                 )
             }
-            {/* <Stack direction='column' spacing={0}>
-                <Code alignSelf='center' colorScheme='teal' children="Loading" />
-                <Progress size='lg' isIndeterminate colorScheme='teal' />
-            </Stack>
-            <Stack direction='column' spacing={0}>
-                <Code alignSelf='center' colorScheme='orange' children="Loading" />
-                <Progress size='lg' isIndeterminate colorScheme='orange' />
-            </Stack>
-            <Stack direction='column' spacing={0}>
-                <Code alignSelf='center' colorScheme='red' children="Error" />
-                <Progress size='lg' value={100} colorScheme='red' />
-            </Stack>
-            <Stack direction='column' spacing={0}>
-                <Stack alignSelf='center' direction='row' spacing={0} alignItems='baseline'>
-                    <Code colorScheme='green' children="Posted !" m={0} p={0}></Code>
-                    <NextLink
-                        href={{
-                            pathname: '/publication/[publicationID]',
-                            query: { publicationID: newPostId },
-                        }}
-                        passHref
-                    >
-                        <Link m={0} p={0}
-                            textDecoration='underline overline #FF3028'
-                            _hover={{
-                                transform: 'translateY(-2px)',
-                                boxShadow: 'lg',
-                            }}
-                        >
-                            <Code colorScheme='green'>{' '}—{' '}Click here to see it.</Code>
-                        </Link>
-                    </NextLink>
-                </Stack>
-                <Progress size='lg' value={100} colorScheme='green' />
-            </Stack>
-            <Stack direction='column' spacing={0}>
-                <Code alignSelf='center' colorScheme='green' children="Waiting" visibility="hidden" />
-                <Progress size='lg' value={0} />
-            </Stack> */}
         </Box>
     )
 }

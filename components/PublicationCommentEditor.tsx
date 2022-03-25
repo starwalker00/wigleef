@@ -232,7 +232,7 @@ function PublicationCommentEditor({ isOpenComment, isToggleComment, publicationI
                         // waiting signature and lens-api calls
                         isLoading && !isBlockchainTxPending && (
                             <Stack direction='column' spacing={0}>
-                                <Code alignSelf='center' colorScheme='teal' children="Loading" />
+                                <Code alignSelf='center' colorScheme='teal'>Loading</Code>
                                 <Progress size='lg' isIndeterminate colorScheme='teal' />
                             </Stack>
                         )
@@ -241,7 +241,7 @@ function PublicationCommentEditor({ isOpenComment, isToggleComment, publicationI
                         // waiting blockchain write
                         isLoading && isBlockchainTxPending && (
                             <Stack direction='column' spacing={0}>
-                                <Code alignSelf='center' colorScheme='orange' children="Loading" />
+                                <Code alignSelf='center' colorScheme='orange'>Loading</Code>
                                 <Progress size='lg' isIndeterminate colorScheme='orange' />
                             </Stack>
                         )
@@ -250,7 +250,7 @@ function PublicationCommentEditor({ isOpenComment, isToggleComment, publicationI
                         // post action errored
                         !isLoading && !isBlockchainTxPending && isError && (
                             <Stack direction='column' spacing={0}>
-                                <Code alignSelf='center' colorScheme='red' children="Error. Reload page and retry." />
+                                <Code alignSelf='center' colorScheme='red'>Error. Reload page and retry.</Code>
                                 <Progress size='lg' value={100} colorScheme='red' />
                             </Stack>
                         )
@@ -260,7 +260,7 @@ function PublicationCommentEditor({ isOpenComment, isToggleComment, publicationI
                         !isLoading && !isBlockchainTxPending && !isError && Boolean(newCommentId) && (
                             <Stack direction='column' spacing={0}>
                                 <Stack alignSelf='center' direction='row' spacing={0} alignItems='baseline'>
-                                    <Code colorScheme='green' children="Posted !" m={0} p={0}></Code>
+                                    <Code colorScheme='green' m={0} p={0}>Posted !</Code>
                                     <NextLink
                                         href={{
                                             pathname: '/publication/[publicationID]',
@@ -287,7 +287,7 @@ function PublicationCommentEditor({ isOpenComment, isToggleComment, publicationI
                         // waiting for user action before calling
                         !isLoading && !isBlockchainTxPending && !isError && !Boolean(newCommentId) && (
                             <Stack direction='column' spacing={0}>
-                                <Code alignSelf='center' colorScheme='green' children="Waiting" visibility="hidden" />
+                                <Code alignSelf='center' colorScheme='green' visibility="hidden" >Waiting</Code>
                                 <Progress size='lg' value={0} />
                             </Stack>
                         )
