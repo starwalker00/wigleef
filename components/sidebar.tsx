@@ -128,9 +128,9 @@ function Sidebar({ children }) {
                                 <SearchBar />
                             </VStack>
                             {/* color mode icon */}
-                            <Button onClick={toggleColorMode}>
+                            {/* <Button onClick={toggleColorMode}>
                                 {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
-                            </Button>
+                            </Button> */}
                             {/* user icon */}
                             <Menu>
                                 <MenuButton
