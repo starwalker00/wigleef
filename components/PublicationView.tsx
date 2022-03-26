@@ -15,6 +15,7 @@ import Pluralize from 'react-pluralize'
 import PublicationStats from './PublicationStats'
 import ReferenceInPublication from './ReferenceInPublication'
 import { namedConsoleLog } from '../lib/helpers'
+import ReferenceInPublicationPopover from './ReferenceInPublicationPopover';
 
 const animate = keyframes`
   from {opacity: 0;}
@@ -121,9 +122,11 @@ function PublicationView(dataPublication, { hideReference }) {
                                 }}
                                 passHref>
                                 <Link>
-                                    <Text fontSize='md' fontWeight='bold'>
-                                        {publication.profile?.handle}
-                                    </Text>
+                                    <ReferenceInPublicationPopover profile={publication?.profile}>
+                                        <Text fontSize='md' fontWeight='bold'>
+                                            {publication.profile?.handle}
+                                        </Text>
+                                    </ReferenceInPublicationPopover>
                                 </Link>
                             </NextLink>
                             <Text fontSize='lg' fontWeight='bold'>
