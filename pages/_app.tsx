@@ -34,7 +34,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <AppProvider>
       <ApolloProvider client={apolloClient}>
-        <WagmiProvider /*autoConnect*/ connectors={connectors}>
+        <WagmiProvider autoConnect connectors={connectors}>
           <ChakraProvider>
             {getLayout(<Component {...pageProps} />)}
           </ChakraProvider>
