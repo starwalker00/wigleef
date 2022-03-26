@@ -35,6 +35,7 @@ import NextLink from 'next/link'
 
 import { ArrowRightIcon } from '@chakra-ui/icons';
 import { BiSubdirectoryLeft } from 'react-icons/bi';
+import ReferenceInPublicationPopover from './ReferenceInPublicationPopover';
 
 function ReferenceInPublication({ mainPost, mainType }) {
     namedConsoleLog('mainPost', mainPost);
@@ -57,9 +58,23 @@ function ReferenceInPublication({ mainPost, mainType }) {
                             query: { publicationID: publicationId },
                         }}
                         passHref>
-                        <Link fontWeight='semibold'>{publicationId}</Link></NextLink>
+                        <Link fontWeight='semibold'>{publicationId}</Link>
+                    </NextLink>
                     {' '}by{' '}
-                    <Link fontWeight='semibold'>{displayName}</Link>
+
+                    <NextLink
+                        href={{
+                            pathname: '/profile/[profileID]',
+                            query: { profileID: profileId },
+                        }}
+                        passHref>
+
+                        <Link fontWeight='semibold'>
+                            <ReferenceInPublicationPopover profile={mainPost?.profile}>
+                                <span>{displayName}</span>
+                            </ReferenceInPublicationPopover>
+                        </Link>
+                    </NextLink>
                 </Text>
             </Stack>
         </>
