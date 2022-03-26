@@ -48,7 +48,7 @@ import { BiSubdirectoryLeft } from 'react-icons/bi';
 import SocialProfileSimple from './SocialProfileSimple';
 
 function ReferenceInPublicationPopover({ children, profile }) {
-    namedConsoleLog('profile', profile);
+    // namedConsoleLog('profile', profile);
     return (
         <>
             <Popover trigger='hover'>
