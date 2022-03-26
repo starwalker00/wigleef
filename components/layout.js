@@ -6,7 +6,7 @@ function Layout({ children }) {
     return (
         <>
             <Head>
-                <title>Layouts Example</title>
+                <title>Wigleef</title>
             </Head>
             <Container
                 width='100%'
