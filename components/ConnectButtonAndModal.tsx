@@ -21,7 +21,7 @@ import { useConnect, useAccount } from 'wagmi';
 import SelectProfile from '../components/SelectProfile'
 import { truncateEthAddress } from '../lib/helpers';
 
-function ConnectButtonAndModal({ showConnected = true, autoFocus = false, colorScheme, size }) {
+function ConnectButtonAndModal({ showConnected = true, autoFocus = false, colorScheme = 'gray', size = 'md' }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [{ data: connectData, error: connectError }, connect] = useConnect();
     const [{ data: accountData }, disconnect] = useAccount({

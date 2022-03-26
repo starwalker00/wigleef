@@ -235,7 +235,7 @@ export default function PostForm() {
                         <Stack direction='row' justifyContent='flex-end' padding={4} spacing={4}>
                             <Text visibility='hidden'>Please connect your wallet</Text>
                             <Button mt={4} type="submit"
-                                isActive={!isLoading && !isBlockchainTxPending && !isError}
+                                // isActive={!isLoading && !isBlockchainTxPending && !isError}
                                 isDisabled={!(!isLoading && !isBlockchainTxPending && !isError)}
                             >
                                 Post
