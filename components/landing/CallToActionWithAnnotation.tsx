@@ -43,7 +43,7 @@ export default function CallToActionWithAnnotation() {
                             bg: 'rgb(197, 233, 175)',
                             zIndex: -1,
                         }}>
-                        Social bonds,
+                        Social network,
                     </Text>
                     <br />
                     <Text as={'span'} color={'rgb(55,99,27)'}>
