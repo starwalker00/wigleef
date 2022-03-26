@@ -54,7 +54,7 @@ function ConnectButtonAndModal({ showConnected = true, autoFocus = false, colorS
                 <Modal isOpen={isOpen} onClose={onClose}>
                     <ModalOverlay />
                     <ModalContent>
-                        <ModalHeader>Modal Title</ModalHeader>
+                        <ModalHeader></ModalHeader>
                         <ModalCloseButton />
                         <ModalBody>
                             {connectData.connectors.map((connector) => (
@@ -62,6 +62,7 @@ function ConnectButtonAndModal({ showConnected = true, autoFocus = false, colorS
                                     disabled={!connector.ready}
                                     key={connector.id}
                                     onClick={() => connect(connector)}
+                                    w={'full'}
                                 >
                                     {connector.name}
                                     {!connector.ready && ' (unsupported)'}

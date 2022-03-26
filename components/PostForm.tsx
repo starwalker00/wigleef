@@ -233,7 +233,7 @@ export default function PostForm() {
                     isWalletConnected
                         ?
                         <Stack direction='row' justifyContent='flex-end' padding={4} spacing={4}>
-                            <Text visibility='hidden'>Please connect your wallet</Text>
+                            <Text fontSize='lg' visibility='hidden'>Please connect your wallet</Text>
                             <Button mt={4} type="submit"
                                 // isActive={!isLoading && !isBlockchainTxPending && !isError}
                                 isDisabled={!(!isLoading && !isBlockchainTxPending && !isError)}
@@ -242,8 +242,8 @@ export default function PostForm() {
                             </Button>
                         </Stack>
                         :
-                        <Stack direction='row' justifyContent='flex-end' padding={4} spacing={4}>
-                            <Text>Please connect your wallet</Text>
+                        <Stack direction='row' justifyContent='flex-end' alignItems='center' padding={4} spacing={4}>
+                            <Text fontSize='lg'>Please connect your wallet</Text>
                             <ConnectButtonAndModal showConnected={false} autoFocus={true} />
                             <Button isActive={false} isDisabled={true} mt={4} type="submit">
                                 Post

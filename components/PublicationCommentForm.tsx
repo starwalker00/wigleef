@@ -225,10 +225,10 @@ function PublicationCommentForm({ isOpenComment, isToggleComment, publicationID 
                     {
                         isWalletConnected
                             ?
-                            <Stack direction='row' justifyContent='flex-end' padding={4} spacing={4}>
+                            <Stack direction='row' justifyContent='flex-end' alignItems='center' padding={4} spacing={4}>
                                 <Text fontSize='xs' visibility='hidden'>Please connect your wallet</Text>
                                 <Button mt={4} type="submit"
-                                    isActive={!isLoading && !isBlockchainTxPending && !isError}
+                                    // isActive={!isLoading && !isBlockchainTxPending && !isError}
                                     isDisabled={!(!isLoading && !isBlockchainTxPending && !isError)}
                                     colorScheme='blackAlpha' size='sm'
                                     onClick={() => clickPostComment()}
@@ -237,8 +237,8 @@ function PublicationCommentForm({ isOpenComment, isToggleComment, publicationID 
                                 </Button>
                             </Stack>
                             :
-                            <Stack direction='row' justifyContent='flex-end' padding={4} spacing={4}>
-                                <Text fontSize='xs'>Please connect your wallet</Text>
+                            <Stack direction='row' justifyContent='flex-end' alignItems='center' padding={4} spacing={4}>
+                                <Text fontSize='xs' color='gray.800'>Please connect your wallet</Text>
                                 <ConnectButtonAndModal showConnected={false} autoFocus={true}
                                     colorScheme='blackAlpha' size='sm'
 
