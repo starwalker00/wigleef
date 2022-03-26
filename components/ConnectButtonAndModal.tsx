@@ -3,7 +3,8 @@ import {
     Button,
     Flex,
     Box,
-    Spacer
+    Spacer,
+    Stack
 } from '@chakra-ui/react';
 import {
     Modal,
@@ -18,6 +19,7 @@ import { useDisclosure } from '@chakra-ui/react';
 
 import { useConnect, useAccount } from 'wagmi';
 import SelectProfile from '../components/SelectProfile'
+import { truncateEthAddress } from '../lib/helpers';
 
 function ConnectButtonAndModal({ showConnected = true, autoFocus = false }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -29,21 +31,14 @@ function ConnectButtonAndModal({ showConnected = true, autoFocus = false }) {
     if (accountData && showConnected) {
         return (
             <>
-                <Flex flexDirection='column'>
-                    <Box p='4' bg='blue.400'>
-                        {accountData.ens?.name
-                            ? <Text fontSize='xs'>{accountData.ens?.name}</Text>
-                            : <Text fontSize='xs'>{accountData.address}</Text>}
-                    </Box>
-                    <Spacer />
-                    <Box p='4' bg='green.400'>
-                        <Text fontSize='xs'>Connected to {accountData.connector.name}</Text>
-                    </Box>
-                    <Box>
-                        <SelectProfile address={accountData.address} />
-                    </Box>
+                <Stack direction='column' border='2px solid cyan' maxWidth='90%' alignItems='center' >
+                    {accountData.ens?.name
+                        ? <Text fontSize='xs'>{accountData.ens?.name}</Text>
+                        : <Text fontSize='xs'>{truncateEthAddress(accountData.address)}</Text>}
+                    <Text fontSize='xs'>Connected to {accountData.connector.name}</Text>
+                    <SelectProfile address={accountData.address} />
                     <Button onClick={() => { disconnect(); onClose(); }}>Disconnect</Button>
-                </Flex>
+                </Stack>
             </>
         )
     }

@@ -17,7 +17,9 @@ import {
     Center,
     VStack,
     Portal,
-    Spacer
+    Spacer,
+    Text,
+    Divider
 } from '@chakra-ui/react';
 import { Show, Hide } from '@chakra-ui/react'
 import { MoonIcon, SunIcon } from '@chakra-ui/icons';
@@ -32,8 +34,10 @@ import { namedConsoleLog } from '../lib/helpers';
 import SearchBar from '../components/SearchBar';
 import SearchModal from '../components/mobileOnly/SearchModal';
 import { ExternalLinkIcon, AddIcon } from '@chakra-ui/icons';
+import { useRouter } from 'next/router';
 
 function Sidebar({ children }) {
+    const router = useRouter();
     const { colorMode, toggleColorMode } = useColorMode();
     const { isOpen, onOpen, onClose } = useDisclosure();
     //@ts-ignore
@@ -89,94 +93,105 @@ function Sidebar({ children }) {
             </Show>
             {/* menu above md size */}
             <Show above='md'>
-                <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4} position='sticky' top='0' zIndex='200' width='100%' maxWidth='20%'>
-                    <Flex alignItems={'stretch'} justifyContent={'space-around'}>
-                        <Stack direction={'column'} alignItems={'center'}>
-                            <Box>Logo</Box>
-                            <VStack
-                                as={'nav'}
-                                spacing={4}
+                <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4} position='sticky' top='0' zIndex='200' maxWidth='20%'>
+                    <Stack direction={'column'} alignItems={'center'} border='2px solid red' height='90vh'>
+                        <Box>Logo</Box>
+                        <VStack
+                            as={'nav'}
+                            spacing={4}
+                        >
+                            <NextLink
+                                href={{
+                                    pathname: '/timeline/[profileID]',
+                                    query: { profileID: myProfileIDhexString },
+                                }}
+                                passHref
                             >
-                                <NextLink
-                                    href={{
-                                        pathname: '/timeline/[profileID]',
-                                        query: { profileID: myProfileIDhexString },
-                                    }}
-                                    passHref
+                                <Button
+                                    rounded={'full'}
+                                    size={'lg'}
+                                    fontWeight={'normal'}
+                                    px={6}
+                                // leftIcon={<AddIcon h={4} w={4} color={'gray.300'} />}
                                 >
-                                    <Button
-                                        rounded={'full'}
-                                        size={'lg'}
-                                        fontWeight={'normal'}
-                                        px={6}
-                                    // leftIcon={<AddIcon h={4} w={4} color={'gray.300'} />}
-                                    >
-                                        Timeline
-                                    </Button>
-                                </NextLink>
-                                <NextLink href={'/explore'} passHref>
-                                    <Button
-                                        rounded={'full'}
-                                        size={'lg'}
-                                        fontWeight={'normal'}
-                                        px={6}
-                                    // leftIcon={<AddIcon h={4} w={4} color={'gray.300'} />}
-                                    >
-                                        Explore
-                                    </Button>
-                                </NextLink>
-                                <NextLink href={'/post'} passHref>
-                                    <Button
-                                        rounded={'full'}
-                                        size={'lg'}
-                                        fontWeight={'normal'}
-                                        px={6}
-                                        leftIcon={<AddIcon h={4} w={4} color={'gray.300'} />}
-                                    >
-                                        New post
-                                    </Button>
-                                </NextLink>
-                                <NextLink href={'/createProfile'} passHref>
-                                    <Button
-                                        rounded={'full'}
-                                        size={'lg'}
-                                        fontWeight={'normal'}
-                                        px={6}
-                                        leftIcon={<AddIcon h={4} w={4} color={'gray.300'} />}
-                                    >
-                                        New profile
-                                    </Button>
-                                </NextLink>
-                                {/* <NextLink href={'/about'} passHref>
+                                    Timeline
+                                </Button>
+                            </NextLink>
+                            <NextLink href={'/explore'} passHref>
+                                <Button
+                                    rounded={'full'}
+                                    size={'lg'}
+                                    fontWeight={'normal'}
+                                    px={6}
+                                // leftIcon={<AddIcon h={4} w={4} color={'gray.300'} />}
+                                >
+                                    Explore
+                                </Button>
+                            </NextLink>
+                            <NextLink href={'/post'} passHref>
+                                <Button
+                                    rounded={'full'}
+                                    size={'lg'}
+                                    fontWeight={'normal'}
+                                    px={6}
+                                    leftIcon={<AddIcon h={4} w={4} color={'gray.300'} />}
+                                >
+                                    New post
+                                </Button>
+                            </NextLink>
+                            <NextLink href={'/createProfile'} passHref>
+                                <Button
+                                    rounded={'full'}
+                                    size={'lg'}
+                                    fontWeight={'normal'}
+                                    px={6}
+                                    leftIcon={<AddIcon h={4} w={4} color={'gray.300'} />}
+                                >
+                                    New profile
+                                </Button>
+                            </NextLink>
+                            {/* <NextLink href={'/about'} passHref>
                                     <Link>About</Link>
                                 </NextLink> */}
-                                <NextLink
-                                    href={{
-                                        pathname: '/profile/[profileID]',
-                                        query: { profileID: myProfileIDhexString },
-                                    }}
-                                    passHref
+                            <NextLink
+                                href={{
+                                    pathname: '/profile/[profileID]',
+                                    query: { profileID: myProfileIDhexString },
+                                }}
+                                passHref
+                            >
+                                <Button
+                                    rounded={'full'}
+                                    size={'lg'}
+                                    fontWeight={'normal'}
+                                    px={6}
+                                // leftIcon={<AddIcon h={4} w={4} color={'gray.300'} />}
                                 >
-                                    <Button
-                                        rounded={'full'}
-                                        size={'lg'}
-                                        fontWeight={'normal'}
-                                        px={6}
-                                    // leftIcon={<AddIcon h={4} w={4} color={'gray.300'} />}
-                                    >
-                                        My profile
-                                    </Button>
-                                </NextLink>
-                                <Spacer />
+                                    My profile
+                                </Button>
+                            </NextLink>
+                            <Spacer />
+                            <Stack spacing='1' backgroundColor='white' p={2}>
+                                <Text fontSize='sm' alignSelf='flex-start' px={2}>Search profiles: </Text>
                                 <SearchBar />
-                            </VStack>
+                            </Stack>
                             {/* color mode icon */}
                             {/* <Button onClick={toggleColorMode}>
                                 {colorMode === 'light' ? <MoonIcon /> : <SunIcon />}
                             </Button> */}
                             {/* user icon */}
+                        </VStack>
+                        <Spacer />
+                        <Divider orientation='horizontal' variant='dashed' />
+                        <VStack width='full'>
                             <Menu>
                                 <MenuButton
+                                    onClick={() => {
+                                        router.push({
+                                            pathname: '/profile/[profileID]',
+                                            query: { profileID: myProfileIDhexString },
+                                        })
+                                    }}
                                     as={Button}
                                     rounded={'full'}
                                     variant={'link'}
@@ -201,14 +216,13 @@ function Sidebar({ children }) {
                                     </Center>
                                     <br />
                                     <MenuDivider />
-                                    <MenuItem>Your Servers</MenuItem>
+                                    <MenuItem>Notifications</MenuItem>
                                     <MenuItem>Account Settings</MenuItem>
-                                    <MenuItem>Logout</MenuItem>
                                 </MenuList>
                             </Menu>
                             <ConnectButtonAndModal />
-                        </Stack>
-                    </Flex>
+                        </VStack>
+                    </Stack>
                 </Box>
                 {children}
             </Show>

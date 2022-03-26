@@ -14,6 +14,9 @@ import { BigNumber } from "@ethersproject/bignumber";
 import { useProfileID, useDispatchProfileID } from "./context/AppContext";
 import { useState, useEffect } from 'react';
 import { UNSET_CONTEXT_PROFILE_ID } from '../lib/config';
+import NextLink from 'next/link'
+import { ExternalLinkIcon, AddIcon } from '@chakra-ui/icons';
+import _ from 'lodash'
 
 const GET_PROFILES = `
   query($request: ProfileQueryRequest!) {
@@ -128,23 +131,45 @@ function SelectProfile({ address }) {
     if (data.profiles?.items?.length < 1) {
       return (
         <>
-          <Text>you do not own a profile</Text>
+          <Stack>
+            <Text fontSize='sm'>You do not own a profile.</Text>
+            <NextLink href={'/createProfile'} passHref>
+              <Button
+                rounded={'full'}
+                size={'lg'}
+                fontWeight={'normal'}
+                px={6}
+                leftIcon={<AddIcon h={4} w={4} color={'gray.300'} />}
+                autoFocus={true}
+              >
+                Create one
+              </Button>
+            </NextLink>
+          </Stack>
         </>
       )
     };
+
+    {/* display profiles in an alphabetical order */ }
+    data.profiles?.items.map((element) => {
+      let name = element?.name ?? element.handle;
+      let profileIDhexString = BigNumber.from(element.id);
+      return element.displayName = name.concat(' — ').concat(profileIDhexString);
+    })
+    let sortedProfiles = _.sortBy(data.profiles?.items, ['displayName']);
     return (
       <>
         <Stack spacing={3}>
           <Select onChange={(event) => changeProfileID(event)}>
             {
-              data.profiles?.items.map((profile) => {
+              sortedProfiles.map((profile) => {
                 let profileID = BigNumber.from(profile.id);
                 return (
                   <option
                     key={profileID.toHexString()}
                     defaultValue={profileIDApp.toHexString()}
                     value={profileID.toHexString()} >
-                    {profile.handle}{'#'}{profileID.toHexString()}
+                    {profile.displayName}
                   </option>)
               })
             }
