@@ -165,7 +165,7 @@ function PublicationView(dataPublication, { hideReference }) {
                         <Text fontSize='xs' color={'gray.500'}>{publication.metadata?.description}</Text>
                         {/* <Text fontSize='sm' color={'gray.800'}>{publication.metadata?.content}</Text> */}
                         <Box m='3' p='3' borderLeft='1px solid green'
-                            maxHeight='720px'
+                            maxHeight='3000px'
                             overflow='auto'
                             zIndex={zIndex}
                             _hover={{
