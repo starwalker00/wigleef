@@ -57,7 +57,7 @@ function ReferenceInPublicationPostPopover({ children, post }) {
                     {children}
                 </PopoverTrigger>
                 <Portal>
-                    <PopoverContent style={{ zIndex: '9999' }}>
+                    <PopoverContent style={{ zIndex: '9999' }} boxShadow={'2xl'}>
                         <PublicationView publication={post} />
                     </PopoverContent>
                 </Portal>
