@@ -51,7 +51,7 @@ export default function CallToActionWithAnnotation() {
                     </Text>
                 </Heading>
                 <Text color={'gray.500'}>
-                    Snippy is a social network connected to
+                    [REDACTED] is a social network connected to
                     <Link href='https://lens.dev' isExternal>
                         <Text fontWeight={500}
                             color='rgb(171 254 44)'
@@ -77,6 +77,7 @@ export default function CallToActionWithAnnotation() {
                         Explore
                     </Button>
                     <Button
+                        onClick={() => router.push('/createProfile')}
                         rounded={'full'}
                         size={'lg'}
                         fontWeight={'normal'}
