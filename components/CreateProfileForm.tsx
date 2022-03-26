@@ -148,7 +148,7 @@ export default function CreateProfileForm() {
             // request a login access if there is no accessTokens in context or Jwt in context has expired
             if (!authenticateApp?.accessToken || authenticateApp?.accessToken.length < 1 || isJwtExpired(authenticateApp?.accessToken)) {
                 const accessTokens = await login();
-                // namedConsoleLog('accessTokens', accessTokens);
+                namedConsoleLog('accessTokenslogin', accessTokens);
                 let authenticate = accessTokens?.data?.authenticate;
                 dispatch({ type: 'set_appContext', payload: { profileIDApp: profileIDApp, authenticateApp: authenticate } });
                 accessToken = authenticate.accessToken;

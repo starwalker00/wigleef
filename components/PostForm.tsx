@@ -108,10 +108,12 @@ export default function PostForm() {
     async function login() {
         console.log('Requesting JWT')
         // authenticate
+        namedConsoleLog('dataAccount', dataAccount);
         const challengeResponse = await generateChallenge(dataAccount.address);
-        // namedConsoleLog('challengeResponse', challengeResponse);
+        namedConsoleLog('challengeResponse', challengeResponse);
         const signature = await signMessage({ message: challengeResponse.data.challenge.text });
-        // namedConsoleLog('signature', signature);
+        namedConsoleLog('signature', signature);
+        debugger;
         return authenticate(dataAccount.address, signature.data);
     }
 
@@ -131,11 +133,11 @@ export default function PostForm() {
             namedConsoleLog('profileIDApp', profileIDApp);
             namedConsoleLog('authenticateApp', authenticateApp);
             // request a login access if there is no accessTokens in context or Jwt in context has expired
-            if (authenticateApp.accessToken.length < 1 || isJwtExpired(authenticateApp.accessToken)) {
+            if (!authenticateApp?.accessToken || authenticateApp?.accessToken.length < 1 || isJwtExpired(authenticateApp?.accessToken)) {
                 const accessTokens = await login();
-                // namedConsoleLog('accessTokens', accessTokens);
+                namedConsoleLog('accessTokenslogin', accessTokens);
                 let authenticate = accessTokens?.data?.authenticate;
-                dispatch({ type: 'set_authenticateApp', payload: authenticate });
+                dispatch({ type: 'set_appContext', payload: { profileIDApp: profileIDApp, authenticateApp: authenticate } });
                 accessToken = authenticate.accessToken;
             }
             else {
