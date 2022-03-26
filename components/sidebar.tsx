@@ -100,23 +100,6 @@ function Sidebar({ children }) {
                             as={'nav'}
                             spacing={4}
                         >
-                            <NextLink
-                                href={{
-                                    pathname: '/timeline/[profileID]',
-                                    query: { profileID: myProfileIDhexString },
-                                }}
-                                passHref
-                            >
-                                <Button
-                                    rounded={'full'}
-                                    size={'lg'}
-                                    fontWeight={'normal'}
-                                    px={6}
-                                // leftIcon={<AddIcon h={4} w={4} color={'gray.300'} />}
-                                >
-                                    Timeline
-                                </Button>
-                            </NextLink>
                             <NextLink href={'/explore'} passHref>
                                 <Button
                                     rounded={'full'}
@@ -148,6 +131,23 @@ function Sidebar({ children }) {
                                     leftIcon={<AddIcon h={4} w={4} color={'gray.300'} />}
                                 >
                                     New profile
+                                </Button>
+                            </NextLink>
+                            <NextLink
+                                href={{
+                                    pathname: '/timeline/[profileID]',
+                                    query: { profileID: myProfileIDhexString },
+                                }}
+                                passHref
+                            >
+                                <Button
+                                    rounded={'full'}
+                                    size={'lg'}
+                                    fontWeight={'normal'}
+                                    px={6}
+                                // leftIcon={<AddIcon h={4} w={4} color={'gray.300'} />}
+                                >
+                                    My Timeline
                                 </Button>
                             </NextLink>
                             {/* <NextLink href={'/about'} passHref>
