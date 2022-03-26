@@ -113,7 +113,6 @@ export default function PostForm() {
         namedConsoleLog('challengeResponse', challengeResponse);
         const signature = await signMessage({ message: challengeResponse.data.challenge.text });
         namedConsoleLog('signature', signature);
-        debugger;
         return authenticate(dataAccount.address, signature.data);
     }
 
