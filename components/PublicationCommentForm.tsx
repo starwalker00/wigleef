@@ -226,26 +226,27 @@ function PublicationCommentForm({ isOpenComment, isToggleComment, publicationID 
                         isWalletConnected
                             ?
                             <Stack direction='row' justifyContent='flex-end' padding={4} spacing={4}>
-                                <Text visibility='hidden'>Please connect your wallet</Text>
+                                <Text fontSize='xs' visibility='hidden'>Please connect your wallet</Text>
                                 <Button mt={4} type="submit"
                                     isActive={!isLoading && !isBlockchainTxPending && !isError}
                                     isDisabled={!(!isLoading && !isBlockchainTxPending && !isError)}
-                                    colorScheme='blackAlpha'
+                                    colorScheme='blackAlpha' size='sm'
                                     onClick={() => clickPostComment()}
                                 >
-                                    Post comment
+                                    Comment
                                 </Button>
                             </Stack>
                             :
                             <Stack direction='row' justifyContent='flex-end' padding={4} spacing={4}>
-                                <Text>Please connect your wallet</Text>
+                                <Text fontSize='xs'>Please connect your wallet</Text>
                                 <ConnectButtonAndModal showConnected={false} autoFocus={true}
-                                    colorScheme='blackAlpha'
+                                    colorScheme='blackAlpha' size='sm'
+
                                 />
                                 <Button isActive={false} isDisabled={true} mt={4} type="submit"
-                                    colorScheme='blackAlpha'
+                                    colorScheme='blackAlpha' size='sm'
                                 >
-                                    Post comment
+                                    Comment
                                 </Button>
                             </Stack>
                     }
