@@ -6,7 +6,7 @@ import { Container, Stack, Skeleton, SkeletonCircle, SkeletonText, Divider, Head
 
 import { gql, useQuery } from "@apollo/client";
 import { initializeApollo, addApolloState } from "../../lib/apolloClient";
-import { prettyJSON } from '../../lib/helpers';
+import { namedConsoleLog, prettyJSON } from '../../lib/helpers';
 import { useRouter } from 'next/router'
 import { DEMO_PUBLICATION_ID } from '../../lib/config';
 
@@ -626,6 +626,7 @@ function Publication() {
         request: { commentsOf: publicationID },
         // request: { publicationId: '0x49-0x02' },
       },
+      pollInterval: 5000,
       notifyOnNetworkStatusChange: true,
     });
   // prettyJSON('dataComments', dataComments);
@@ -633,6 +634,7 @@ function Publication() {
   const comments = dataComments?.publications.items || [];
   const haveComments = Boolean(comments.length);
   const haveMoreComments = Boolean(true);
+  // namedConsoleLog('comments.length', comments.length);
   return (
     <>
       <Stack direction='column'>
