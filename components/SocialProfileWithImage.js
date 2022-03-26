@@ -165,6 +165,7 @@ export default function SocialProfileWithImage({ profile }) {
                                 transform: 'translateY(-2px)',
                                 boxShadow: 'lg',
                             }}
+                            onClick={() => alert('soon')}
                         >
                             Follow
                         </Button>
