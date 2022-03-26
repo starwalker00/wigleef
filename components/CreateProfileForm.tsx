@@ -208,7 +208,7 @@ export default function CreateProfileForm() {
         }
     };
     return (
-        <Box my={4} textAlign="left">
+        <Flex flexDirection='column' alignItems='stretch'>
             <form onSubmit={handleSubmit}>
                 <FormControl isRequired isInvalid={isFormError}>
                     <FormLabel>Your name</FormLabel>
@@ -325,6 +325,6 @@ export default function CreateProfileForm() {
                     </Stack>
                 )
             }
-        </Box >
+        </Flex >
     )
 }

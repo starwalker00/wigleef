@@ -9,16 +9,9 @@ import PostForm from '../components/PostForm';
 
 function Post() {
     return (
-        <Container border='2px solid blue'>
+        <Container border='2px solid blue' margin='auto'>
             <Stack direction='column'>
                 <Heading alignSelf={'center'}>Create a post</Heading>
-            </Stack>
-            <Stack
-                border='2px solid green'
-                direction='column'
-            // justifyContent='space-around'
-            // alignItems='stretch'
-            >
                 <PostForm />
             </Stack>
         </Container>

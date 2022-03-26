@@ -213,7 +213,7 @@ export default function PostForm() {
         }
     };
     return (
-        <Box my={4} textAlign="left">
+        <Flex flexDirection='column' alignItems='stretch'>
             <form onSubmit={handleSubmit}>
                 <FormControl>
                     <FormLabel>Name</FormLabel>
@@ -315,7 +315,7 @@ export default function PostForm() {
                     </Stack>
                 )
             }
-        </Box>
+        </Flex>
     )
 }
 
