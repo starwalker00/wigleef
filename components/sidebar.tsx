@@ -16,7 +16,8 @@ import {
     useColorMode,
     Center,
     VStack,
-    Portal
+    Portal,
+    Spacer
 } from '@chakra-ui/react';
 import { Show, Hide } from '@chakra-ui/react'
 import { MoonIcon, SunIcon } from '@chakra-ui/icons';
@@ -30,6 +31,7 @@ import { useProfileID } from "../components/context/AppContext";
 import { namedConsoleLog } from '../lib/helpers';
 import SearchBar from '../components/SearchBar';
 import SearchModal from '../components/mobileOnly/SearchModal';
+import { ExternalLinkIcon, AddIcon } from '@chakra-ui/icons';
 
 function Sidebar({ children }) {
     const { colorMode, toggleColorMode } = useColorMode();
@@ -88,7 +90,7 @@ function Sidebar({ children }) {
             {/* menu above md size */}
             <Show above='md'>
                 <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4} position='sticky' top='0' zIndex='200' width='100%' maxWidth='20%'>
-                    <Flex alignItems={'center'} justifyContent={'space-around'}>
+                    <Flex alignItems={'stretch'} justifyContent={'space-around'}>
                         <Stack direction={'column'} alignItems={'center'}>
                             <Box>Logo</Box>
                             <VStack
@@ -102,20 +104,52 @@ function Sidebar({ children }) {
                                     }}
                                     passHref
                                 >
-                                    <Link>Timeline</Link>
+                                    <Button
+                                        rounded={'full'}
+                                        size={'lg'}
+                                        fontWeight={'normal'}
+                                        px={6}
+                                    // leftIcon={<AddIcon h={4} w={4} color={'gray.300'} />}
+                                    >
+                                        Timeline
+                                    </Button>
                                 </NextLink>
                                 <NextLink href={'/explore'} passHref>
-                                    <Link>Explore</Link>
+                                    <Button
+                                        rounded={'full'}
+                                        size={'lg'}
+                                        fontWeight={'normal'}
+                                        px={6}
+                                    // leftIcon={<AddIcon h={4} w={4} color={'gray.300'} />}
+                                    >
+                                        Explore
+                                    </Button>
                                 </NextLink>
                                 <NextLink href={'/post'} passHref>
-                                    <Link>Post</Link>
+                                    <Button
+                                        rounded={'full'}
+                                        size={'lg'}
+                                        fontWeight={'normal'}
+                                        px={6}
+                                        leftIcon={<AddIcon h={4} w={4} color={'gray.300'} />}
+                                    >
+                                        New post
+                                    </Button>
                                 </NextLink>
-                                <NextLink href={'/comment'} passHref>
-                                    <Link>Comment</Link>
+                                <NextLink href={'/createProfile'} passHref>
+                                    <Button
+                                        rounded={'full'}
+                                        size={'lg'}
+                                        fontWeight={'normal'}
+                                        px={6}
+                                        leftIcon={<AddIcon h={4} w={4} color={'gray.300'} />}
+                                    >
+                                        New profile
+                                    </Button>
                                 </NextLink>
-                                <NextLink href={'/about'} passHref>
+                                {/* <NextLink href={'/about'} passHref>
                                     <Link>About</Link>
-                                </NextLink>
+                                </NextLink> */}
                                 <NextLink
                                     href={{
                                         pathname: '/profile/[profileID]',
@@ -123,8 +157,17 @@ function Sidebar({ children }) {
                                     }}
                                     passHref
                                 >
-                                    <Link>My Profile</Link>
+                                    <Button
+                                        rounded={'full'}
+                                        size={'lg'}
+                                        fontWeight={'normal'}
+                                        px={6}
+                                    // leftIcon={<AddIcon h={4} w={4} color={'gray.300'} />}
+                                    >
+                                        My profile
+                                    </Button>
                                 </NextLink>
+                                <Spacer />
                                 <SearchBar />
                             </VStack>
                             {/* color mode icon */}
