@@ -1,5 +1,6 @@
 import CallToActionWithAnnotation from '../components/landing/CallToActionWithAnnotation'
 import TopBar from '../components/landing/TopBar'
+import ListTechnologies from '../components/landing/ListTechnologies'
 import {
   Container,
 } from '@chakra-ui/react';
@@ -13,6 +14,7 @@ function Index() {
       <Container maxW={'7xl'}>
         <TopBar />
         <CallToActionWithAnnotation />
+        <ListTechnologies />
       </Container>
     </>
   )
