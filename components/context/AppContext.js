@@ -19,16 +19,38 @@ const initialState = {
 
 const reducer = (state, action) => {
     switch (action.type) {
-        case 'set_profileID':
-            console.log(`context profileIDApp: ${action.payload}`);
-            // namedConsoleLog('state', state)
-            // namedConsoleLog('state', state)
-            return { profileIDApp: action.payload, authenticateApp: initialState.authenticateApp }
-        case 'set_authenticateApp':
-            console.log(`context authenticateApp: ${action.payload}`);
-            // namedConsoleLog('state', state)
-            // namedConsoleLog('state', state)
-            return { profileIDApp: state.profileIDApp, authenticateApp: action.payload }
+        // case 'set_profileID':
+        //     console.log(`context profileIDApp: ${action.payload}`);
+        //     namedConsoleLog('oldStateProfile', state)
+        //     let newStateProfile = {
+        //         profileIDApp: action.payload,
+        //         // authenticateApp: state?.payload?.authenticateApp || initialState.authenticateApp
+        //     };
+        //     namedConsoleLog('newStateProfile', newStateProfile)
+        //     debugger;
+        //     return newStateProfile;
+        // case 'set_authenticateApp':
+        //     debugger;
+        //     console.log(`set_authenticateApp authenticateApp: ${action.payload}`);
+        //     namedConsoleLog('oldStateAccess', state)
+        //     let newStateAccess = {
+        //         // profileIDApp: state.profileIDApp, 
+        //         authenticateApp: action.payload
+        //     };
+        //     namedConsoleLog('newStateAccess', newStateAccess)
+        //     return newStateAccess;
+        case 'set_appContext':
+            console.log(`set_appContext payload: ${action.payload}`);
+            namedConsoleLog('oldset_appContext', state)
+            let newProfile = action.payload?.profileIDApp ?? state.profileIDApp;
+            let newAccess = action.payload?.authenticateApp ?? state.authenticateApp;
+            let newStateAppContext = {
+                profileIDApp: newProfile,
+                authenticateApp: newAccess,
+            };
+            namedConsoleLog('newset_appContext', newStateAppContext)
+            debugger;
+            return newStateAppContext;
         default:
             throw new Error(`Unknown action: ${action.type}`)
     }

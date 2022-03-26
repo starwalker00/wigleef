@@ -15,6 +15,8 @@ export const omit = (object: any, name: string) => {
 };
 
 export const isJwtExpired = (jwtToken: string) => {
+    let regex = '^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$';
+    if (!jwtToken.match(regex)) { return false }
     let decoded = jwt_decode(jwtToken);
     //@ts-ignore
     let exp = decoded.exp;

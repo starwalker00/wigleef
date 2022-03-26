@@ -146,11 +146,11 @@ export default function CreateProfileForm() {
             namedConsoleLog('profileIDApp', profileIDApp);
             namedConsoleLog('authenticateApp', authenticateApp);
             // request a login access if there is no accessTokens in context or Jwt in context has expired
-            if (authenticateApp.accessToken.length < 1 || isJwtExpired(authenticateApp.accessToken)) {
+            if (!authenticateApp?.accessToken || authenticateApp?.accessToken.length < 1 || isJwtExpired(authenticateApp?.accessToken)) {
                 const accessTokens = await login();
                 // namedConsoleLog('accessTokens', accessTokens);
                 let authenticate = accessTokens?.data?.authenticate;
-                dispatch({ type: 'set_authenticateApp', payload: authenticate });
+                dispatch({ type: 'set_appContext', payload: { profileIDApp: profileIDApp, authenticateApp: authenticate } });
                 accessToken = authenticate.accessToken;
             }
             else {
@@ -191,7 +191,7 @@ export default function CreateProfileForm() {
             console.log('profile id', ethers.BigNumber.from(profileId).toHexString());
             setNewProfileId(ethers.BigNumber.from(profileId).toHexString());
             // set new profile id to context
-            dispatch({ type: 'set_profileID', payload: ethers.BigNumber.from(profileId) });
+            dispatch({ type: 'set_appContext', payload: { profileIDApp: ethers.BigNumber.from(profileId), authenticateApp: null } });
             namedConsoleLog('profileIDApp', profileIDApp);
             setIsBlockchainTxPending(false);
             setIsLoading(false);
