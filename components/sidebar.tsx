@@ -185,7 +185,12 @@ function Sidebar({ children }) {
                                 </Button>
                             </NextLink>
                             <Spacer />
-                            <Stack spacing='1' backgroundColor='white' p={2}>
+                            <Stack spacing='1' backgroundColor='white' p={2}
+                                // border='2px solid blue'
+                                // borderTop='1px solid #3fada8'
+                                boxShadow={'xs'}
+                                rounded={'md'}
+                            >
                                 <Text fontSize='sm' alignSelf='flex-start' px={2}>Search profiles: </Text>
                                 <SearchBar />
                             </Stack>
