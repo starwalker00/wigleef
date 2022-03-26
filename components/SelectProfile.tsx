@@ -117,12 +117,12 @@ function SelectProfile({ address }) {
   // set first profile to appcontext if no profile ID is set
   if (profileIDApp.eq(UNSET_CONTEXT_PROFILE_ID) && data?.profiles?.items?.length > 0) {
     let firstProfileID = BigNumber.from(data.profiles.items[0].id);
-    dispatch({ type: 'set_profileID', payload: firstProfileID });
+    dispatch({ type: 'set_appContext', payload: { profileIDApp: firstProfileID, authenticateApp: null } });
   }
 
   // handle select one of owned profileID
   function changeProfileID(event: any) {
-    dispatch({ type: 'set_profileID', payload: BigNumber.from(event.target.value) });
+    dispatch({ type: 'set_appContext', payload: { profileIDApp: BigNumber.from(event.target.value), authenticateApp: null } });
   }
 
   if (data) {

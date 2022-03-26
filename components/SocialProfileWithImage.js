@@ -36,7 +36,7 @@ export default function SocialProfileWithImage({ profile }) {
     const dispatch = useDispatchProfileID();
 
     function changeProfileID(event) {
-        dispatch({ type: 'set_profileID', payload: BigNumber.from(profile?.id) });
+        dispatch({ type: 'set_appContext', payload: { profileIDApp: BigNumber.from(profile?.id), authenticateApp: null } });
     }
 
     return (

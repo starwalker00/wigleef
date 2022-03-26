@@ -117,11 +117,11 @@ function PublicationCommentForm({ isOpenComment, isToggleComment, publicationID 
             setIsError(false);
             // check if connected user has a valid jwt token
             let accessToken;
-            if (authenticateApp.accessToken.length < 1 || isJwtExpired(authenticateApp.accessToken)) {
+            if (!authenticateApp?.accessToken || authenticateApp.accessToken.length < 1 || isJwtExpired(authenticateApp.accessToken)) {
                 const accessTokens = await login();
                 // namedConsoleLog('accessTokens', accessTokens);
                 let authenticate = accessTokens?.data?.authenticate;
-                dispatch({ type: 'set_authenticateApp', payload: authenticate });
+                dispatch({ type: 'set_appContext', payload: { profileIDApp: profileIDApp, authenticateApp: authenticate } });
                 accessToken = authenticate.accessToken;
             }
             else {
