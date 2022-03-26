@@ -139,7 +139,7 @@ function Profile() {
   const defaultTabIndex = profile?.stats?.totalPosts > 0 ? 1 : profile?.stats?.totalComments > 0 ? 2 : profile?.stats?.totalMirrors > 0 ? 3 : 0;
 
   return (
-    <section>
+    <>
       {
         !haveProfile && loadingProfile ? (
           // <Skeleton height='20px'>loading</Skeleton>
@@ -153,42 +153,51 @@ function Profile() {
         ) : !haveProfile ? (
           <p>Profile not found</p>
         ) : (
-          <>
-            <SocialProfileWithImage profile={profile} />
-            <Tabs isFitted isLazy /*lazyBehavior="keepMounted"*/ defaultIndex={defaultTabIndex - 1}>
-              <TabList>
-                <Tab isDisabled={profile.stats.totalPosts < 1}>
-                  <Pluralize singular={'Post'} plural={'Posts'} zero={'No posts'} count={profile.stats.totalPosts} />
-                </Tab>
-                <Tab isDisabled={profile.stats.totalComments < 1}>
-                  <Pluralize singular={'Comment'} plural={'Comments'} zero={'No comments'} count={profile.stats.totalComments} />
-                </Tab>
-                <Tab isDisabled={profile.stats.totalMirrors < 1}>
-                  <Pluralize singular={'Mirror'} plural={'Mirrors'} zero={'No mirrors'} count={profile.stats.totalMirrors} />
-                </Tab>
-              </TabList>
-              {// display tab content is there is data
-                defaultTabIndex > 0
-                  ?
-                  <TabPanels>
-                    <TabPanel>
-                      <ProfileTab constCurrentProfileID={constCurrentProfileID} publicationType={['POST']} />
-                    </TabPanel>
-                    <TabPanel>
-                      <ProfileTab constCurrentProfileID={constCurrentProfileID} publicationType={['COMMENT']} />
-                    </TabPanel >
-                    <TabPanel>
-                      <ProfileTab constCurrentProfileID={constCurrentProfileID} publicationType={['MIRROR']} />
-                    </TabPanel>
-                  </TabPanels >
-                  :
-                  null
-              }
-            </Tabs>
-          </>
+          <Container
+            width={'full'}
+          // border='2px solid blue'
+          >
+            <Stack
+              // border='2px solid green'
+              direction='column'
+              alignItems='stretch'
+            >
+              <SocialProfileWithImage profile={profile} />
+              <Tabs isFitted isLazy /*lazyBehavior="keepMounted"*/ defaultIndex={defaultTabIndex - 1}>
+                <TabList>
+                  <Tab isDisabled={profile.stats.totalPosts < 1}>
+                    <Pluralize singular={'Post'} plural={'Posts'} zero={'No posts'} count={profile.stats.totalPosts} />
+                  </Tab>
+                  <Tab isDisabled={profile.stats.totalComments < 1}>
+                    <Pluralize singular={'Comment'} plural={'Comments'} zero={'No comments'} count={profile.stats.totalComments} />
+                  </Tab>
+                  <Tab isDisabled={profile.stats.totalMirrors < 1}>
+                    <Pluralize singular={'Mirror'} plural={'Mirrors'} zero={'No mirrors'} count={profile.stats.totalMirrors} />
+                  </Tab>
+                </TabList>
+                {// display tab content is there is data
+                  defaultTabIndex > 0
+                    ?
+                    <TabPanels>
+                      <TabPanel>
+                        <ProfileTab constCurrentProfileID={constCurrentProfileID} publicationType={['POST']} />
+                      </TabPanel>
+                      <TabPanel>
+                        <ProfileTab constCurrentProfileID={constCurrentProfileID} publicationType={['COMMENT']} />
+                      </TabPanel >
+                      <TabPanel>
+                        <ProfileTab constCurrentProfileID={constCurrentProfileID} publicationType={['MIRROR']} />
+                      </TabPanel>
+                    </TabPanels >
+                    :
+                    null
+                }
+              </Tabs>
+            </Stack>
+          </Container>
         )
       }
-    </section >
+    </>
   )
 }
 
