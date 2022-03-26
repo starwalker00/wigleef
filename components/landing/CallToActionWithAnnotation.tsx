@@ -43,15 +43,21 @@ export default function CallToActionWithAnnotation() {
                             bg: 'rgb(197, 233, 175)',
                             zIndex: -1,
                         }}>
-                        Write once,
+                        Social bonds,
                     </Text>
                     <br />
                     <Text as={'span'} color={'rgb(55,99,27)'}>
-                        use everywhere!
+                        decentralized.
                     </Text>
                 </Heading>
                 <Text color={'gray.500'}>
-                    [REDACTED] is a social network connected to
+                    <Text as='span' fontWeight={500}
+                        color='#3fada8'
+                        fontFamily='"Space Grotesk", sans-serif;'
+                    >
+                        Wigleef{' '}
+                    </Text>
+                    is a social network connected to
                     <Link href='https://lens.dev' isExternal>
                         <Text fontWeight={500}
                             color='rgb(171 254 44)'
@@ -133,7 +139,7 @@ export default function CallToActionWithAnnotation() {
                     />
                 </Box>
             </Flex>
-        </Stack>
+        </Stack >
     );
 }
 

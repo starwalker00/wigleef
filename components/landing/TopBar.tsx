@@ -37,7 +37,7 @@ export default function TopBar() {
                         textAlign={useBreakpointValue({ base: 'center', md: 'left' })}
                         fontFamily={'heading'}
                         color={useColorModeValue('gray.800', 'white')}>
-                        Logo
+                        Wigleef
                     </Text>
                 </Flex>
 
