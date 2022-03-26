@@ -319,7 +319,7 @@ export default function SearchBar({ afterSelected = () => { } }) {
     {
       variables: {
         request: {
-          query: 'josh', type: 'PROFILE', limit: 10
+          query: 't', type: 'PROFILE', limit: 10
         },
       },
       notifyOnNetworkStatusChange: true,
@@ -335,7 +335,7 @@ export default function SearchBar({ afterSelected = () => { } }) {
     searchProfile({
       variables: {
         request: {
-          query: 'josh', type: 'PROFILE', limit: 10
+          query: 't', type: 'PROFILE', limit: 10
         },
       }
     });
