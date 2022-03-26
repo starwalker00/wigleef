@@ -202,7 +202,8 @@ function Sidebar({ children }) {
                                         src={'https://avatars.dicebear.com/api/male/username.svg'}
                                     />
                                 </MenuButton>
-                                <MenuList alignItems={'center'}>
+                                {/* hide unused menu for now */}
+                                {/* <MenuList alignItems={'center'}>
                                     <br />
                                     <Center>
                                         <Avatar
@@ -218,7 +219,7 @@ function Sidebar({ children }) {
                                     <MenuDivider />
                                     <MenuItem>Notifications</MenuItem>
                                     <MenuItem>Account Settings</MenuItem>
-                                </MenuList>
+                                </MenuList> */}
                             </Menu>
                             <ConnectButtonAndModal />
                         </VStack>

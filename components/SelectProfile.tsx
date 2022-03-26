@@ -153,13 +153,14 @@ function SelectProfile({ address }) {
     {/* display profiles in an alphabetical order */ }
     data.profiles?.items.map((element) => {
       let name = element?.name ?? element.handle;
-      let profileIDhexString = BigNumber.from(element.id);
+      let profileIDhexString = BigNumber.from(element.id).toHexString();
       return element.displayName = name.concat(' — ').concat(profileIDhexString);
     })
     let sortedProfiles = _.sortBy(data.profiles?.items, ['displayName']);
     return (
       <>
-        <Stack spacing={3}>
+        <Stack spacing={0}>
+          <Text fontSize='sm'>Found {sortedProfiles.length} profiles :</Text>
           <Select onChange={(event) => changeProfileID(event)}>
             {
               sortedProfiles.map((profile) => {

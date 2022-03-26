@@ -33,9 +33,9 @@ function ConnectButtonAndModal({ showConnected = true, autoFocus = false }) {
             <>
                 <Stack direction='column' border='2px solid cyan' maxWidth='90%' alignItems='center' >
                     {accountData.ens?.name
-                        ? <Text fontSize='xs'>{accountData.ens?.name}</Text>
-                        : <Text fontSize='xs'>{truncateEthAddress(accountData.address)}</Text>}
-                    <Text fontSize='xs'>Connected to {accountData.connector.name}</Text>
+                        ? <Text fontSize='lg'>{accountData.ens?.name}</Text>
+                        : <Text fontSize='lg'>{truncateEthAddress(accountData.address)}</Text>}
+                    {/* <Text fontSize='xs'>Connected to {accountData.connector.name}</Text> */}
                     <SelectProfile address={accountData.address} />
                     <Button onClick={() => { disconnect(); onClose(); }}>Disconnect</Button>
                 </Stack>
