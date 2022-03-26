@@ -630,12 +630,13 @@ function Publication() {
       pollInterval: 5000,
       notifyOnNetworkStatusChange: true,
     });
+  // prettyJSON('publicationID', publicationID);
   // prettyJSON('dataComments', dataComments);
 
   const comments = dataComments?.publications.items || [];
   const haveComments = Boolean(comments.length);
   const haveMoreComments = Boolean(true);
-  // namedConsoleLog('comments.length', comments.length);
+  namedConsoleLog('comments.length', comments.length);
   return (
     <>
       <Stack direction='column'>
