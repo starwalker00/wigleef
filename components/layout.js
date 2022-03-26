@@ -16,7 +16,7 @@ function Layout({ children }) {
                 // bgColor={{ base: 'blue', md: 'red', lg: 'green' }}
                 display='flex'
                 flexDirection={{ base: 'column', md: 'row' }}
-                style={{ border: '3px solid red' }}
+            // style={{ border: '3px solid red' }}
             >
                 {children}
             </Container>

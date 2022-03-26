@@ -9,12 +9,19 @@ import CreateProfileForm from '../components/CreateProfileForm';
 
 function Post() {
     return (
-        <Container border='2px solid blue' margin='auto' >
+        <Container margin='auto'
+            // border='2px solid blue'
+            borderTop='1px solid #3fada8'
+            boxShadow={'lg'}
+            rounded={'md'}
+            p={3}
+            pb={0}
+        >
             <Stack direction='column'>
                 <Heading alignSelf={'center'}>Create a profile</Heading>
                 <CreateProfileForm />
             </Stack>
-        </Container>
+        </Container >
     )
 }
 

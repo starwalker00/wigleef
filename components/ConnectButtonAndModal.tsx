@@ -31,7 +31,7 @@ function ConnectButtonAndModal({ showConnected = true, autoFocus = false, colorS
     if (accountData && showConnected) {
         return (
             <>
-                <Stack direction='column' border='2px solid cyan' maxWidth='90%' alignItems='center' >
+                <Stack direction='column' maxWidth='90%' alignItems='center' >
                     {accountData.ens?.name
                         ? <Text fontSize='lg'>{accountData.ens?.name}</Text>
                         : <Text fontSize='lg'>{truncateEthAddress(accountData.address)}</Text>}

@@ -221,7 +221,7 @@ export default function PostForm() {
                 </FormControl>
                 <FormControl mt={6}>
                     <FormLabel>Description</FormLabel>
-                    <Input id='postDescription' placeholder="Description of my post." />
+                    <Input id='postDescription' placeholder="Description of the post." />
                 </FormControl>
                 <FormControl mt={6}>
                     <FormLabel>Content</FormLabel>

@@ -53,7 +53,12 @@ function Sidebar({ children }) {
                 {/* top bar */}
                 <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4} position='sticky' top='0' zIndex='200' width='100%'>
                     <Flex h={16} alignItems={'center'} justifyContent={'center'} >
-                        Logo
+                        <Text as='span' fontWeight={500}
+                            color='#3fada8'
+                            fontFamily='"Space Grotesk", sans-serif;'
+                        >
+                            Wigleef{' '}
+                        </Text>
                     </Flex>
                 </Box>
                 {children}
@@ -94,8 +99,17 @@ function Sidebar({ children }) {
             {/* menu above md size */}
             <Show above='md'>
                 <Box bg={useColorModeValue('gray.100', 'gray.900')} px={4} position='sticky' top='0' zIndex='200' maxWidth='20%'>
-                    <Stack direction={'column'} alignItems={'center'} border='2px solid red' height='90vh'>
-                        <Box>Logo</Box>
+                    <Stack direction={'column'} alignItems={'center'} height='90vh'>
+                        <Flex>
+                            <Text fontWeight={500}
+                                color='#3fada8'
+                                fontFamily='"Space Grotesk", sans-serif;'
+                                p={3}
+                                mb={3}
+                            >
+                                Wigleef{' '}
+                            </Text>
+                        </Flex>
                         <VStack
                             as={'nav'}
                             spacing={4}
@@ -182,7 +196,7 @@ function Sidebar({ children }) {
                             {/* user icon */}
                         </VStack>
                         <Spacer />
-                        <Divider orientation='horizontal' variant='dashed' />
+                        <Divider orientation='horizontal' variant='dashed' color='#3fada8' />
                         <VStack width='full'>
                             <Menu>
                                 <MenuButton
