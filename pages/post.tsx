@@ -17,7 +17,7 @@ function Post() {
             p={3}
             pb={0}
         >
-            <Stack direction='column'>
+            <Stack direction='column' p={5} pb={0}>
                 <Heading alignSelf={'center'}>Create a post</Heading>
                 <PostForm />
             </Stack>
