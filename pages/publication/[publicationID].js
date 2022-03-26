@@ -604,6 +604,7 @@ function Publication() {
         request: { publicationId: publicationID },
         // request: { publicationId: '0x49-0x02' },
       },
+      pollInterval: 5000,
       notifyOnNetworkStatusChange: true,
     });
 

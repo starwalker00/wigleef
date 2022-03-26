@@ -32,6 +32,7 @@ import { useProfileID, useDispatchProfileID } from "./context/AppContext";
 import { LENS_HUB_ABI } from '../lib/abi';
 import { ethers, utils, Wallet } from 'ethers';
 import NextLink from 'next/link'
+import ConnectButtonAndModal from './ConnectButtonAndModal';
 
 function PublicationCommentForm({ isOpenComment, isToggleComment, publicationID }) {
     // app context in-use
@@ -41,6 +42,7 @@ function PublicationCommentForm({ isOpenComment, isToggleComment, publicationID 
 
     // wagmi hooks
     const [{ data: dataAccount, error: errorAccount, loading: loadingAccount }, disconnect] = useAccount();
+    const isWalletConnected = Boolean(dataAccount?.address);
     const [{ data: dataSignMessage, error: errorSignMessage, loading: loadingSignMessage }, signMessage] = useSignMessage();
     const [{ data: dataSignTypedData, error: errorSignTypedData, loading: loadingSignTypedData }, signTypedData] = useSignTypedData();
     const [{ data: dataContractWrite, error: errorContractWrite, loading: loadingContractWrite }, write] = useContractWrite(
@@ -220,7 +222,34 @@ function PublicationCommentForm({ isOpenComment, isToggleComment, publicationID 
                 >
                     <CloseButton alignSelf='flex-end' onClick={isToggleComment} size='sm' color='gray.800' />
                     <MarkdownEditor markdownValue={markdownValue} onChange={setMarkdownValue} />
-                    <Button
+                    {
+                        isWalletConnected
+                            ?
+                            <Stack direction='row' justifyContent='flex-end' padding={4} spacing={4}>
+                                <Text visibility='hidden'>Please connect your wallet</Text>
+                                <Button mt={4} type="submit"
+                                    isActive={!isLoading && !isBlockchainTxPending && !isError}
+                                    isDisabled={!(!isLoading && !isBlockchainTxPending && !isError)}
+                                    colorScheme='blackAlpha'
+                                    onClick={() => clickPostComment()}
+                                >
+                                    Post comment
+                                </Button>
+                            </Stack>
+                            :
+                            <Stack direction='row' justifyContent='flex-end' padding={4} spacing={4}>
+                                <Text>Please connect your wallet</Text>
+                                <ConnectButtonAndModal showConnected={false} autoFocus={true}
+                                    colorScheme='blackAlpha'
+                                />
+                                <Button isActive={false} isDisabled={true} mt={4} type="submit"
+                                    colorScheme='blackAlpha'
+                                >
+                                    Post comment
+                                </Button>
+                            </Stack>
+                    }
+                    {/* <Button
                         colorScheme='blackAlpha'
                         alignSelf='flex-end'
                         size='sm'
@@ -229,7 +258,7 @@ function PublicationCommentForm({ isOpenComment, isToggleComment, publicationID 
                         disabled={!Boolean(dataAccount?.address)}
                     >
                         Post comment
-                    </Button>
+                    </Button> */}
                     {
                         // waiting signature and lens-api calls
                         isLoading && !isBlockchainTxPending && (
