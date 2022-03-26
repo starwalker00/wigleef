@@ -50,13 +50,13 @@ function PublicationStats({ publicationStats, publicationID }) {
                         p='10px'
                         color='white'
                         mt='4'
-                        bg='blue.500'
+                        backgroundImage='linear-gradient(to bottom, #a3bded 0%, #6991c7 100%);'
                         rounded='md'
                         shadow='md'
                         zIndex='2'
                     >
                         <CloseButton alignSelf='flex-end' onClick={isToggleCollect} size='sm' />
-                        <MarkdownRenderer markdownString={'collect'} />
+                        <MarkdownRenderer markdownString={'soon'} />
                     </Flex>
                 </Flex>
             </Collapse>
@@ -67,13 +67,13 @@ function PublicationStats({ publicationStats, publicationID }) {
                         p='10px'
                         color='white'
                         mt='4'
-                        bg='blue.500'
+                        backgroundImage='linear-gradient(to bottom, #a3bded 0%, #6991c7 100%);'
                         rounded='md'
                         shadow='md'
                         zIndex='2'
                     >
                         <CloseButton alignSelf='flex-end' onClick={isToggleMirror} size='sm' />
-                        <MarkdownRenderer markdownString={'mirror'} />
+                        <MarkdownRenderer markdownString={'soon'} />
                     </Flex>
                 </Flex>
             </Collapse>

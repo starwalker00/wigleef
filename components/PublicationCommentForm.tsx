@@ -212,14 +212,16 @@ function PublicationCommentForm({ isOpenComment, isToggleComment, publicationID 
                     p='10px'
                     color='white'
                     mt='4'
-                    bg='blue.500'
+                    backgroundColor='#85FFBD'
+                    backgroundImage='linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%)'
                     rounded='md'
                     shadow='md'
                     zIndex='2'
                 >
-                    <CloseButton alignSelf='flex-end' onClick={isToggleComment} size='sm' />
+                    <CloseButton alignSelf='flex-end' onClick={isToggleComment} size='sm' color='gray.800' />
                     <MarkdownEditor markdownValue={markdownValue} onChange={setMarkdownValue} />
                     <Button
+                        colorScheme='blackAlpha'
                         alignSelf='flex-end'
                         size='sm'
                         mt='4px'
@@ -294,7 +296,7 @@ function PublicationCommentForm({ isOpenComment, isToggleComment, publicationID 
                     }
                 </Flex>
             </Flex>
-        </Collapse>
+        </Collapse >
     )
 }
 
