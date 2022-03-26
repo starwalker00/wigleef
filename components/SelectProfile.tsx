@@ -103,8 +103,14 @@ function SelectProfile({ address }) {
   const { profileIDApp } = useProfileID();
   const dispatch = useDispatchProfileID()
 
+  useEffect(() => { // called on every name or image URI change
+    //changeProfileIdViewedInSelected
+    refetch().catch(console.error);;
+    // debugger;
+  }, [profileIDApp])
+
   // get profiles ownedBy connected address
-  const { loading, error, data, fetchMore, called } = useQuery(
+  const { loading, error, data, fetchMore, called, refetch } = useQuery(
     gql(GET_PROFILES),
     {
       variables: {
@@ -168,7 +174,8 @@ function SelectProfile({ address }) {
                 return (
                   <option
                     key={profileID.toHexString()}
-                    defaultValue={profileIDApp.toHexString()}
+                    // defaultValue={profileIDApp.toHexString()}
+                    selected={profileIDApp.eq(profileID)}
                     value={profileID.toHexString()} >
                     {profile.displayName}
                   </option>)

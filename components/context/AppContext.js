@@ -49,7 +49,7 @@ const reducer = (state, action) => {
                 authenticateApp: newAccess,
             };
             namedConsoleLog('newset_appContext', newStateAppContext)
-            debugger;
+            // debugger;
             return newStateAppContext;
         default:
             throw new Error(`Unknown action: ${action.type}`)
