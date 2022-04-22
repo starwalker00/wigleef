@@ -70,7 +70,7 @@ const GET_TIMELINE = `
     bio
     location
     website
-    twitterUrl
+    twitter
     handle
     picture {
       ... on NftImage {
@@ -177,7 +177,7 @@ const GET_TIMELINE = `
 
   fragment CollectModuleFields on CollectModule {
     __typename
-    ... on EmptyCollectModuleSettings {
+    ... on FreeCollectModuleSettings {
       type
     }
     ... on FeeCollectModuleSettings {

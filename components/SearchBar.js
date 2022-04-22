@@ -87,7 +87,7 @@ fragment ProfileFields on Profile {
   bio
   location
   website
-  twitterUrl
+  twitter
   handle
   picture {
     ... on NftImage {
@@ -176,7 +176,7 @@ fragment Erc20Fields on Erc20 {
 
 fragment CollectModuleFields on CollectModule {
   __typename
-  ... on EmptyCollectModuleSettings {
+  ... on FreeCollectModuleSettings {
     type
   }
   ... on FeeCollectModuleSettings {

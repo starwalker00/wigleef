@@ -98,7 +98,7 @@ function CommentView(dataComment) {
     //                     </NextLink>
     //                     <Text fontSize='lg' fontWeight='bold'>
     //                         {/* <Badge ml='1' colorScheme='green'>New</Badge> */}
-    //                         {publication.profile?.twitterUrl
+    //                         {publication.profile?.twitter
     //                             ?
     //                             <NextLink href='https://www.google.fr' passHref>
     //                                 <Link>
@@ -154,7 +154,7 @@ export default CommentView;
 //       "bio": null,
 //       "location": null,
 //       "website": null,
-//       "twitterUrl": null,
+//       "twitter": null,
 //       "handle": "oneski22",
 //       "picture": null,
 //       "coverPicture": null,
@@ -185,8 +185,8 @@ export default CommentView;
 //     },
 //     "createdAt": "2022-02-17T13:35:47.000Z",
 //     "collectModule": {
-//       "__typename": "EmptyCollectModuleSettings",
-//       "type": "EmptyCollectModule"
+//       "__typename": "FreeCollectModuleSettings",
+//       "type": "FreeCollectModule"
 //     },
 //     "referenceModule": null,
 //     "appId": null

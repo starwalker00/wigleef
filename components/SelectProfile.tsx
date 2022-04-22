@@ -27,7 +27,7 @@ const GET_PROFILES = `
         bio
         location
         website
-        twitterUrl
+        twitter
         picture {
           ... on NftImage {
             contractAddress

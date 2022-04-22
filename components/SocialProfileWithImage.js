@@ -202,6 +202,6 @@ export default function SocialProfileWithImage({ profile }) {
 // totalPublications: 109
 // __typename: "ProfileStats"
 // [[Prototype]]: Object
-// twitterUrl: "https://twitter.com/yogicodes"
+// twitter: "https://twitter.com/yogicodes"
 // website: "https://yogi.codes"
 // __typename: "Profile"

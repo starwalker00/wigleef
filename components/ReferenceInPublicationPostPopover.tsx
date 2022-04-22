@@ -85,6 +85,6 @@ export default ReferenceInPublicationPostPopover;
 // __typename: "MediaSet"
 // [[Prototype]]: Object
 // stats: {__typename: 'ProfileStats', totalFollowers: 0, totalFollowing: 5, totalPosts: 7, totalComments: 2, …}
-// twitterUrl: "https://twitter.com/sasicodes"
+// twitter: "https://twitter.com/sasicodes"
 // website: "https://sasi.codes"
 // __typename: "Profile"

@@ -49,7 +49,7 @@ const EXPLORE_PUBLICATIONS = `
     bio
     location
     website
-    twitterUrl
+    twitter
     handle
     picture {
       ... on NftImage {
@@ -156,7 +156,7 @@ const EXPLORE_PUBLICATIONS = `
 
   fragment CollectModuleFields on CollectModule {
     __typename
-    ... on EmptyCollectModuleSettings {
+    ... on FreeCollectModuleSettings {
       type
     }
     ... on FeeCollectModuleSettings {

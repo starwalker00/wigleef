@@ -39,7 +39,7 @@ const GET_PROFILES = `
         bio
         location
         website
-        twitterUrl
+        twitter
         picture {
           ... on NftImage {
             contractAddress
@@ -252,7 +252,7 @@ export default Profile
 //           "bio": "Amazing docs",
 //           "location": "UK",
 //           "website": "https://mumbai.polygonscan.com/",
-//           "twitterUrl": "devjoshstevens",
+//           "twitter": "devjoshstevens",
 //           "picture": null,
 //           "handle": "josh.dev",
 //           "coverPicture": null,

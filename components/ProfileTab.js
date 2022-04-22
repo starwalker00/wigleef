@@ -47,7 +47,7 @@ const GET_PUBLICATIONS = `
     bio
     location
     website
-    twitterUrl
+    twitter
     handle
     picture {
       ... on NftImage {
@@ -136,7 +136,7 @@ const GET_PUBLICATIONS = `
 
   fragment CollectModuleFields on CollectModule {
     __typename
-    ... on EmptyCollectModuleSettings {
+    ... on FreeCollectModuleSettings {
       type
     }
     ... on FeeCollectModuleSettings {

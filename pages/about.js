@@ -103,7 +103,7 @@ fragment ProfileFields on Profile {
   bio
   location
   website
-  twitterUrl
+  twitter
   handle
   picture {
     ... on NftImage {
@@ -192,7 +192,7 @@ fragment Erc20Fields on Erc20 {
 
 fragment CollectModuleFields on CollectModule {
   __typename
-  ... on EmptyCollectModuleSettings {
+  ... on FreeCollectModuleSettings {
     type
   }
   ... on FeeCollectModuleSettings {
@@ -447,7 +447,7 @@ export default About
     // picture: null
     // profileId: "0x3b"
     // stats: { totalFollowers: 2, totalFollowing: 1, totalPosts: 5, totalComments: 0, totalMirrors: 0, … }
-    // twitterUrl: null
+    // twitter: null
     // website: null
     // __typename: "Profile"
 // 1: {profileId: '0x01ac', name: 'josh stevens', bio: 'hey this is my profile', location: 'UK', website: null, …}
